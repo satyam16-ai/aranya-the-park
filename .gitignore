@@ -25,3 +25,7 @@ dist-ssr
 
 # Raw reference documents & scans (not needed for deployment)
 reference/
+
+# Raw client assets (only the optimised WebPs in public/assets/opt ship)
+JPGs/
+LOGO/

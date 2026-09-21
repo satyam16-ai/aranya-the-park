@@ -228,3 +228,56 @@ export const infrastructureProjects: InfrastructureProject[] = [
     benefit: 'Direct connectivity to SEEPZ, Powai tech corridor, and Eastern Express Highway.',
   },
 ];
+
+export type LocationCategory = LocationNode['category'];
+
+export interface LocationCategoryMeta {
+  id: LocationCategory;
+  label: string;
+  /** lucide icon name, resolved in the component */
+  icon: 'TrainFront' | 'ShoppingBag' | 'GraduationCap' | 'HeartPulse';
+  image: string;
+  imageAlt: string;
+}
+
+export const locationCategories: LocationCategoryMeta[] = [
+  {
+    id: 'connectivity',
+    label: 'Connectivity',
+    icon: 'TrainFront',
+    image: '/assets/opt/city-local-train-2000.webp',
+    imageAlt: 'Western Railway suburban train near Malad station',
+  },
+  {
+    id: 'entertainment',
+    label: 'Entertainment',
+    icon: 'ShoppingBag',
+    image: '/assets/opt/city-shopping-2000.webp',
+    imageAlt: 'A couple shopping at a mall',
+  },
+  {
+    id: 'education',
+    label: 'Education',
+    icon: 'GraduationCap',
+    image: '/assets/opt/city-school-2000.webp',
+    imageAlt: 'A schoolboy raising his hand in class',
+  },
+  {
+    id: 'healthcare',
+    label: 'Healthcare',
+    icon: 'HeartPulse',
+    image: '/assets/opt/city-hospital-2000.webp',
+    imageAlt: 'A modern hospital room',
+  },
+];
+
+/** Photo mosaic for the Location section (brochure page 8 composition). */
+export const locationMosaic = [
+  { src: '/assets/opt/city-highway-2000.webp', alt: 'Western Express Highway', span: 'wide' },
+  { src: '/assets/opt/city-hospital-2000.webp', alt: 'Hospital room', span: 'std' },
+  { src: '/assets/opt/city-shopping-2000.webp', alt: 'Shopping at the mall', span: 'std' },
+  { src: '/assets/opt/city-school-2000.webp', alt: 'International school classroom', span: 'std' },
+  { src: '/assets/opt/city-metro-2000.webp', alt: 'Mumbai Metro', span: 'std' },
+  { src: '/assets/opt/city-airport-2000.webp', alt: 'Airport departure lounge at sunset', span: 'std' },
+  { src: '/assets/opt/city-local-train-2000.webp', alt: 'Suburban local train', span: 'std' },
+] as const;

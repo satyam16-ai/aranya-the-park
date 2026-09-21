@@ -27,14 +27,31 @@ export interface ProjectInfo {
     title: string;
     description: string;
     icon: string;
+    /** When set, the hallmark renders as a photo tile in the Highlights bento. */
+    image?: string;
+    imageAlt?: string;
+    /** CSS object-position for the tile crop. */
+    focus?: string;
   }[];
+}
+
+export interface HeroSlide {
+  id: string;
+  image: string;
+  alt: string;
+  /** Short line shown under the render, after "Artist's impression". */
+  caption: string;
+  /** CSS object-position for the near-square desktop frame and the tall phone backdrop. */
+  focus: { desktop: string; phone: string };
 }
 
 export interface ResidenceUnit {
   id: string;
   type: string;
   title: string;
-  carpetArea: string;
+  /** Carpet area in sq ft — omitted until the client supplies it. */
+  carpetArea?: string;
+  tower?: string;
   tag: string;
   deck: string;
   ceilingHeight: string;

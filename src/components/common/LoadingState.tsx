@@ -1,40 +1,21 @@
 import React from 'react';
+import { cn } from '../../lib/cn';
 
 interface LoadingStateProps {
-  /** Text label shown below the spinner */
   label?: string;
-  /** Size of the spinner */
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-const spinnerSizes: Record<string, string> = {
-  sm: 'w-6 h-6',
-  md: 'w-10 h-10',
-  lg: 'w-14 h-14',
-};
+const sizes = { sm: 'w-6 h-6', md: 'w-10 h-10', lg: 'w-14 h-14' };
 
-/**
- * LoadingState — a minimal, architectural loading indicator.
- * A thin gold-bordered square rotating — avoids generic circular spinners.
- */
-export const LoadingState: React.FC<LoadingStateProps> = ({
-  label,
-  size = 'md',
-  className = '',
-}) => {
-  return (
-    <div className={`flex flex-col items-center justify-center gap-4 py-12 ${className}`}>
-      <div
-        className={`${spinnerSizes[size]} border border-champagne-400/50 animate-spin`}
-        style={{
-          animationDuration: '2.5s',
-          animationTimingFunction: 'cubic-bezier(0.5, 0, 0.5, 1)',
-        }}
-      />
-      {label && (
-        <p className="text-detail text-cream-300/60">{label}</p>
-      )}
-    </div>
-  );
-};
+export const LoadingState: React.FC<LoadingStateProps> = ({ label, size = 'md', className }) => (
+  <div className={cn('flex flex-col items-center justify-center gap-4', className)} role="status">
+    <span
+      className={cn('block border border-gold-400/60 animate-spin-slow', sizes[size])}
+      aria-hidden="true"
+    />
+    {label && <span className="t-micro text-fg-muted">{label}</span>}
+    <span className="sr-only">Loading</span>
+  </div>
+);

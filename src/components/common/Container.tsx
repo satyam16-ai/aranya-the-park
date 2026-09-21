@@ -1,37 +1,32 @@
 import React from 'react';
+import { cn } from '../../lib/cn';
 
-interface ContainerProps {
-  children: React.ReactNode;
-  /** Max width variant */
-  size?: 'sm' | 'md' | 'lg' | 'xl' | 'wide' | 'showcase' | 'full';
-  /** Additional className */
-  className?: string;
-  /** HTML element to render */
-  as?: 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer';
+type ContainerSize = 'prose' | 'content' | 'showcase' | 'wide' | 'full';
+
+interface ContainerProps extends React.HTMLAttributes<HTMLElement> {
+  size?: ContainerSize;
+  as?: 'div' | 'section' | 'article' | 'aside' | 'header' | 'footer' | 'nav';
 }
 
-const widths: Record<string, string> = {
-  sm: 'max-w-3xl',
-  md: 'max-w-5xl',
-  lg: 'max-w-6xl',
-  xl: 'max-w-[1152px]',
-  wide: 'max-w-7xl',
-  showcase: 'max-w-[1600px]',
+const widths: Record<ContainerSize, string> = {
+  prose: 'max-w-prose',
+  content: 'max-w-content',
+  showcase: 'max-w-showcase',
+  wide: 'max-w-wide',
   full: 'max-w-none',
 };
 
-/**
- * Container — constrains content width with consistent horizontal padding.
- * Default `lg` (1152px) for editorial feel. Use `wide` for Gallery.
- */
+/** Centred, gutter-padded layout container. Default width 1280px. */
 export const Container: React.FC<ContainerProps> = ({
+  size = 'content',
+  as = 'div',
+  className,
   children,
-  size = 'lg',
-  className = '',
-  as: Tag = 'div',
+  ...rest
 }) => {
+  const Tag = as as 'div';
   return (
-    <Tag className={`mx-auto w-full px-5 sm:px-8 lg:px-12 ${widths[size]} ${className}`}>
+    <Tag className={cn('mx-auto w-full px-5 sm:px-8 lg:px-12', widths[size], className)} {...rest}>
       {children}
     </Tag>
   );
