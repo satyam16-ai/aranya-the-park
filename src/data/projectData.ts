@@ -20,10 +20,10 @@ export const projectData: ProjectInfo = {
   rccConsultant: 'RD Consultants',
   legalAdvisor: 'Shankar Consultant',
   stats: [
-    { label: 'Open green living', value: '40%+', subtext: 'Curated biophilic enclaves' },
-    { label: 'Ceiling height, up to', value: '11 ft', subtext: 'Palatial vertical proportions' },
-    { label: 'Private access road', value: '18.3 m', subtext: 'Connecting directly to New Link Road' },
-    { label: 'To Malad West metro', value: '3 min', subtext: 'Metro Line 2A, Yellow Line' },
+    { label: 'Open Green Living', value: '40%+', subtext: 'Curated Biophilic Enclaves' },
+    { label: 'Ceiling Height', value: 'Up to 11 Ft.', subtext: 'Palatial Vertical Proportions' },
+    { label: 'Direct Access Road', value: '18.3 Mtr.', subtext: 'Connecting directly to New Link Road' },
+    { label: 'Transit Access', value: '3 Mins', subtext: 'To Malad West Metro Station' },
   ],
   hallmarks: [
     {
@@ -31,9 +31,6 @@ export const projectData: ProjectInfo = {
       title: '2, 3 & 4 BHK Residences',
       description: 'Expansive living spaces with private sundecks, up to 11 ft floor-to-ceiling height, and Vastu-compliant layouts.',
       icon: 'Home',
-      image: '/assets/opt/life-family-sofa-2000.webp',
-      imageAlt: 'A family at ease in a sunlit living room',
-      focus: '50% 40%',
     },
     {
       id: 'banquet',
@@ -58,9 +55,12 @@ export const projectData: ProjectInfo = {
       title: 'Double-Height AC Lobbies',
       description: 'Regal arrival experience designed by Kalpesh Makwana Design Studio with Italian marble finishes and concierge desk.',
       icon: 'DoorClosed',
-      image: '/assets/opt/render-grand-lobby-2000.webp',
-      imageAlt: 'The double-height lobby with its coffered ceiling and marble floor',
-      focus: '50% 45%',
+    },
+    {
+      id: 'skyline-lounge',
+      title: 'Skyline Coffee & Library Lounge',
+      description: 'Panoramic rooftop reading sanctuary, quiet co-working nook, and relaxation deck high above the urban hum.',
+      icon: 'Coffee',
     },
     {
       id: 'grohe',
@@ -69,22 +69,10 @@ export const projectData: ProjectInfo = {
       icon: 'Sparkles',
     },
     {
-      id: 'skyline-lounge',
-      title: 'Skyline Coffee & Library Lounge',
-      description: 'Panoramic rooftop reading sanctuary, quiet co-working nook, and relaxation deck high above the urban hum.',
-      icon: 'Coffee',
-      image: '/assets/opt/life-skyline-night-2000.webp',
-      imageAlt: 'The city skyline at night from a rooftop lounge',
-      focus: '50% 35%',
-    },
-    {
       id: 'recreation',
       title: 'Dual-Level Amenities',
       description: 'Regulation pickleball court, state-of-the-art gym, rooftop yoga lawn, aroma garden, and reflexology trails.',
       icon: 'Trophy',
-      image: '/assets/opt/amenity-pickleball-play-2000.webp',
-      imageAlt: 'A rally on the pickleball court',
-      focus: '50% 50%',
     },
   ],
 };

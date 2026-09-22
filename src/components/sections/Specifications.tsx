@@ -1,92 +1,105 @@
-import React from 'react';
-import { specificationsData } from '../../data/specificationsData';
+import React, { useState } from 'react';
 import { Container } from '../common/Container';
-import { Frame } from '../common/Frame';
-import { Img } from '../common/Img';
-import { ImageReveal } from '../common/ImageReveal';
-import { SectionIntro } from '../common/SectionIntro';
-import { Reveal, RevealGroup, RevealItem } from '../common/Reveal';
+import { specificationsData } from '../../data/specificationsData';
+import { Button } from '../common/Button';
+import { Compass } from 'lucide-react';
 
-/** Material swatches: tight crops of the renders — focal point + zoom, no extra files. */
-const swatches = [
-  { label: 'Italian marble', src: '/assets/opt/render-grand-lobby-2000.webp', focus: '52% 96%', zoom: 2.4 },
-  { label: 'Oak panelling', src: '/assets/opt/render-grand-lobby-2000.webp', focus: '9% 42%', zoom: 2.6 },
-  { label: 'Glass & steel', src: '/assets/opt/render-entrance-drive-2000.webp', focus: '44% 38%', zoom: 2 },
-  { label: 'Curated greens', src: '/assets/opt/render-fitness-pavilion-2000.webp', focus: '28% 84%', zoom: 2.2 },
-  { label: 'Skyline views', src: '/assets/opt/render-gym-2000.webp', focus: '80% 30%', zoom: 2.2 },
-];
+interface SpecificationsProps {
+  onOpenLeadModal?: (purpose: string, config?: string) => void;
+}
 
-/** Specifications — every category as one editorial list on the champagne surface. */
-export const Specifications: React.FC = () => (
-  <section id="specifications" data-surface="gold" className="botanical overflow-hidden py-section">
-    <Container>
-      <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
-        <div className="lg:col-span-5">
-          <div className="lg:sticky lg:top-28">
-            <SectionIntro
-              eyebrow="Chapter 06 · Specifications"
-              title={
-                <>
-                  Built to <em>endure</em>
-                </>
-              }
-              lead="Essential architectural parameters, fittings and engineering hallmarks — from Grohe fittings to an earthquake-resistant RCC frame."
-            />
-            <Reveal className="mt-8">
-              <span className="t-micro text-fg-muted">Materials &amp; finishes</span>
-              <ul className="mt-3 grid grid-cols-5 gap-2 sm:gap-3">
-                {swatches.map((sw) => (
-                  <li key={sw.label}>
-                    <div className="aspect-square overflow-hidden rounded-xs border border-rule">
-                      <Img
-                        src={sw.src}
-                        alt=""
-                        aria-hidden="true"
-                        sizes="(min-width: 1024px) 7vw, 18vw"
-                        className="h-full w-full object-cover"
-                        style={{ objectPosition: sw.focus, transform: `scale(${sw.zoom})`, transformOrigin: sw.focus }}
-                      />
-                    </div>
-                    <p className="mt-2 font-sans text-[0.6875rem] font-medium leading-snug text-fg-muted">{sw.label}</p>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-            <Frame as="figure" className="mt-10 hidden lg:block">
-              <ImageReveal aspect="aspect-[4/5]">
-                <Img
-                  src="/assets/opt/render-entrance-drive-2000.webp"
-                  alt="The glazed entrance and porte-cochère"
-                  sizes="(min-width: 1024px) 36vw, 100vw"
-                  className="h-full w-full object-cover object-[72%_50%]"
-                />
-              </ImageReveal>
-              <figcaption className="t-micro mt-3 px-1 text-fg-muted">Entrance & porte-cochère · artist's impression</figcaption>
-            </Frame>
+export const Specifications: React.FC<SpecificationsProps> = ({
+  onOpenLeadModal,
+}) => {
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState<number>(0);
+  const currentCategory = specificationsData[activeCategoryIndex] || specificationsData[0];
+
+  return (
+    <section id="specifications" className="section-spacing bg-dark-950 text-ivory relative overflow-hidden">
+      {/* Background subtle illumination */}
+      <div className="absolute top-1/3 -right-48 w-[600px] h-[600px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 -left-48 w-[500px] h-[500px] bg-champagne-400/[0.015] rounded-full blur-3xl pointer-events-none" />
+
+      <Container>
+        {/* Chapter Header */}
+        <div className="text-center mb-14 sm:mb-20">
+          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-4">
+            ARCHITECTURAL STANDARDS
+          </span>
+          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-ivory uppercase mb-5 leading-[1.1]">
+            Project Specifications
+          </h2>
+          <p className="font-sans text-xs sm:text-sm text-ivory-muted font-light max-w-xl mx-auto leading-relaxed">
+            Essential architectural parameters, fittings, and engineering hallmarks curated for enduring quality and refined metropolitan living.
+          </p>
+        </div>
+
+        {/* ─── Category Selection Tabs (Minimalist Glass Pills) ─── */}
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12 sm:mb-16">
+          {specificationsData.map((cat, idx) => {
+            const isActive = idx === activeCategoryIndex;
+            return (
+              <button
+                key={cat.category}
+                onClick={() => setActiveCategoryIndex(idx)}
+                className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-xs font-sans uppercase tracking-[0.15em] transition-all duration-300 cursor-pointer ${
+                  isActive
+                    ? 'bg-champagne-400 text-dark-950 font-semibold shadow-md'
+                    : 'text-ivory-muted hover:text-ivory bg-white/[0.03] border border-white/[0.06] hover:border-white/[0.12]'
+                }`}
+              >
+                {cat.category}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* ─── Specifications Presentation Stage ─── */}
+        <div className="max-w-4xl mx-auto">
+          <div className="glass-panel p-6 sm:p-10 lg:p-12 rounded-[6px] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="border-b border-white/[0.08] pb-4 mb-8 flex items-center justify-between">
+              <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-champagne-400 font-semibold">
+                {currentCategory.category}
+              </span>
+              <span className="text-[11px] text-ivory-muted/60 font-sans tracking-wider">
+                0{activeCategoryIndex + 1} / 0{specificationsData.length}
+              </span>
+            </div>
+
+            {/* Concise Editorial Specification List */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-8 gap-x-12">
+              {currentCategory.items.map((item, idx) => (
+                <div key={idx} className="space-y-1.5 border-b border-white/[0.04] pb-6 last:border-b-0">
+                  <span className="block font-sans text-[10px] uppercase tracking-[0.2em] text-champagne-300/80 font-medium">
+                    {item.feature}
+                  </span>
+                  <p className="font-serif text-lg sm:text-xl text-ivory font-light leading-snug">
+                    {item.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Bottom Enquire Action */}
+            {onOpenLeadModal && (
+              <div className="mt-12 pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <p className="font-sans text-xs text-ivory-muted font-light">
+                  Direct developer consultation regarding materials, layouts, and construction milestones.
+                </p>
+                <Button
+                  variant="gold"
+                  size="sm"
+                  icon={<Compass size={14} />}
+                  onClick={() => onOpenLeadModal('Project Specifications', currentCategory.category)}
+                  className="shrink-0"
+                >
+                  ENQUIRE FOR SPECIFICATION DETAILS
+                </Button>
+              </div>
+            )}
           </div>
         </div>
-
-        <div className="lg:col-span-7">
-          <RevealGroup as="div" className="divide-y divide-rule" staggerChildren={0.06}>
-            {specificationsData.map((cat, i) => (
-              <RevealItem as="div" key={cat.category} className="py-8 first:pt-0 last:pb-0">
-                <div className="flex items-baseline gap-4">
-                  <span className="font-display text-xl text-accent-text tabular-nums">{String(i + 1).padStart(2, '0')}</span>
-                  <h3 className="t-h3 text-fg">{cat.category}</h3>
-                </div>
-                <dl className="mt-5 grid grid-cols-1 gap-x-10 gap-y-4 sm:grid-cols-2">
-                  {cat.items.map((item) => (
-                    <div key={item.feature} className="border-l border-rule pl-4">
-                      <dt className="t-micro text-fg-muted">{item.feature}</dt>
-                      <dd className="mt-1 text-[0.9375rem] text-fg">{item.detail}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      </div>
-    </Container>
-  </section>
-);
+      </Container>
+    </section>
+  );
+};

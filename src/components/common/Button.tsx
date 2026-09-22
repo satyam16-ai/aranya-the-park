@@ -1,97 +1,107 @@
 import React from 'react';
-import { cn } from '../../lib/cn';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'inverse';
-export type ButtonSize = 'sm' | 'md' | 'lg';
-
-interface ButtonOwnProps {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'gold' | 'outline' | 'outline-gold' | 'dark' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
   icon?: React.ReactNode;
   iconPosition?: 'left' | 'right';
-  className?: string;
+  /** Render as a link-like element */
+  href?: string;
+  target?: string;
+  rel?: string;
   children: React.ReactNode;
 }
 
-type AnchorProps = ButtonOwnProps &
-  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof ButtonOwnProps> & { href: string };
-type NativeProps = ButtonOwnProps &
-  Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, keyof ButtonOwnProps> & { href?: undefined };
-
-export type ButtonProps = AnchorProps | NativeProps;
-
-const base =
-  'group inline-flex items-center justify-center gap-2.5 font-sans font-medium uppercase tracking-[0.16em] whitespace-nowrap select-none rounded-xs transition-[transform,box-shadow,background-color,border-color,color] duration-300 ease-luxe disabled:opacity-40 disabled:pointer-events-none active:translate-y-0 active:scale-[0.985]';
-
-const sizes: Record<ButtonSize, string> = {
-  sm: 'text-[0.6875rem] px-5 min-h-10',
-  md: 'text-xs px-7 min-h-12',
-  lg: 'text-xs px-9 min-h-14',
-};
-
-const variants: Record<ButtonVariant, string> = {
-  primary:
-    'btn-sheen bg-gold-500 text-linen-950 hover:bg-gold-400 hover:-translate-y-px hover:shadow-gold',
-  secondary:
-    'border border-fg/35 text-fg hover:border-fg/70 hover:bg-fg/[0.06] hover:-translate-y-px',
-  inverse: 'bg-linen-100 text-linen-950 hover:bg-white hover:-translate-y-px hover:shadow-md',
-  ghost:
-    'relative text-xs py-1 text-accent-text after:absolute after:left-0 after:-bottom-0.5 after:h-px after:w-6 after:bg-accent after:transition-[width] after:duration-500 after:ease-out-expo hover:after:w-full',
-};
-
 /**
- * Button — the single button language of the site.
- * primary: gold fill / ink text · secondary: hairline outline in the surface
- * foreground · ghost: text link with a growing gold rule · inverse: linen fill.
- * Renders an <a> when `href` is given.
+ * Button — architectural luxury button system.
+ * Slightly rounded corners (2px) for refinement. Gold accents, subtle depth on hover.
  */
-export const Button: React.FC<ButtonProps> = (props) => {
-  const {
-    variant = 'primary',
-    size = 'md',
-    icon,
-    iconPosition = 'right',
-    className,
-    children,
-    ...rest
-  } = props;
+export const Button: React.FC<ButtonProps> = ({
+  variant = 'gold',
+  size = 'md',
+  icon,
+  iconPosition = 'right',
+  href,
+  target,
+  rel,
+  children,
+  className = '',
+  ...props
+}) => {
+  const base = [
+    'inline-flex items-center justify-center gap-2.5',
+    'font-sans font-semibold uppercase tracking-[0.14em]',
+    'rounded-[3px]',
+    'btn-lux',
+    'cursor-pointer select-none',
+    'disabled:opacity-40 disabled:pointer-events-none',
+    'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-champagne-400',
+  ].join(' ');
 
-  const classes = cn(base, variant !== 'ghost' && sizes[size], variants[variant], className);
+  const sizes: Record<string, string> = {
+    sm: 'text-[0.625rem] px-5 sm:px-6 py-2.5 min-h-[42px]',
+    md: 'text-[0.6875rem] px-6 sm:px-8 py-3 sm:py-3.5 min-h-[46px]',
+    lg: 'text-xs px-8 sm:px-10 py-3.5 sm:py-4 min-h-[50px]',
+  };
 
-  const iconNode = icon ? (
-    <span
-      className={cn(
-        'shrink-0 transition-transform duration-300 ease-luxe',
-        iconPosition === 'right' ? 'group-hover:translate-x-0.5' : 'group-hover:-translate-x-0.5'
-      )}
-      aria-hidden="true"
-    >
-      {icon}
-    </span>
-  ) : null;
+  const variants: Record<string, string> = {
+    gold: [
+      'bg-gradient-to-b from-champagne-300 to-champagne-400 text-forest-800',
+      'shadow-[0_4px_14px_rgba(200,169,107,0.22)]',
+      'hover:from-champagne-200 hover:to-champagne-300',
+      'hover:shadow-[0_10px_30px_rgba(200,169,107,0.45)]',
+      'active:from-champagne-400 active:to-champagne-500',
+    ].join(' '),
+    outline: [
+      'border border-champagne-400/40 text-champagne-300',
+      'bg-transparent backdrop-blur-sm',
+      'hover:border-champagne-400 hover:text-cream-100 hover:bg-champagne-400/[0.08]',
+      'hover:shadow-[0_8px_26px_rgba(197,168,128,0.16)]',
+    ].join(' '),
+    'outline-gold': [
+      'border border-champagne-400/40 text-champagne-300',
+      'bg-transparent backdrop-blur-sm',
+      'hover:border-champagne-400 hover:text-dark-950 hover:bg-champagne-400',
+      'hover:shadow-[0_10px_30px_rgba(200,169,107,0.4)]',
+    ].join(' '),
+    dark: [
+      'bg-forest-700 text-cream-200 border border-champagne-400/20',
+      'hover:bg-forest-600 hover:border-champagne-400/45 hover:text-cream-100',
+      'hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)]',
+    ].join(' '),
+    ghost: [
+      'text-champagne-300 bg-transparent',
+      'hover:text-cream-100 hover:bg-cream-100/[0.07]',
+    ].join(' '),
+  };
 
   const content = (
     <>
-      {iconPosition === 'left' && iconNode}
+      {icon && iconPosition === 'left' && (
+        <span className="btn-icon-left shrink-0 -ml-0.5">{icon}</span>
+      )}
       <span className="relative z-10">{children}</span>
-      {iconPosition === 'right' && iconNode}
+      {icon && iconPosition === 'right' && (
+        <span className="btn-icon-right shrink-0 -mr-0.5">{icon}</span>
+      )}
     </>
   );
 
-  if ('href' in rest && rest.href) {
+  if (href) {
     return (
-      <a className={classes} {...(rest as React.AnchorHTMLAttributes<HTMLAnchorElement>)}>
+      <a
+        href={href}
+        target={target}
+        rel={rel}
+        className={`${base} ${sizes[size]} ${variants[variant]} ${className}`}
+      >
         {content}
       </a>
     );
   }
 
   return (
-    <button
-      type="button"
-      className={classes}
-      {...(rest as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-    >
+    <button className={`${base} ${sizes[size]} ${variants[variant]} ${className}`} {...props}>
       {content}
     </button>
   );

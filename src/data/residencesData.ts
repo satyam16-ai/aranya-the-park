@@ -5,8 +5,8 @@ export const residencesData: ResidenceUnit[] = [
     id: '2bhk',
     type: '2 BHK',
     title: 'The Urban Sanctuary',
-        tag: 'Signature 2 BHK',
-    tower: 'Tower B',
+    carpetArea: 'Details On Request',
+    tag: 'Signature 2 BHK',
     deck: 'Private Sunlit Deck',
     ceilingHeight: 'Up to 11 Ft.',
     description:
@@ -21,15 +21,15 @@ export const residencesData: ResidenceUnit[] = [
     ],
     threeDUrl:
       'https://surbhi-infotech.s3.ap-south-1.amazonaws.com/Aranya_The_Park/aranya_the_park_b_2bhk-699/index.html',
-    threeDThumbnail: '/assets/opt/life-family-living-2000.webp',
+    threeDThumbnail: '/assets/opt/lifestyle-living-2000.webp',
     floorPlanImage: '/assets/opt/plan-tower-b-typical-2600.webp',
   },
   {
     id: '3bhk',
     type: '3 BHK',
     title: 'The Grand Boulevard',
-        tag: 'Executive 3 BHK',
-    tower: 'Tower A',
+    carpetArea: 'Details On Request',
+    tag: 'Executive 3 BHK',
     deck: 'Dual Private Sundecks',
     ceilingHeight: 'Up to 11 Ft.',
     description:
@@ -44,15 +44,15 @@ export const residencesData: ResidenceUnit[] = [
     ],
     threeDUrl:
       'https://surbhi-infotech.s3.ap-south-1.amazonaws.com/Aranya_The_Park/aranya_the_park_b_3bhk-1066/index.html',
-    threeDThumbnail: '/assets/opt/life-family-sofa-2000.webp',
+    threeDThumbnail: '/assets/opt/residences-interior-2000.webp',
     floorPlanImage: '/assets/opt/plan-tower-a-typical-2600.webp',
   },
   {
     id: '4bhk',
     type: '4 BHK',
     title: 'The Presidential Haven',
-        tag: 'Palatial 4 BHK',
-    tower: 'Tower A · Upper floors',
+    carpetArea: 'Details On Request',
+    tag: 'Palatial 4 BHK',
     deck: 'Wraparound Skyline Sundeck',
     ceilingHeight: 'Up to 11 Ft.',
     description:
@@ -66,7 +66,7 @@ export const residencesData: ResidenceUnit[] = [
       'Dedicated servant washroom facilities on floor',
     ],
     threeDUrl: undefined,
-    threeDThumbnail: '/assets/opt/life-sunset-terrace-2000.webp',
+    threeDThumbnail: '/assets/opt/lifestyle-sundeck-2000.webp',
     floorPlanImage: '/assets/opt/plan-tower-a-upper-2600.webp',
   },
 ];
