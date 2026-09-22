@@ -6,7 +6,6 @@ import { StoryGreens } from './components/sections/StoryGreens';
 import { Residences } from './components/sections/Residences';
 import { FloorPlans } from './components/sections/FloorPlans';
 import { FloorPlansModal } from './components/sections/FloorPlansModal';
-import { VirtualTour3D } from './components/sections/VirtualTour3D';
 import { Amenities } from './components/sections/Amenities';
 import { LocationConnectivity } from './components/sections/LocationConnectivity';
 import { LocationModal } from './components/sections/LocationModal';
@@ -63,9 +62,6 @@ export default function App() {
   const [leadModalConfig, setLeadModalConfig] = useState('2 BHK');
   const [lightbox, setLightbox] = useState<LightboxState | null>(null);
 
-  const [active3DTour, setActive3DTour] = useState<'2bhk' | '3bhk' | undefined>(undefined);
-  const [trigger3DModal, setTrigger3DModal] = useState<boolean>(false);
-
   // Pop-up window states for Floor Plans & Location Connectivity
   const [isFloorPlansModalOpen, setIsFloorPlansModalOpen] = useState(false);
   const [floorPlansCategory, setFloorPlansCategory] = useState<'master' | 'tower-a' | 'tower-b'>('master');
@@ -79,12 +75,6 @@ export default function App() {
     setLeadModalPurpose(purpose);
     setLeadModalConfig(config);
     setIsLeadModalOpen(true);
-  }, []);
-
-  const handleOpen3DViewer = useCallback((config: '2bhk' | '3bhk') => {
-    setActive3DTour(config);
-    setTrigger3DModal(true);
-    setTimeout(() => setTrigger3DModal(false), 200);
   }, []);
 
   const handleOpenFloorPlansModal = useCallback((category: 'master' | 'tower-a' | 'tower-b' = 'master') => {
@@ -145,16 +135,8 @@ export default function App() {
       <Residences
         onOpenLeadModal={handleOpenLeadModal}
         onSelectFloorPlan={handleSelectFloorPlan}
-        onOpen3DViewer={handleOpen3DViewer}
         onOpenFloorPlansModal={handleOpenFloorPlansModal}
         onOpenLightbox={handleOpenLightbox}
-      />
-
-      {/* ─── Chapter 04: 3D Spatial Experience Walkthrough ─── */}
-      <VirtualTour3D
-        onOpenLeadModal={handleOpenLeadModal}
-        externalSelectedId={active3DTour}
-        externalTriggerModal={trigger3DModal}
       />
 
       {/* ─── Chapter 05: Life Beyond Four Walls (Amenities) ─── */}
@@ -164,10 +146,7 @@ export default function App() {
       />
 
       {/* ─── Chapter 06: Location & Connectivity (18.3m Boulevard) ─── */}
-      <LocationConnectivity
-        onOpenLeadModal={handleOpenLeadModal}
-        onOpenModal={handleOpenLocationModal}
-      />
+      <LocationConnectivity onOpenModal={handleOpenLocationModal} />
 
       {/* ─── Chapter 07: Crafted in Every Detail (Specifications) ─── */}
       <Specifications onOpenLeadModal={handleOpenLeadModal} />
@@ -189,10 +168,7 @@ export default function App() {
       <EnquiryCTA onOpenLeadModal={handleOpenLeadModal} />
 
       {/* ─── Spacious Editorial Footer ─── */}
-      <Footer
-        onOpenFloorPlansModal={() => handleOpenFloorPlansModal('master')}
-        onOpenLocationModal={() => handleOpenLocationModal('all')}
-      />
+      <Footer />
 
       {/* ─── Floating Glass Action Pill ─── */}
       <StickyActionBar onOpenLeadModal={handleOpenLeadModal} />

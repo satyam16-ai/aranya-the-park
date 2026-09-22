@@ -131,7 +131,6 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
       'Mid-rise vantage points with unhindered cross-ventilation',
       'High-speed OTIS elevators',
       'Separate dining areas and ergonomic kitchen layouts',
-      'Floor-to-ceiling heights up to 11 feet',
     ],
   },
   {
@@ -234,7 +233,6 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     highlights: [
       'Thoughtfully planned 2 BHK & 3 BHK usable layouts',
       'Master bedrooms with private en-suite Grohe bathrooms',
-      'Floor-to-ceiling volume up to 11 ft throughout',
       'Generous dining alcoves: 3.85m x 1.47m',
     ],
   },
@@ -252,7 +250,6 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
       'Approved MahaRERA & CFO fire refuge area: 2.15m x 1.53m',
       'Panoramic high-floor vistas across Malad West',
       'Master suite bedrooms with external weather chajjas',
-      'Up to 11 ft clear ceiling heights',
     ],
   },
 ];

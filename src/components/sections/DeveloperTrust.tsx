@@ -48,7 +48,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
 
       <Container size="showcase" className="relative z-10">
         {/* Section Pre-title */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-champagne-300 font-medium block mb-3">
             DEVELOPER HERITAGE & PARTNERSHIP
           </span>
@@ -58,7 +58,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
         </div>
 
         {/* ─── Main Editorial Brand Spread (Inspired by Brochure Page 29) ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-0 rounded-2xl overflow-hidden border border-white/[0.1] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] mb-14 sm:mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-0 rounded-2xl overflow-hidden border border-white/[0.1] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.8)] mb-10 sm:mb-12">
           
           {/* Left Column: Architectural Skyline Editorial (Twilight View from Sky Deck) */}
           <div
@@ -100,7 +100,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
           </div>
 
           {/* Right Column: Warm Champagne / Beige Editorial Branding Card */}
-          <div className="lg:col-span-6 relative bg-[#BFA370] text-[#1D1B16] p-8 sm:p-12 lg:p-14 flex flex-col justify-between overflow-hidden">
+          <div className="lg:col-span-6 relative bg-[#BFA370] text-[#1D1B16] p-6 sm:p-9 lg:p-14 flex flex-col justify-between overflow-hidden">
             {/* Subtle organic botanical pattern overlay (pure decorative texture, 100% text-free) */}
             <div
               className="absolute inset-0 opacity-20 pointer-events-none mix-blend-multiply bg-repeat"
@@ -158,7 +158,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
         </div>
 
         {/* ─── Official Developer Partnership: PROJECT BY ZAVERI REALTY × BKM MINDSPACE ─── */}
-        <div className="glass-panel p-8 sm:p-12 rounded-2xl border border-white/[0.08] mb-14 sm:mb-16 text-center space-y-8">
+        <div className="glass-panel p-6 sm:p-9 rounded-2xl border border-white/[0.08] mb-10 sm:mb-12 text-center space-y-8">
           <div className="max-w-xl mx-auto space-y-2">
             <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-champagne-300 font-semibold block">
               PROJECT BY
@@ -212,14 +212,10 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
                 STATUTORY REGISTRATION
               </span>
               <h4 className="font-serif text-2xl text-ivory font-light">MAHARERA REGISTERED</h4>
-              <div className="mt-3">
-                <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70 block mb-1">
-                  Registration No.
-                </span>
-                <div className="inline-block px-5 py-2.5 bg-white/[0.04] border border-white/[0.1] font-mono text-sm sm:text-base text-champagne-300 font-semibold rounded-[4px] tracking-wider">
-                  {projectData.mahaRera}
-                </div>
-              </div>
+              <p className="mt-3 text-xs text-ivory-muted leading-relaxed max-w-sm">
+                Registered with the Maharashtra Real Estate Regulatory Authority. Verify the
+                project and its approvals on the official portal.
+              </p>
             </div>
             <a
               href={projectData.reraUrl}
@@ -240,7 +236,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
                 <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-champagne-300 font-medium">
                   TRUSTED TECHNICAL PARTNERS
                 </span>
-                <span className="text-[10px] font-mono text-ivory-muted/60 tracking-wider">
+                <span className="text-[10px] text-ivory-muted/60 tracking-wider">
                   STATUTORY CONSORTIUM
                 </span>
               </div>

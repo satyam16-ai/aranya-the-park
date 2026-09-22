@@ -8,7 +8,16 @@ export const projectData: ProjectInfo = {
   city: 'Mumbai',
   address: 'CTS 1069A/1/A/3, off New Link Road, Ram Nagar, Behind Evershine Mall, Mindspace, Malad West, Mumbai - 400064',
   mahaRera: 'P51800011594',
+  // TODO(client): paste the official profile URLs. Empty entries stay hidden.
+  socials: [
+    { label: 'Instagram', url: '' },
+    { label: 'Facebook', url: '' },
+    { label: 'YouTube', url: '' },
+    { label: 'LinkedIn', url: '' },
+  ],
   reraUrl: 'https://maharera.mahaonline.gov.in',
+  // TODO(client): replace with the project's Google Business Profile link.
+  googleBusinessUrl: '',
   phone: '+91 976 976 6500',
   phoneRaw: 'tel:+919769766500',
   emailPlaceholder: 'sales@aranyathepark.com',
@@ -21,7 +30,6 @@ export const projectData: ProjectInfo = {
   legalAdvisor: 'Shankar Consultant',
   stats: [
     { label: 'Open Green Living', value: '40%+', subtext: 'Curated Biophilic Enclaves' },
-    { label: 'Ceiling Height', value: 'Up to 11 Ft.', subtext: 'Palatial Vertical Proportions' },
     { label: 'Direct Access Road', value: '18.3 Mtr.', subtext: 'Connecting directly to New Link Road' },
     { label: 'Transit Access', value: '3 Mins', subtext: 'To Malad West Metro Station' },
   ],
@@ -29,7 +37,7 @@ export const projectData: ProjectInfo = {
     {
       id: 'homes',
       title: '2, 3 & 4 BHK Residences',
-      description: 'Expansive living spaces with private sundecks, up to 11 ft floor-to-ceiling height, and Vastu-compliant layouts.',
+      description: 'Expansive living spaces with private sundecks and Vastu-compliant layouts.',
       icon: 'Home',
     },
     {

@@ -10,7 +10,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A cheerful zone for shared victories & cherished bonds',
     description:
       'Regulation-standard outdoor pickleball court engineered with pro-grade non-slip cushioned sports turf, evening floodlighting, and viewing benches for spirited friendly matches.',
-    image: '/assets/opt/amenity-pickleball-2000.webp',
+    image: '/assets/opt/amenity-pickleball-play-2000.webp',
     badge: 'Trending Sport',
     highlights: ['Regulation Dimensions (13.4m x 6.0m)', 'Pro-Cushioned Surface', 'Evening Floodlighting'],
   },
@@ -22,7 +22,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A serene corner for seasoned souls',
     description:
       'A peaceful botanical enclave nestled away from vehicular pathways, furnished with ergonomic shaded benches, flowering planters, and gentle walking trails.',
-    image: '/assets/opt/amenity-senior-citizens-2000.webp',
+    image: '/assets/opt/amenity-seniors-terrace-2000.webp',
     badge: 'Quiet Sanctuary',
     highlights: ['Ergonomic Teak Benches', 'Tranquil Shaded Tree Canopy', 'Level Gentle Footpaths'],
   },
@@ -34,7 +34,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A wonderland of joy for your tiny-tots',
     description:
       'Secure adventure haven equipped with sensory play structures, slides, swings, and soft-turf safety surfaces to let your little ones explore without bounds.',
-    image: '/assets/opt/amenity-kids-play-2000.webp',
+    image: '/assets/opt/amenity-kids-swing-2000.webp',
     badge: 'Child Safe',
     highlights: ['Impact-Absorbent Flooring', 'Zero-Traffic Safe Zone', 'Shaded Seating for Parents'],
   },
@@ -46,7 +46,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A high-end gymnasium for energising workouts',
     description:
       'Architecturally designed fitness sanctuary fitted with world-class cardio stations, free weights, resistance machines, and dedicated stretching bays overlooking landscaped gardens.',
-    image: '/assets/opt/amenity-fitness-center-2000.webp',
+    image: '/assets/opt/render-gym-2000.webp',
     badge: 'Fully Equipped',
     highlights: ['Biophilic Garden Views', 'World-Class Cardio & Strength', 'Personal Trainer Bay'],
   },
@@ -58,7 +58,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A vibrant space for good games and great times',
     description:
       'Bespoke leisure clubroom featuring a championship tournament pool table (9.71m x 5.05m), card tables, board game alcoves, and relaxed spectator seating.',
-    image: '/assets/opt/amenity-games-room-2000.webp',
+    image: '/assets/opt/amenity-games-lounge-2000.webp',
     badge: 'Clubhouse Level',
     highlights: ['Championship Pool Table', 'Card & Board Game Tables', 'Acoustic Wall Panelling'],
   },
@@ -70,7 +70,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A venue for every grand family occasion',
     description:
       'Air-conditioned banquet venue accommodating up to 150 guests. Equipped with an elevated presentation stage, dedicated green rooms, serving pantry, and separate wash areas.',
-    image: '/assets/opt/amenity-banquet-gazebo-2000.webp',
+    image: '/assets/opt/amenity-banquet-hall-2000.webp',
     badge: '150-Guest Capacity',
     highlights: ['150 Guest Capacity', 'Dedicated Green Rooms', 'Full Catering Pantry'],
   },
@@ -82,7 +82,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Eco-conscious green infrastructure at your doorstep',
     description:
       'Dedicated multi-point high-speed electric vehicle charging docks compatible with all modern 2-wheeler and 4-wheeler EVs, powered by smart metering.',
-    image: '/assets/opt/grand-lobby-2000.webp',
+    image: '/assets/opt/amenity-parking-2000.webp',
     badge: 'Eco Infrastructure',
     highlights: ['Fast-Charge Ports', 'Safe Tower Parking Integration', 'Dedicated Fire Protection'],
   },
@@ -94,7 +94,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Sensory serenity amidst indigenous aromatic flora',
     description:
       'Landscape master plan curated by BeyondGreen featuring fragrant indigenous flowering shrubs, stepped manicured hedges, and soothing sensory pathways.',
-    image: '/assets/opt/lifestyle-park-greens-2800.webp',
+    image: '/assets/opt/life-garden-walk-2000.webp',
     badge: 'Curated by BeyondGreen',
     highlights: ['Indigenous Fragrant Flora', 'Aromatic Therapeutic Shrubs', '40% Open Green Buffer'],
   },
@@ -108,7 +108,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A zen zone to balance your body, mind & soul',
     description:
       'Elevated natural turf yoga deck open to early morning sunrise and cooling sea breezes, offering an invigorating open-air meditation sanctuary high above the city.',
-    image: '/assets/opt/amenity-rooftop-yoga-2000.webp',
+    image: '/assets/opt/amenity-yoga-deck-2000.webp',
     badge: 'Panoramic Heights',
     highlights: ['Sunrise Facing Deck', 'Natural Grass Turf', 'Tranquil Acoustic Heights'],
   },
@@ -120,7 +120,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A rooftop spot for serene evenings & starlit celebrations',
     description:
       'Designer timber pergola gazebo surrounded by flowering planter beds, ambient LED path lighting, and an expansive lawn for private family gatherings under the stars.',
-    image: '/assets/opt/amenity-banquet-gazebo-2000.webp',
+    image: '/assets/opt/amenity-rooftop-pergola-2000.webp',
     badge: 'Starlit Events',
     highlights: ['Pergolised Gazebo Seating', 'Integrated Party Illumination', 'Glass Parapet Skyline Edge'],
   },
@@ -132,7 +132,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A revitalizing fitness loop with panoramic Western Suburb views',
     description:
       'Continuous rubberized rooftop jogging loop safely framed with glass safety balustrades, offering an uninterrupted running path above street traffic.',
-    image: '/assets/opt/lifestyle-sundeck-2000.webp',
+    image: '/assets/opt/life-family-garden-2000.webp',
     badge: 'Panoramic Track',
     highlights: ['High-Traction Jogging Surface', 'Continuous Safety Balustrade', 'Unmatched Horizon Vistas'],
   },
@@ -156,7 +156,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Breathe fresh sea breezes while training in the sky',
     description:
       'Outdoor calisthenics and functional training zone with weather-proof resistance bars, core training mats, and chin-up stations open to the morning sky.',
-    image: '/assets/opt/amenity-fitness-center-2000.webp',
+    image: '/assets/opt/render-fitness-pavilion-2000.webp',
     badge: 'Skyline Calisthenics',
     highlights: ['All-Weather Training Equipment', 'Open-Air Calisthenics', 'Sunrise Facing Orientation'],
   },
@@ -168,7 +168,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Unwind together with panoramic starlit horizons',
     description:
       'Sheltered alcoves with architectural lounge chairs, wind-deflecting glass screens, and lush potted flora designed for multi-generational conversations and evening tea.',
-    image: '/assets/opt/lifestyle-sundeck-2000.webp',
+    image: '/assets/opt/life-sunset-terrace-2000.webp',
     badge: 'Community Haven',
     highlights: ['Architectural Wind Deflectors', 'Ergonomic All-Weather Loungers', 'Starlit Evening Views'],
   },

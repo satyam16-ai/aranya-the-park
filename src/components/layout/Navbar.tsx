@@ -4,7 +4,6 @@ import { Menu, X } from 'lucide-react';
 const NAV_LINKS = [
   { label: 'OVERVIEW', href: '#overview' },
   { label: 'RESIDENCES', href: '#residences' },
-  { label: '3D EXPERIENCE', href: '#virtual-tour' },
   { label: 'AMENITIES', href: '#amenities' },
   { label: 'FLOOR PLANS', href: '#floor-plans' },
   { label: 'LOCATION', href: '#location' },

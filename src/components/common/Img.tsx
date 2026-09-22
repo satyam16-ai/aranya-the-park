@@ -1,5 +1,8 @@
 import React from 'react';
 import { imageManifest } from '../../data/imageManifest';
+import { photoManifest } from '../../data/photoManifest';
+
+const manifest = { ...imageManifest, ...photoManifest };
 
 interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
@@ -13,7 +16,8 @@ interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 /**
  * Img — <img> that pulls srcSet and intrinsic dimensions from the generated
- * image manifest (see scripts/extract-brochure-assets.py).
+ * image manifests (scripts/extract-brochure-assets.py for the brochure pages,
+ * scripts/optimize-photos.py for the client photography).
  *
  * Declaring width/height lets the browser reserve the right box before the file
  * lands, so growing the images doesn't introduce layout shift. Anything absent
@@ -21,7 +25,7 @@ interface ImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
  * so this is safe to use for every image on the page.
  */
 export const Img: React.FC<ImgProps> = ({ src, alt, sizes = '100vw', ...rest }) => {
-  const entry = imageManifest[src];
+  const entry = manifest[src];
 
   if (!entry) {
     return <img src={src} alt={alt} {...rest} />;

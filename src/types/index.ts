@@ -6,7 +6,11 @@ export interface ProjectInfo {
   city: string;
   address: string;
   mahaRera: string;
+  /** Official channels. Entries with an empty url are not rendered. */
+  socials: { label: 'Instagram' | 'Facebook' | 'YouTube' | 'LinkedIn'; url: string }[];
   reraUrl: string;
+  /** Google Business Profile short link. Falls back to a maps address search when empty. */
+  googleBusinessUrl: string;
   phone: string;
   phoneRaw: string;
   emailPlaceholder: string;
@@ -37,11 +41,11 @@ export interface ResidenceUnit {
   carpetArea: string;
   tag: string;
   deck: string;
-  ceilingHeight: string;
   description: string;
   features: string[];
-  threeDUrl?: string;
-  threeDThumbnail: string;
+  /** Which tower this configuration sits in. */
+  tower: string;
+  image: string;
   floorPlanImage: string;
 }
 

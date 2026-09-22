@@ -8,13 +8,13 @@ import {
   Plane,
   Maximize2,
   ArrowRight,
+  Navigation,
 } from 'lucide-react';
 import { Container } from '../common/Container';
-import { Img } from '../common/Img';
 import { Button } from '../common/Button';
+import { projectData } from '../../data/projectData';
 
 interface LocationConnectivityProps {
-  onOpenLeadModal: (purpose?: string, config?: string) => void;
   onOpenModal?: (category?: string) => void;
 }
 
@@ -36,7 +36,6 @@ const transitHighlights = [
 ];
 
 export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
-  onOpenLeadModal,
   onOpenModal,
 }) => {
   const handleLaunchModal = (category: string = 'all') => {
@@ -52,9 +51,9 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
 
       <Container size="showcase">
         {/* Chapter Header */}
-        <div className="text-center mb-16 sm:mb-20">
+        <div className="text-center mb-10 sm:mb-12">
           <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-5">
-            CHAPTER 06 · STRATEGIC CONVERGENCE
+            STRATEGIC CONVERGENCE
           </span>
           <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ivory uppercase mb-6 leading-[1.05]">
             Connected to<br />Everything That Matters
@@ -156,47 +155,26 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
                 >
                   EXPAND FULL MAP
                 </Button>
-                <button
-                  onClick={() => onOpenLeadModal('Location Inquiry')}
-                  className="btn-lux py-3.5 px-6 text-xs font-sans font-semibold tracking-[0.16em] uppercase text-ivory-muted hover:text-ivory border border-white/[0.12] hover:border-champagne-400/50 rounded-[3px] glass-panel-subtle transition-all duration-300 cursor-pointer"
+                <a
+                  href={
+                    projectData.googleBusinessUrl ||
+                    `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                      `${projectData.name}, ${projectData.address}`
+                    )}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-lux py-3.5 px-6 text-xs font-sans font-semibold tracking-[0.16em] uppercase text-ivory-muted hover:text-ivory border border-white/[0.12] hover:border-champagne-400/50 rounded-[3px] glass-panel-subtle transition-all duration-300 cursor-pointer inline-flex items-center gap-2"
                 >
-                  DIRECTIONS ASSISTANCE
-                </button>
+                  <Navigation size={14} />
+                  GET DIRECTIONS
+                </a>
               </div>
             </div>
           </div>
         </div>
       </Container>
 
-      {/* ─── Showcase Band: the connectivity page at full scale ─── */}
-      <div className="flex justify-center px-4 sm:px-8 mt-14 sm:mt-18">
-        <button
-          type="button"
-          onClick={() => handleLaunchModal('all')}
-          aria-label="Explore the interactive location map"
-          className="group relative block w-full max-w-[440px] aspect-[692/1000] overflow-hidden rounded-[4px] border border-white/[0.08] bg-black shadow-[0_25px_60px_rgba(0,0,0,0.7)] cursor-pointer
-                     lg:w-auto lg:max-w-none lg:aspect-auto lg:h-[min(86vh,1250px)]"
-        >
-          <Img
-            src="/assets/opt/location-map-infra-2800.webp"
-            alt="Aranya The Park location and connectivity map"
-            sizes="(min-width: 1024px) 1200px, 440px"
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover object-left brightness-[0.92] group-hover:brightness-100 transition-all duration-700
-                       lg:static lg:h-full lg:w-auto lg:max-w-[94vw] lg:object-contain"
-          />
-
-          {/* Hover Cue */}
-          <span className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <span className="flex items-center gap-2.5 px-5 py-2.5 bg-champagne-400 text-dark-950 rounded-full shadow-xl">
-              <Maximize2 size={16} />
-              <span className="font-sans text-xs font-bold uppercase tracking-wider">
-                EXPLORE INTERACTIVE MAP
-              </span>
-            </span>
-          </span>
-        </button>
-      </div>
     </section>
   );
 };

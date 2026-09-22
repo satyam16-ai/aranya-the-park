@@ -29,7 +29,7 @@ export const StoryArrival: React.FC = () => {
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
-          end: isMobile ? '+=60%' : '+=100%',
+          end: isMobile ? '+=35%' : '+=55%',
           pin: pinRef.current,
           scrub: 0.3, // Snappy & ultra-responsive 1:1 scroll without laggy dragging
           fastScrollEnd: true,
@@ -103,7 +103,7 @@ export const StoryArrival: React.FC = () => {
         {/* Text Layer 1: "THE LUSHURY LIFE" */}
         <div ref={text1Ref} className="relative z-20 text-center px-5 sm:px-6 max-w-4xl mx-auto will-change-transform transform-gpu">
           <span className="font-sans text-[10px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 block mb-4 sm:mb-6 font-medium">
-            CHAPTER 01 · THE ARRIVAL
+            THE ARRIVAL
           </span>
           <h2 className="font-serif text-3xl sm:text-6xl md:text-7xl lg:text-8xl tracking-[0.14em] text-ivory font-light leading-[0.96] uppercase">
             The Lushury Life

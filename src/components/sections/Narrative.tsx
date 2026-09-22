@@ -37,7 +37,7 @@ export const Narrative: React.FC = () => {
             </h3>
 
             <p className="prose-editorial">
-              We welcome you to the greener side of life. At Aranya The Park, living is immersed in 40% open green landscapes curated by BeyondGreen, sensory aroma gardens, and architectural residences engineered with up to 11 ft ceiling volumes and private sunlit balconies.
+              We welcome you to the greener side of life. At Aranya The Park, living is immersed in 40% open green landscapes curated by BeyondGreen, sensory aroma gardens, and architectural residences engineered with generous ceiling volumes and private sunlit balconies.
             </p>
 
             <p className="prose-editorial">
@@ -53,7 +53,7 @@ export const Narrative: React.FC = () => {
                 </p>
               </div>
               <div>
-                <h4 className="font-serif text-lg text-champagne-300 mb-1.5">11 Ft Volumes</h4>
+                <h4 className="font-serif text-lg text-champagne-300 mb-1.5">Generous Volumes</h4>
                 <p className="text-sm text-cream-300/60 font-light leading-relaxed">
                   Generous vertical clearance ensuring supreme ventilation.
                 </p>

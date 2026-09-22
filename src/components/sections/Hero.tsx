@@ -21,9 +21,13 @@ export const Hero: React.FC<HeroProps> = ({ onOpenLeadModal }) => {
       {/* ─── Tower Render — sized to viewport height, anchored left, dissolving right ─── */}
       <div className="absolute inset-y-0 left-0 w-full lg:w-auto lg:left-[-3%] z-0">
         <img
-          src="/assets/hero-tower.jpg"
-          alt="Aranya The Park — Twin tower elevation at dusk, Malad West"
-          className="h-full w-full lg:w-auto object-cover object-[50%_bottom] lg:object-bottom brightness-[0.9] saturate-[1.05]"
+          src="/assets/opt/render-tower-day-963.webp"
+          srcSet="/assets/opt/render-tower-day-800.webp 800w, /assets/opt/render-tower-day-963.webp 963w"
+          sizes="(min-width: 1024px) 60vw, 100vw"
+          width={963}
+          height={1280}
+          alt="Aranya The Park — tower elevation, Malad West"
+          className="h-full w-full lg:w-auto object-cover object-[50%_bottom] lg:object-bottom brightness-[0.82] saturate-[0.92] contrast-[1.02]"
           style={{
             WebkitMaskImage:
               'linear-gradient(to right, black 0%, black 62%, rgba(0,0,0,0.5) 80%, transparent 100%)',
@@ -32,8 +36,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenLeadModal }) => {
           }}
           fetchPriority="high"
         />
-        {/* Mobile-only readability veil (desktop keeps the render bright) */}
+        {/* Mobile readability veil */}
         <div className="absolute inset-0 lg:hidden bg-gradient-to-b from-dark-950/55 via-dark-950/35 to-dark-950" />
+        {/* Desktop: settle the daylight sky into the deep-green surface */}
+        <div className="absolute inset-0 hidden lg:block bg-gradient-to-t from-dark-950 via-dark-950/25 via-35% to-dark-950/45" />
         {/* Ground + navbar-zone fades */}
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-dark-950 to-transparent" />
         <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-dark-950/70 to-transparent" />

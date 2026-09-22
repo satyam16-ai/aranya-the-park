@@ -64,11 +64,11 @@ export const Gallery: React.FC<GalleryProps> = ({ onOpenLeadModal: _onOpenLeadMo
           subtitle="Explore the architectural elevation, living volumes, wellness decks, and verdant parkscapes."
           align="center"
           theme="dark"
-          className="mb-12 sm:mb-16"
+          className="mb-8 sm:mb-10"
         />
 
         {/* Category Pill Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto overflow-touch pb-3 sm:pb-0 px-1 sm:px-0 mb-12 sm:mb-16">
+        <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto overflow-touch pb-3 sm:pb-0 px-1 sm:px-0 mb-8 sm:mb-10">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.value;
             return (
@@ -91,14 +91,12 @@ export const Gallery: React.FC<GalleryProps> = ({ onOpenLeadModal: _onOpenLeadMo
         </div>
 
         {/* Gallery Grid — Asymmetric editorial layout with clean frames */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-5">
           {filteredGallery.map((item, idx) => (
             <div
               key={item.id}
               onClick={() => setLightboxIndex(idx)}
-              className={`relative overflow-hidden cursor-pointer group rounded-[4px] border border-white/[0.08] bg-dark-900 transition-all duration-500 hover:border-champagne-400/40 shadow-[0_15px_35px_rgba(0,0,0,0.6)] ${
-                idx < 2 ? 'sm:col-span-1 lg:first:col-span-2 lg:first:row-span-2' : ''
-              } ${idx === 0 ? 'aspect-[4/3] lg:aspect-auto' : 'aspect-[4/3]'}`}
+              className="relative overflow-hidden cursor-pointer group rounded-[4px] border border-white/[0.08] bg-dark-900 transition-all duration-500 hover:border-champagne-400/40 shadow-[0_15px_35px_rgba(0,0,0,0.6)] aspect-[4/3]"
             >
               <Img
                 src={item.image}

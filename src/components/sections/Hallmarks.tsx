@@ -12,7 +12,7 @@ export const Hallmarks: React.FC = () => {
     {
       value: '2 / 3 / 4 BHK',
       title: 'LUXURY RESIDENCES',
-      subtitle: 'Up to 11 Ft. Floor Volumes',
+      subtitle: 'Generous Floor Volumes',
     },
     {
       value: '18.3M',

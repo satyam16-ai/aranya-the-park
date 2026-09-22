@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Compass,
   Eye,
   Check,
-  Sparkles,
   Maximize2,
 } from 'lucide-react';
 import { Container } from '../common/Container';
@@ -15,7 +13,6 @@ import type { ResidenceUnit } from '../../types';
 interface ResidencesProps {
   onOpenLeadModal: (purpose?: string, config?: string) => void;
   onSelectFloorPlan: (imageUrl: string, title: string) => void;
-  onOpen3DViewer?: (config: '2bhk' | '3bhk') => void;
   onOpenFloorPlansModal?: (category?: 'master' | 'tower-a' | 'tower-b') => void;
   onOpenLightbox?: (
     url: string,
@@ -28,7 +25,6 @@ interface ResidencesProps {
 export const Residences: React.FC<ResidencesProps> = ({
   onOpenLeadModal,
   onSelectFloorPlan,
-  onOpen3DViewer,
   onOpenFloorPlansModal,
   onOpenLightbox,
 }) => {
@@ -37,18 +33,6 @@ export const Residences: React.FC<ResidencesProps> = ({
   const currentUnit: ResidenceUnit =
     residencesData.find((unit) => unit.id === selectedId) || residencesData[0];
 
-  const handle3DAction = () => {
-    if (currentUnit.id === '2bhk' || currentUnit.id === '3bhk') {
-      if (onOpen3DViewer) {
-        onOpen3DViewer(currentUnit.id);
-      } else {
-        const el = document.getElementById('virtual-tour');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
-    }
-  };
 
   return (
     <section id="residences" className="section-spacing bg-dark-950 text-ivory relative overflow-hidden">
@@ -57,15 +41,15 @@ export const Residences: React.FC<ResidencesProps> = ({
 
       <Container size="showcase">
         {/* Chapter Header */}
-        <div className="text-center mb-16 sm:mb-20">
+        <div className="text-center mb-10 sm:mb-12">
           <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-5">
-            CHAPTER 03 · SANCTUARIES OF PROPORTION
+            SANCTUARIES OF PROPORTION
           </span>
           <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ivory uppercase mb-6">
             Space to Live
           </h2>
           <p className="font-sans text-sm sm:text-base text-ivory-muted font-light max-w-2xl mx-auto leading-relaxed">
-            Homes engineered around generous 11-foot ceiling volumes, cross-ventilating private sundecks, and uncompromised privacy.
+            Homes engineered around generous volumes, cross-ventilating private sundecks, and uncompromised privacy.
           </p>
         </div>
 
@@ -107,7 +91,7 @@ export const Residences: React.FC<ResidencesProps> = ({
                   className="relative aspect-[16/10] overflow-hidden group/img cursor-zoom-in"
                   onClick={() =>
                     onOpenLightbox?.(
-                      currentUnit.threeDThumbnail,
+                      currentUnit.image,
                       `${currentUnit.title} — ${currentUnit.type}`,
                       currentUnit.description,
                       currentUnit.tag
@@ -115,7 +99,7 @@ export const Residences: React.FC<ResidencesProps> = ({
                   }
                 >
                   <Img
-                    src={currentUnit.threeDThumbnail}
+                    src={currentUnit.image}
                     alt={`${currentUnit.title} — ${currentUnit.type} Residence`}
                     sizes="(min-width: 1024px) 891px, 100vw"
                     className="w-full h-full object-cover object-center group-hover/img:scale-[1.02] transition-transform duration-700 ease-out brightness-[0.92]"
@@ -134,15 +118,6 @@ export const Residences: React.FC<ResidencesProps> = ({
                     </span>
                   </div>
 
-                  {/* 3D Badge */}
-                  {currentUnit.threeDUrl && (
-                    <div className="absolute top-5 right-5 z-10 hidden sm:block">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1.5 glass-panel text-ivory text-[10px] font-sans uppercase tracking-widest rounded-full">
-                        <Sparkles size={11} className="text-champagne-400" />
-                        <span>3D Spatial Tour</span>
-                      </span>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
@@ -170,7 +145,7 @@ export const Residences: React.FC<ResidencesProps> = ({
                   {currentUnit.deck}
                 </span>
                 <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
-                  {currentUnit.ceilingHeight}
+                  {currentUnit.tower}
                 </span>
               </div>
 
@@ -191,36 +166,24 @@ export const Residences: React.FC<ResidencesProps> = ({
 
               {/* CTA Hierarchy */}
               <div className="pt-2 flex flex-col gap-3">
-                {currentUnit.threeDUrl ? (
-                  <Button
-                    variant="gold"
-                    size="md"
-                    icon={<Compass size={15} />}
-                    onClick={handle3DAction}
-                    className="w-full"
-                  >
-                    EXPLORE IN 3D
-                  </Button>
-                ) : (
-                  <Button
-                    variant="gold"
-                    size="md"
-                    icon={<Eye size={15} />}
-                    onClick={() => {
-                      if (onOpenFloorPlansModal) {
-                        onOpenFloorPlansModal(currentUnit.id === '2bhk' ? 'tower-b' : 'tower-a');
-                      } else {
-                        onSelectFloorPlan(
-                          currentUnit.floorPlanImage,
-                          `${currentUnit.type} Blueprint`
-                        );
-                      }
-                    }}
-                    className="w-full"
-                  >
-                    VIEW BLUEPRINT
-                  </Button>
-                )}
+                <Button
+                  variant="gold"
+                  size="md"
+                  icon={<Eye size={15} />}
+                  onClick={() => {
+                    if (onOpenFloorPlansModal) {
+                      onOpenFloorPlansModal(currentUnit.id === '2bhk' ? 'tower-b' : 'tower-a');
+                    } else {
+                      onSelectFloorPlan(
+                        currentUnit.floorPlanImage,
+                        `${currentUnit.type} Blueprint`
+                      );
+                    }
+                  }}
+                  className="w-full"
+                >
+                  VIEW BLUEPRINT
+                </Button>
 
                 <button
                   onClick={() =>
@@ -233,7 +196,7 @@ export const Residences: React.FC<ResidencesProps> = ({
               </div>
 
               {/* 4 BHK note */}
-              {!currentUnit.threeDUrl && (
+              {currentUnit.id === '4bhk' && (
                 <p className="text-[11px] text-ivory-muted/60 font-sans font-light leading-relaxed">
                   * 4 BHK Presidential Residences occupy select upper floors.
                 </p>

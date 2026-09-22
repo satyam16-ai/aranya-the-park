@@ -4,14 +4,15 @@ import {
   ZoomOut,
   RotateCcw,
   Download,
-  ShieldCheck,
   Check,
   X,
   Move,
   Info,
+  Lock,
 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { detailedFloorPlans, type DetailedFloorPlan } from '../../data/floorPlansData';
+import { hasUnlockedPlans } from '../../services/enquiryService';
 
 export interface FloorPlansModalProps {
   isOpen: boolean;
@@ -27,6 +28,14 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
   initialCategory = 'master',
 }) => {
   const [activeCategory, setActiveCategory] = useState<'master' | 'tower-a' | 'tower-b'>(initialCategory);
+  // Tower plates stay blurred until an enquiry is submitted; master plan never locks.
+  const [plansUnlocked, setPlansUnlocked] = useState(hasUnlockedPlans);
+
+  useEffect(() => {
+    const sync = () => setPlansUnlocked(hasUnlockedPlans());
+    window.addEventListener('aranya:plans-unlocked', sync);
+    return () => window.removeEventListener('aranya:plans-unlocked', sync);
+  }, []);
   const [selectedPlanId, setSelectedPlanId] = useState<string>('master-layout');
   const [zoom, setZoom] = useState<number>(1);
   const [pan, setPan] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -82,6 +91,7 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
   // Current active plan
   const currentPlan: DetailedFloorPlan =
     categoryPlans.find((p) => p.id === selectedPlanId) || categoryPlans[0] || detailedFloorPlans[0];
+  const isLocked = !plansUnlocked && currentPlan.category !== 'master';
 
   const handleSelectCategory = (cat: 'master' | 'tower-a' | 'tower-b') => {
     setActiveCategory(cat);
@@ -167,10 +177,6 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
             <div className="flex items-center gap-2">
               <span className="text-champagne-300 text-[10px] tracking-[0.3em] uppercase font-sans font-semibold">
                 ARCHITECTURAL BLUEPRINTS
-              </span>
-              <span className="hidden md:inline-flex items-center gap-1 text-[10px] text-ivory-muted/70 font-sans border-l border-white/[0.1] pl-2">
-                <ShieldCheck size={11} className="text-champagne-400" />
-                MahaRERA: P51800011594
               </span>
             </div>
             <h2 className="font-serif text-base sm:text-xl text-ivory font-light truncate">
@@ -304,15 +310,17 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
             >
               <RotateCcw size={14} />
             </button>
-            <a
-              href={currentPlan.image}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-1.5 rounded-[3px] border border-white/[0.08] text-ivory-muted hover:text-champagne-300 hover:bg-white/[0.06] transition-colors inline-flex items-center ml-1"
-              title="Download High-Res Blueprint"
-            >
-              <Download size={14} />
-            </a>
+            {!isLocked && (
+              <a
+                href={currentPlan.image}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-1.5 rounded-[3px] border border-white/[0.08] text-ivory-muted hover:text-champagne-300 hover:bg-white/[0.06] transition-colors inline-flex items-center ml-1"
+                title="Download High-Res Blueprint"
+              >
+                <Download size={14} />
+              </a>
+            )}
           </div>
         </div>
 
@@ -341,11 +349,36 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
               <img
                 src={currentPlan.image}
                 alt={currentPlan.title}
-                className="max-h-[68vh] max-w-[90vw] object-contain filter contrast-[1.12] brightness-[0.98] drop-shadow-2xl"
+                className={`max-h-[68vh] max-w-[90vw] object-contain filter contrast-[1.12] brightness-[0.98] drop-shadow-2xl transition-[filter] duration-500 ${
+                  isLocked ? 'blur-[14px]' : ''
+                }`}
                 draggable={false}
               />
             </div>
           </div>
+
+          {isLocked && (
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-4 bg-dark-950/55 px-6 text-center">
+              <span className="inline-flex items-center justify-center h-12 w-12 rounded-full border border-champagne-400/40 text-champagne-300">
+                <Lock size={20} />
+              </span>
+              <div className="space-y-1.5 max-w-sm">
+                <h4 className="font-serif text-xl sm:text-2xl text-ivory">
+                  Floor plans available on request
+                </h4>
+                <p className="text-xs text-ivory-muted leading-relaxed">
+                  Share your details to unlock the detailed Tower A &amp; Tower B plates.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => onOpenLeadModal(`Floor Plan Access: ${currentPlan.title}`)}
+                className="btn-lux px-6 py-3 rounded-full bg-champagne-400 hover:bg-champagne-300 text-dark-950 font-sans text-[11px] uppercase tracking-[0.2em] font-semibold transition-colors cursor-pointer"
+              >
+                Unlock Floor Plans
+              </button>
+            </div>
+          )}
 
           {/* Canvas Floating Guidance Cue */}
           <div className="absolute bottom-3 left-3 z-10 pointer-events-none">

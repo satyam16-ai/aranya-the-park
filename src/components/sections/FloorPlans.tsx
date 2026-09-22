@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
   Maximize2,
-  ShieldCheck,
   FileDown,
+  Lock,
+  Eye,
 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { Button } from '../common/Button';
 import { Img } from '../common/Img';
+import { hasUnlockedPlans } from '../../services/enquiryService';
+
+/**
+ * Tower floor plates stay blurred until the visitor submits an enquiry; the
+ * master plan is always legible. `unlockPlans()` fires the event we listen for,
+ * so an unlock from anywhere on the page reveals the plans without a reload.
+ */
+function usePlansUnlocked(): boolean {
+  const [unlocked, setUnlocked] = useState(hasUnlockedPlans);
+  useEffect(() => {
+    const sync = () => setUnlocked(hasUnlockedPlans());
+    window.addEventListener('aranya:plans-unlocked', sync);
+    return () => window.removeEventListener('aranya:plans-unlocked', sync);
+  }, []);
+  return unlocked;
+}
+
 import { detailedFloorPlans } from '../../data/floorPlansData';
 
 interface FloorPlansProps {
@@ -26,6 +45,7 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
 }) => {
   const [selectedTower, setSelectedTower] = useState<TowerSelection>('tower-b');
   const [zoomLevel, setZoomLevel] = useState<number>(1);
+  const plansUnlocked = usePlansUnlocked();
 
   // Filter plans based on selected tower
   const towerPlans = detailedFloorPlans.filter((p) => {
@@ -36,6 +56,7 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
 
   const [activePlanId, setActivePlanId] = useState<string>(towerPlans[0]?.id || 'plan-b-typical');
   const currentPlan = towerPlans.find((p) => p.id === activePlanId) || towerPlans[0] || detailedFloorPlans[0];
+  const isLocked = !plansUnlocked && currentPlan.category !== 'master';
 
   const handleTowerChange = (tower: TowerSelection) => {
     setSelectedTower(tower);
@@ -53,6 +74,12 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
   const handleZoomReset = () => setZoomLevel(1);
 
   const handleFullscreen = () => {
+    // Fullscreen would show the unblurred plate, so a locked plan routes to the
+    // enquiry form instead of the lightbox.
+    if (isLocked) {
+      onOpenLeadModal('Floor Plan Access');
+      return;
+    }
     if (onSelectFloorPlanLightbox) {
       onSelectFloorPlanLightbox(currentPlan.image, currentPlan.title, currentPlan.description);
     } else if (onOpenModal) {
@@ -146,10 +173,6 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
               <span className="font-serif text-lg text-ivory font-light">
                 {currentPlan.title}
               </span>
-              <span className="inline-flex items-center gap-1 text-[10px] font-sans uppercase tracking-widest text-champagne-400/90 glass-panel-subtle px-2.5 py-0.5 rounded-full">
-                <ShieldCheck size={11} />
-                MahaRERA Approved
-              </span>
             </div>
 
             {/* Minimal Zoom & Fullscreen Controls */}
@@ -188,7 +211,7 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
           </div>
 
           {/* Large Architectural Blueprint Stage */}
-          <div className="relative h-[520px] sm:h-[680px] lg:h-[820px] bg-black/40 overflow-hidden flex items-center justify-center p-6 sm:p-10 cursor-grab active:cursor-grabbing">
+          <div className="relative h-[420px] sm:h-[520px] lg:h-[600px] bg-black/40 overflow-hidden flex items-center justify-center p-6 sm:p-10 cursor-grab active:cursor-grabbing">
             <div
               className="transition-transform duration-300 ease-out origin-center flex items-center justify-center w-full h-full"
               style={{ transform: `scale(${zoomLevel})` }}
@@ -197,9 +220,37 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
                 src={currentPlan.image}
                 alt={currentPlan.title}
                 sizes="(min-width: 1024px) 1400px, 100vw"
-                className="max-h-full max-w-full object-contain filter drop-shadow-2xl"
+                className={`max-h-full max-w-full object-contain filter drop-shadow-2xl transition-[filter] duration-500 ${
+                  isLocked ? 'blur-[14px] scale-[1.02]' : ''
+                }`}
               />
             </div>
+
+            {/* Enquiry gate — the master plan is never locked */}
+            {isLocked && (
+              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 bg-dark-950/55 backdrop-blur-[2px] px-6 text-center">
+                <span className="inline-flex items-center justify-center h-12 w-12 rounded-full border border-champagne-400/40 text-champagne-300">
+                  <Lock size={20} />
+                </span>
+                <div className="space-y-1.5 max-w-sm">
+                  <h4 className="font-serif text-xl sm:text-2xl text-ivory">
+                    Floor plans available on request
+                  </h4>
+                  <p className="text-xs text-ivory-muted leading-relaxed">
+                    Share your details and the sales desk will unlock the detailed Tower A &amp;
+                    Tower B plates, along with current pricing.
+                  </p>
+                </div>
+                <Button
+                  variant="gold"
+                  size="md"
+                  icon={<Eye size={15} />}
+                  onClick={() => onOpenLeadModal('Floor Plan Access', '2 BHK')}
+                >
+                  UNLOCK FLOOR PLANS
+                </Button>
+              </div>
+            )}
 
             {/* Subtle Zoom Indicator */}
             <div className="absolute bottom-4 left-4 text-[10px] font-sans tracking-widest uppercase text-ivory-muted/50 glass-panel-subtle px-2.5 py-1 rounded-full">

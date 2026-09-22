@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { Phone, MessageSquare, ArrowRight, CheckCircle2 } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Phone, MessageSquare, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
 import { projectData } from '../../data/projectData';
-import { submitEnquiry } from '../../services/enquiryService';
+import { submitEnquiry, sendOtp, verifyOtp, unlockPlans } from '../../services/enquiryService';
 
 interface EnquiryCTAProps {
   onOpenLeadModal?: (purpose?: string, config?: string) => void;
@@ -19,9 +19,55 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [referenceId, setReferenceId] = useState('');
 
+  /* Same verification step as the modal form, so both routes to the sales desk
+     behave identically. */
+  const [otpStage, setOtpStage] = useState<'idle' | 'sent' | 'verified'>('idle');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpBusy, setOtpBusy] = useState(false);
+  const [otpNotice, setOtpNotice] = useState('');
+  const [otpError, setOtpError] = useState('');
+
+  const phoneIsComplete = /^[6-9]\d{9}$/.test(phoneNumber);
+
+  useEffect(() => {
+    setOtpStage('idle');
+    setOtpCode('');
+    setOtpNotice('');
+    setOtpError('');
+  }, [phoneNumber]);
+
+  const handleSendOtp = async () => {
+    if (!phoneIsComplete || otpBusy) return;
+    setOtpBusy(true);
+    setOtpError('');
+    const res = await sendOtp(phoneNumber);
+    setOtpBusy(false);
+    if (res.success) {
+      setOtpStage('sent');
+      setOtpNotice(res.message);
+    } else {
+      setOtpError(res.message);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (otpBusy) return;
+    setOtpBusy(true);
+    setOtpError('');
+    const res = await verifyOtp(phoneNumber, otpCode);
+    setOtpBusy(false);
+    if (res.success) {
+      setOtpStage('verified');
+      setOtpNotice(res.message);
+    } else {
+      setOtpError(res.message);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName.trim() || !phoneNumber.trim() || !consentAgreed) return;
+    if (otpStage !== 'verified') return;
 
     setIsSubmitting(true);
 
@@ -37,6 +83,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
 
       setReferenceId(response.leadId);
       setIsSubmitted(true);
+      unlockPlans();
     } catch (err) {
       console.error('Submission failed', err);
     } finally {
@@ -162,7 +209,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                       Mobile Number *
                     </label>
                     <div className="relative flex items-center">
-                      <span className="absolute left-4 text-ivory-muted/50 font-mono text-xs">+91</span>
+                      <span className="absolute left-4 text-ivory-muted/50 text-xs tabular-nums font-semibold">+91</span>
                       <input
                         id="cta-mobile"
                         type="tel"
@@ -172,9 +219,54 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value.replace(/\D/g, ''))}
                         placeholder="10-digit mobile"
-                        className="w-full bg-white/[0.04] border border-white/[0.12] rounded-[3px] pl-12 pr-4 py-3 text-sm text-ivory placeholder:text-ivory-muted/30 focus:border-champagne-400/80 focus:bg-white/[0.06] focus:outline-none transition-all"
+                        className="w-full bg-white/[0.04] border border-white/[0.12] rounded-[3px] pl-12 pr-[104px] py-3 text-sm text-ivory placeholder:text-ivory-muted/30 focus:border-champagne-400/80 focus:bg-white/[0.06] focus:outline-none transition-all"
                       />
+                      {otpStage === 'verified' ? (
+                        <span className="absolute right-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-champagne-300">
+                          <Check size={12} />
+                          Verified
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={handleSendOtp}
+                          disabled={!phoneIsComplete || otpBusy}
+                          className="absolute right-2 h-8 px-3 rounded-[3px] bg-champagne-400/90 hover:bg-champagne-300 disabled:bg-white/[0.06] disabled:text-ivory-muted/40 text-dark-950 text-[10px] uppercase tracking-wider font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed"
+                        >
+                          {otpStage === 'sent' ? 'Resend' : 'Send OTP'}
+                        </button>
+                      )}
                     </div>
+
+                    {otpStage === 'sent' && (
+                      <div className="flex gap-2 mt-2">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          autoComplete="one-time-code"
+                          maxLength={6}
+                          value={otpCode}
+                          onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                          placeholder="6-digit code"
+                          aria-label="Verification code"
+                          className="flex-1 bg-white/[0.04] border border-white/[0.12] rounded-[3px] px-4 py-3 text-sm text-ivory tracking-[0.4em] placeholder:tracking-normal placeholder:text-ivory-muted/30 focus:border-champagne-400/80 focus:outline-none transition-all"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleVerifyOtp}
+                          disabled={otpCode.length !== 6 || otpBusy}
+                          className="shrink-0 px-5 rounded-[3px] border border-champagne-400/50 hover:border-champagne-300 text-champagne-300 disabled:opacity-40 text-[11px] uppercase tracking-wider font-semibold transition-colors cursor-pointer disabled:cursor-not-allowed"
+                        >
+                          Verify
+                        </button>
+                      </div>
+                    )}
+
+                    {(otpNotice || otpError) && otpStage !== 'verified' && (
+                      <p className={`mt-1.5 text-[10px] ${otpError ? 'text-red-300' : 'text-ivory-muted/70'}`}>
+                        {otpError || otpNotice}
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -232,11 +324,15 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                       type="submit"
                       variant="gold"
                       size="lg"
-                      disabled={isSubmitting || !consentAgreed}
+                      disabled={isSubmitting || !consentAgreed || otpStage !== 'verified'}
                       className="w-full justify-center tracking-widest uppercase font-semibold text-xs"
                       icon={<ArrowRight size={15} />}
                     >
-                      {isSubmitting ? 'Registering…' : 'REQUEST A PRIVATE VIEWING'}
+                      {isSubmitting
+                        ? 'Registering…'
+                        : otpStage !== 'verified'
+                          ? 'VERIFY YOUR NUMBER TO CONTINUE'
+                          : 'REQUEST A PRIVATE VIEWING'}
                     </Button>
                   </div>
                 </form>

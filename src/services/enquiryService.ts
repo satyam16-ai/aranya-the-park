@@ -70,3 +70,70 @@ export function getStoredEnquiries(): any[] {
     return [];
   }
 }
+
+/* ────────────────────────────────────────────────────────────────
+   OTP VERIFICATION — stubbed
+   ────────────────────────────────────────────────────────────────
+   The UI below is final; only these two functions need replacing when a
+   provider account exists (MSG91 / Twilio / WhatsApp Business API). Swap the
+   bodies for `fetch('/api/otp/send'|'/api/otp/verify', ...)` — the modal does
+   not care how the code is delivered.
+
+   Until then any 6-digit code is accepted, so the form stays testable and the
+   flow can be demoed. NOTE: this is not security; it must be wired to a real
+   provider before the site takes live leads. */
+
+const OTP_SESSION_KEY = 'aranya_verified_phone';
+
+/** Pretends to dispatch a one-time code to the given number. */
+export async function sendOtp(phoneNumber: string): Promise<{ success: boolean; message: string }> {
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  return {
+    success: true,
+    message: `Verification code sent to +91 ${phoneNumber}.`,
+  };
+}
+
+/** Accepts any 6-digit code. Replace with a real provider check. */
+export async function verifyOtp(
+  phoneNumber: string,
+  code: string
+): Promise<{ success: boolean; message: string }> {
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  if (!/^\d{6}$/.test(code)) {
+    return { success: false, message: 'Enter the 6-digit code.' };
+  }
+
+  try {
+    sessionStorage.setItem(OTP_SESSION_KEY, phoneNumber);
+  } catch {
+    /* private mode — verification simply won't persist across reloads */
+  }
+  return { success: true, message: 'Number verified.' };
+}
+
+/* ────────────────────────────────────────────────────────────────
+   FLOOR PLAN ACCESS
+   ────────────────────────────────────────────────────────────────
+   Floor plans render blurred until a visitor submits an enquiry. The unlock
+   lasts for the browsing session only, so a returning visitor enquires again. */
+
+const PLANS_UNLOCKED_KEY = 'aranya_plans_unlocked';
+
+export function hasUnlockedPlans(): boolean {
+  try {
+    return sessionStorage.getItem(PLANS_UNLOCKED_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+export function unlockPlans(): void {
+  try {
+    sessionStorage.setItem(PLANS_UNLOCKED_KEY, 'true');
+    window.dispatchEvent(new Event('aranya:plans-unlocked'));
+  } catch {
+    /* ignore — plans stay blurred, which is the safe default */
+  }
+}

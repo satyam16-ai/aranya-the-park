@@ -95,14 +95,17 @@
   --color-stone-300: #B9B3A8;
   --color-stone-200: #D5D0C6;
 
-  /* — Typography Scale — */
+  /* — Typography: one family, three variations —
+     Cormorant Garamond carries display, body and UI roles; the roles are
+     separated by weight, case and tracking rather than by family.
+     Minimum weight is 500 everywhere: lighter cuts render as hairlines at 1x. */
   --font-serif: "Cormorant Garamond", "Georgia", serif;
-  --font-display: "Cinzel", "Georgia", serif;
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-display: "Cormorant Garamond", "Georgia", serif;
+  --font-sans: "Cormorant Garamond", "Georgia", serif;
 
   /* — Standardized Section Spacing — */
-  --spacing-section: 7.5rem;
-  --spacing-section-lg: 10rem;
+  --spacing-section: 4.5rem;
+  --spacing-section-lg: 6rem;
 
   /* — Container Max Widths — */
   --container-sm: 640px;
@@ -185,6 +188,7 @@
 
   body {
     font-family: var(--font-sans);
+    font-weight: 500;
     background-color: var(--color-dark-950);
     color: var(--color-ivory);
     line-height: 1.6;
@@ -240,7 +244,7 @@
 /* Serif editorial heading — section titles with fluid clamp */
 .heading-serif {
   font-family: var(--font-serif);
-  font-weight: 300;
+  font-weight: 600;
   font-size: clamp(1.75rem, 2.8vw + 0.8rem, 3.25rem);
   letter-spacing: 0.01em;
   line-height: 1.15;
@@ -249,7 +253,7 @@
 /* Sub-serif editorial heading */
 .heading-sub {
   font-family: var(--font-serif);
-  font-weight: 400;
+  font-weight: 600;
   font-size: clamp(1.25rem, 1.5vw + 0.75rem, 1.875rem);
   line-height: 1.25;
 }
@@ -257,8 +261,8 @@
 /* Eyebrow label — small uppercase accent text */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: clamp(0.625rem, 0.35vw + 0.5rem, 0.6875rem);
-  font-weight: 600;
+  font-size: clamp(0.6875rem, 0.35vw + 0.55rem, 0.75rem);
+  font-weight: 700;
   letter-spacing: clamp(0.18em, 0.5vw + 0.1em, 0.28em);
   text-transform: uppercase;
   color: var(--color-champagne-400);
@@ -267,8 +271,8 @@
 /* Body prose — editorial reading text */
 .prose-editorial {
   font-family: var(--font-sans);
-  font-size: clamp(0.875rem, 0.2vw + 0.8rem, 1rem);
-  font-weight: 300;
+  font-size: clamp(0.9375rem, 0.25vw + 0.85rem, 1.0625rem);
+  font-weight: 500;
   line-height: 1.8;
   color: var(--color-cream-300);
 }
@@ -276,8 +280,8 @@
 /* Small detail text — captions, disclaimers, labels */
 .text-detail {
   font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 500;
+  font-size: 0.75rem;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
@@ -709,3 +713,35 @@
 @media (prefers-reduced-motion: reduce) {
   .closet-halo { animation: none; }
 }
+
+
+/* ----------------------------------------------------------------
+   TYPOGRAPHY HARDENING — single-family (Cormorant Garamond) pass
+   ----------------------------------------------------------------
+   Cormorant is a light-set serif with a small x-height, so the weights
+   and sizes that read fine in Plus Jakarta Sans turn into hairlines here.
+   These rules sit outside @layer so they win over Tailwind's utilities,
+   clamping every weight to >= 500 and nudging the smallest UI sizes up.
+   Do not lower these values. */
+.font-thin,
+.font-extralight,
+.font-light,
+.font-normal { font-weight: 500; }
+.font-medium { font-weight: 600; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Small uppercase UI text: nav, chips, labels, badges, captions. */
+.text-\[10px\] { font-size: 11.5px; font-weight: 700; }
+.text-\[11px\] { font-size: 12.5px; font-weight: 700; }
+.text-\[0\.625rem\] { font-size: 0.71rem; font-weight: 700; }
+.text-\[0\.6875rem\] { font-size: 0.78rem; font-weight: 700; }
+.text-xs { font-size: 0.8125rem; }
+
+/* Form controls keep the serif but need body weight to stay readable. */
+input,
+textarea,
+select,
+button { font-family: var(--font-sans); font-weight: 600; }
+input::placeholder,
+textarea::placeholder { font-weight: 500; }

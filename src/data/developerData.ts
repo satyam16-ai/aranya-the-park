@@ -17,7 +17,7 @@ export const developerData = {
     },
     {
       title: 'MahaRERA Transparency',
-      description: 'Complete regulatory adherence under MahaRERA registration number P51800011594.',
+      description: 'Complete regulatory adherence under MahaRERA registration.',
     },
     {
       title: 'Prime Location Curation',

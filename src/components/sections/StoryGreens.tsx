@@ -41,7 +41,7 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
         {/* Chapter Eyebrow */}
         <div className="text-center mb-14 sm:mb-20">
           <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-6">
-            CHAPTER 02 · BIOPHILIC SANCTUARY
+            BIOPHILIC SANCTUARY
           </span>
           <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight text-ivory leading-[1.05] max-w-4xl mx-auto uppercase">
             A Newer Kind<br />The Lushury
@@ -50,7 +50,7 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
 
         {/* Editorial band — the stat, the narrative and the metrics now run the
             full width so the image below can take the whole stage. */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-14 sm:mb-18 text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-10 sm:mb-12 text-left">
           <div className="lg:col-span-4 space-y-2">
             <span className="font-serif text-7xl sm:text-8xl lg:text-9xl text-champagne-300 font-light tracking-tight leading-none block">
               40%
@@ -66,8 +66,8 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
 
           <div className="lg:col-span-3 pt-4 border-t border-white/[0.08] flex items-center gap-8">
             <div>
-              <span className="font-serif text-2xl text-ivory font-light block">11 Ft.</span>
-              <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70">Ceiling Clearance</span>
+              <span className="font-serif text-2xl text-ivory font-light block">2 Towers</span>
+              <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70">Tower A &amp; Tower B</span>
             </div>
             <div className="w-px h-8 bg-white/[0.08]" />
             <div>
