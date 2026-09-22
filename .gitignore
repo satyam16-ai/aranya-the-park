@@ -25,3 +25,10 @@ dist-ssr
 
 # Raw reference documents & scans (not needed for deployment)
 reference/
+
+# Raw client assets (source photos/logos — not needed for deployment)
+JPGs/
+LOGO/
+
+# Vercel CLI link
+.vercel
