@@ -1,0 +1,30 @@
+# What NOT to upload to Vercel.
+#
+# Vercel installs dependencies and runs the build itself, so a deploy only
+# needs the sources it builds from — not node_modules (172 MB), not a local
+# dist, and not the raw client material the site was cut from.
+#
+# Careful: as soon as this file exists Vercel stops falling back to
+# .gitignore, so everything heavy has to be named here too, even if
+# .gitignore already covers it.
+
+node_modules
+dist
+dist-ssr
+
+# Raw client assets — source photographs, layered logos and the print
+# brochure. The web-ready versions live in public/assets, which IS uploaded.
+JPGs
+LOGO
+reference
+*.pdf
+
+# Local tooling, never served
+scripts
+.claude
+.vscode
+.idea
+
+# Logs and local env
+*.log
+*.local
