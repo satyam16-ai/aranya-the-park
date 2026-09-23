@@ -1,12 +1,13 @@
 import React from 'react';
 import { Maximize2 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
 
 const SPREAD = '/assets/opt/lifestyle-park-greens-2800.webp';
 const SPREAD_TITLE = 'Welcome to a Forevermore Life';
 const SPREAD_CAPTION =
-  'Over 40% open green landscapes, sensory aroma lawns and tranquil courtyards, curated by BeyondGreen.';
+  '40% open green spaces, an aroma garden and landscaped walks, designed by BeyondGreen.';
 
 interface StoryGreensProps {
   onOpenLightbox?: (
@@ -30,7 +31,7 @@ interface StoryGreensProps {
  */
 export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
   const openSpread = () =>
-    onOpenLightbox?.(SPREAD, SPREAD_TITLE, SPREAD_CAPTION, 'Chapter 02 · Biophilic Sanctuary');
+    onOpenLightbox?.(SPREAD, SPREAD_TITLE, SPREAD_CAPTION, 'The Lushury Life');
 
   return (
     <section id="story-greens" className="section-spacing bg-dark-900 text-ivory relative overflow-hidden">
@@ -39,20 +40,16 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
 
       <Container size="showcase">
         {/* Chapter Eyebrow */}
-        <div className="text-center mb-14 sm:mb-20">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-6">
-            BIOPHILIC SANCTUARY
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl xl:text-8xl font-light tracking-tight text-ivory leading-[1.05] max-w-4xl mx-auto uppercase">
-            A Newer Kind<br />The Lushury
-          </h2>
-        </div>
+        <SectionHeading
+          eyebrow="Welcome to a Forevermore Life"
+          title="Luxury, Made Lush"
+        />
 
         {/* Editorial band — the stat, the narrative and the metrics now run the
             full width so the image below can take the whole stage. */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-10 sm:mb-12 text-left">
           <div className="lg:col-span-4 space-y-2">
-            <span className="font-serif text-7xl sm:text-8xl lg:text-9xl text-champagne-300 font-light tracking-tight leading-none block">
+            <span className="font-serif text-5xl sm:text-6xl lg:text-7xl text-champagne-300 font-light tracking-tight leading-none block">
               40%
             </span>
             <span className="font-sans text-xs sm:text-sm uppercase tracking-[0.25em] text-ivory font-semibold block">
@@ -61,18 +58,18 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
           </div>
 
           <p className="lg:col-span-5 font-sans text-sm sm:text-base text-ivory-muted font-light leading-relaxed">
-            While the world races behind fleeting luxuries, we bring you a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Where life is lush with over 40% open green landscapes, sensory aroma lawns, and tranquil courtyards curated by <strong className="text-ivory font-medium">BeyondGreen</strong>.
+            While the world races after fleeting luxuries, Aranya offers a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Life here is lush with 40% open green spaces and generous with sunlit sundecks and spacious homes, all set in a landscape by <strong className="text-ivory font-medium">BeyondGreen</strong>.
           </p>
 
-          <div className="lg:col-span-3 pt-4 border-t border-white/[0.08] flex items-center gap-8">
+          <div className="lg:col-span-3 pt-4 border-t border-white/[0.08] flex items-center gap-6">
             <div>
               <span className="font-serif text-2xl text-ivory font-light block">2 Towers</span>
-              <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70">Tower A &amp; Tower B</span>
+              <span className="text-[10px] font-sans uppercase tracking-[0.08em] text-ivory-muted/70 whitespace-nowrap">Tower A &amp; Tower B</span>
             </div>
             <div className="w-px h-8 bg-white/[0.08]" />
             <div>
-              <span className="font-serif text-2xl text-ivory font-light block">100%</span>
-              <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70">Vastu Aligned</span>
+              <span className="font-serif text-2xl text-ivory font-light block">Vastu</span>
+              <span className="text-[10px] font-sans uppercase tracking-[0.08em] text-ivory-muted/70 whitespace-nowrap">Compliant Homes</span>
             </div>
           </div>
         </div>
@@ -85,15 +82,15 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
           onClick={openSpread}
           aria-label="View the full brochure page"
           className="group relative block w-full max-w-[440px] aspect-[692/1000] overflow-hidden rounded-[4px] border border-white/[0.06] shadow-[0_25px_60px_rgba(0,0,0,0.8)] cursor-zoom-in
-                     lg:w-auto lg:max-w-none lg:aspect-auto lg:h-[min(86vh,1250px)]"
+                     lg:max-w-none lg:aspect-auto lg:h-[min(86vh,1250px)]"
         >
           <Img
             src={SPREAD}
             alt="Verdant parkscapes at Aranya The Park — the Lushury brochure page"
-            sizes="(min-width: 1024px) 1200px, 440px"
+            sizes="(min-width: 1024px) 100vw, 440px"
             loading="lazy"
             className="absolute inset-0 h-full w-full object-cover object-left transition-transform duration-1000 ease-out group-hover:scale-[1.02]
-                       lg:static lg:h-full lg:w-auto lg:max-w-[94vw] lg:object-contain"
+                       lg:static lg:h-full lg:w-full lg:max-w-full lg:object-cover"
           />
 
           {/* Inspect cue */}

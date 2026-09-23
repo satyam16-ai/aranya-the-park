@@ -7,7 +7,7 @@ interface StickyActionBarProps {
 }
 
 const WHATSAPP_URL = `https://wa.me/919769766500?text=${encodeURIComponent(
-  'Hello, I would like to schedule a private preview of Aranya The Park, Malad West.'
+  'Hello, I would like to arrange a private site visit to Aranya The Park, Malad West.'
 )}`;
 
 /**

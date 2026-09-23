@@ -33,11 +33,61 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 
 ## Client revision round — 22 Sep 2026
 
-- **Typography** — one family only: Cormorant Garamond at weights 500/600/700. The
-  roles (display / body / UI) differ by weight, case and tracking, not by family.
-  `src/index.css` ends with a hardening block that clamps every Tailwind weight
-  utility to >= 500 and nudges the 10-11px UI sizes up; Cormorant is a light-set
-  serif and renders as hairlines below that. Do not lower those values.
+- **Hero is The Arrival** — the standalone tower-render hero was removed at the
+  client's request on 23 Sep and the pinned arrival sequence took the first fold
+  (`src/components/sections/Hero.tsx`, `id="overview"`, `StoryArrival.tsx` deleted).
+  Layer one is deliberately bare — the positioning line in champagne gold over
+  its address, and nothing else. The wordmark, the crest, the supporting
+  paragraph and both CTAs were all removed from the first fold on 23-09 at the
+  client's request, so above-the-fold enquiry now runs through the navbar's
+  ENQUIRE button and the sticky action bar; do not assume a hero CTA exists.
+  The headline sets itself one letter at a time (`.hero-letter` in `index.css`,
+  delays scheduled once at module scope in `Hero.tsx`): every letter holds its
+  final box from the first frame and only opacity, blur and a small rise animate,
+  so a centred display line never reflows mid-reveal. The animated letters are
+  `aria-hidden` and an `sr-only` copy carries the full line, and
+  `prefers-reduced-motion` drops the reveal entirely.
+- **Hero slideshow** — the frames behind the statement cross-fade on a timer
+  (`HERO_SLIDES` in `Hero.tsx`: garden walk, aerial, lobby; 6s dwell, 1.4s fade,
+  a slow `heroSlideZoom` push). This replaced the pinned GSAP sequence that
+  revealed the second frame on scroll, so the hero costs exactly one viewport
+  instead of 1.55. The timer stops when the hero is off-screen or the tab is
+  hidden, the dots take manual control, and `prefers-reduced-motion` holds the
+  first frame with the dots still working. Frames past the first stay unmounted
+  for 1.2s so the LCP image has the network to itself. **`gsap` and
+  `@types/gsap` are now imported nowhere** — the bundle already tree-shook them
+  out (539 kB -> 425 kB), and they can be uninstalled whenever convenient. Two rules to keep: GSAP must target
+  wrappers, never elements carrying `.hero-animate-*` (those CSS animations use
+  `fill-mode: both`, so their final keyframe outranks inline styles), and the
+  retiring layer must fade with `autoAlpha`, not `opacity` — it holds the enquiry
+  button, and a transparent button still swallows clicks. The scrims over both
+  frames are **neutral black**: the client rejected the green wash on 23-09, so
+  `dark-950` appears only in the top/bottom seams that blend the frame into the
+  page, never as a tint across the photography. The left editorial rail and the
+  large crest watermark were removed in the same note.
+- **Typography** — one family only: **Playfair Display** (weights 500/600/700;
+  Cormorant Garamond was replaced on 23 Sep). The roles (display / body / UI)
+  differ by weight, case and tracking, not by family — that rule is the client's
+  and should survive any future family change. `src/index.css` ends with a
+  hardening block that clamps every Tailwind weight utility to >= 500 and nudges
+  the smallest UI sizes up; Playfair is a high-contrast display face whose thin
+  strokes drop out below that. Do not lower those values.
+- **Section headings** — every section renders its header through
+  `src/components/common/SectionHeading.tsx`. It is left-aligned and deliberately
+  small (`.heading-serif` caps at 40px), and its `aside` prop puts the section's
+  own controls on the heading's row instead of in a second band beneath it (see
+  `FloorPlans.tsx` for the pattern). Sizing lives in `.eyebrow` /
+  `.heading-serif` / `.prose-editorial`, so the whole site retunes from one
+  place. Do not reintroduce per-section hand-rolled headers.
+- **Palette is unchanged** — deep forest green #071510 with champagne gold
+  #C8A96B. A light-sage version and a mid-dark #41584E version were both built
+  on 23 Sep and reverted at the client's direction; both are recoverable from
+  the git stash named `session-23-09` if they are ever wanted again.
+- **Amenities** — a tile raises its photograph on hover (a fixed-position panel
+  anchored to the tile, flipping below it when the navbar zone would clip it),
+  and the click still opens the full lightbox. The hover path is gated on
+  `(hover: hover) and (pointer: fine)`, so on touch the tap goes straight to the
+  lightbox — the preview must never be the only route to the image.
 - **OTP** — `sendOtp` / `verifyOtp` in `src/services/enquiryService.ts` are stubs that
   accept any 6-digit code. Replace both bodies with real provider calls before the
   site takes live leads; the UI needs no changes.

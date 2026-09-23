@@ -103,15 +103,15 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
             <div className="lg:col-span-6 space-y-8">
               <div>
                 <span className="font-sans text-[11px] uppercase tracking-[0.3em] text-champagne-300 font-medium block mb-3">
-                  PRIVATE CONCIERGE EXPERIENCE
+                  PRIVATE SITE VISITS
                 </span>
-                <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl text-ivory font-light tracking-tight leading-[1.1]">
+                <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ivory font-light tracking-tight leading-[1.1]">
                   Begin Your<br />Lushury Life
                 </h2>
               </div>
 
               <p className="font-sans text-sm sm:text-base text-ivory-muted font-light leading-relaxed">
-                Schedule a personalized walkthrough of the sample residences, interactive 3D spatial models, and panoramic sky vistas with our Senior Relationship Concierge.
+                Visit Aranya The Park with our sales team. Walk the site, go through the floor plans and receive current pricing, at a time that suits you.
               </p>
 
               {/* Direct Touchpoints */}
@@ -135,7 +135,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                   <div>
                     <span className="text-[10px] font-sans uppercase tracking-widest text-ivory-muted/70 block">Instant Chat</span>
                     <span className="text-sm text-ivory font-medium group-hover:text-[#25D366] transition-colors">
-                      WhatsApp Concierge
+                      Chat on WhatsApp
                     </span>
                   </div>
                 </a>
@@ -149,14 +149,14 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                   <div className="w-16 h-16 mx-auto rounded-full bg-champagne-400/10 border border-champagne-400/30 flex items-center justify-center text-champagne-300">
                     <CheckCircle2 size={32} />
                   </div>
-                  <h4 className="font-serif text-2xl text-ivory font-light">Private Preview Registered</h4>
+                  <h4 className="font-serif text-2xl text-ivory font-light">Site Visit Requested</h4>
                   <p className="font-sans text-sm text-ivory-muted font-light leading-relaxed">
-                    Thank you, {fullName}. Reference: <strong className="text-champagne-300 font-medium">{referenceId}</strong>. Our relationship manager will reach out shortly.
+                    Thank you, {fullName}. Reference: <strong className="text-champagne-300 font-medium">{referenceId}</strong>. Our sales team will be in touch shortly to arrange your visit.
                   </p>
                   <div className="pt-4 flex flex-col gap-3">
                     <a
                       href={`https://wa.me/919769766500?text=${encodeURIComponent(
-                        `Hello, I am ${fullName} (${referenceId}). I just requested a private preview of ${configuration} at Aranya The Park.`
+                        `Hello, I am ${fullName} (${referenceId}). I have requested a private site visit for a ${configuration} at Aranya The Park.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -182,10 +182,10 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="mb-6">
                     <h3 className="font-serif text-xl sm:text-2xl text-ivory font-light">
-                      Request A Private Viewing
+                      Request a Private Site Visit
                     </h3>
                     <p className="text-xs text-ivory-muted/70 mt-1 font-sans">
-                      Direct developer consultation and personalized residence walkthrough
+                      Speak directly with the developer's sales team.
                     </p>
                   </div>
 
@@ -315,7 +315,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                       required
                     />
                     <label htmlFor="cta-consent" className="cursor-pointer leading-relaxed">
-                      I agree to receive project details via Call, WhatsApp, or Email. Direct developer interaction.
+                      I agree to receive project details by call, WhatsApp or email from the developer's team.
                     </label>
                   </div>
 
@@ -329,10 +329,10 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                       icon={<ArrowRight size={15} />}
                     >
                       {isSubmitting
-                        ? 'Registering…'
+                        ? 'Sending…'
                         : otpStage !== 'verified'
                           ? 'VERIFY YOUR NUMBER TO CONTINUE'
-                          : 'REQUEST A PRIVATE VIEWING'}
+                          : 'REQUEST A PRIVATE VISIT'}
                     </Button>
                   </div>
                 </form>

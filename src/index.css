@@ -95,17 +95,20 @@
   --color-stone-300: #B9B3A8;
   --color-stone-200: #D5D0C6;
 
-  /* — Typography: one family, three variations —
-     Cormorant Garamond carries display, body and UI roles; the roles are
+  /* — Typography: one family, several variations —
+     Playfair Display carries display, body and UI roles; the roles are
      separated by weight, case and tracking rather than by family.
      Minimum weight is 500 everywhere: lighter cuts render as hairlines at 1x. */
-  --font-serif: "Cormorant Garamond", "Georgia", serif;
-  --font-display: "Cormorant Garamond", "Georgia", serif;
-  --font-sans: "Cormorant Garamond", "Georgia", serif;
+  --font-serif: "Playfair Display", "Georgia", serif;
+  --font-display: "Playfair Display", "Georgia", serif;
+  --font-sans: "Playfair Display", "Georgia", serif;
 
-  /* — Standardized Section Spacing — */
-  --spacing-section: 4.5rem;
-  --spacing-section-lg: 6rem;
+  /* — Standardized Section Spacing —
+     Trimmed in the 23-09 review: the client reads tall header bands as wasted
+     area. Section headers are left-aligned and share their row with the
+     section's own controls, so the rhythm can be tighter than before. */
+  --spacing-section: 3.5rem;
+  --spacing-section-lg: 4.5rem;
 
   /* — Container Max Widths — */
   --container-sm: 640px;
@@ -245,7 +248,9 @@
 .heading-serif {
   font-family: var(--font-serif);
   font-weight: 600;
-  font-size: clamp(1.75rem, 2.8vw + 0.8rem, 3.25rem);
+  /* Capped at 40px. Sections previously hand-rolled up to text-8xl (96px),
+     which is what made every header band so tall. */
+  font-size: clamp(1.5rem, 1.9vw + 0.7rem, 2.5rem);
   letter-spacing: 0.01em;
   line-height: 1.15;
 }
@@ -271,9 +276,9 @@
 /* Body prose — editorial reading text */
 .prose-editorial {
   font-family: var(--font-sans);
-  font-size: clamp(0.9375rem, 0.25vw + 0.85rem, 1.0625rem);
+  font-size: clamp(0.875rem, 0.2vw + 0.8rem, 0.9375rem);
   font-weight: 500;
-  line-height: 1.8;
+  line-height: 1.65;
   color: var(--color-cream-300);
 }
 
@@ -473,6 +478,53 @@
 .hero-animate-cue {
   animation: heroEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.25s both;
 }
+/* Hero slideshow — a slow push on whichever frame is showing. The animation
+   runs longer than one dwell plus its cross-fade, so it never reaches the end
+   and snaps back while the frame is still on screen. */
+@keyframes heroSlideZoom {
+  from {
+    transform: scale(1.001);
+  }
+  to {
+    transform: scale(1.085);
+  }
+}
+.hero-slide-active img {
+  animation: heroSlideZoom 8.6s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-active img {
+    animation: none;
+  }
+}
+
+/* Hero headline — the letters set themselves one at a time.
+   Each letter keeps its final box from the first frame (only opacity, blur and
+   a small rise animate), so a centred display line never reflows mid-reveal the
+   way a caret-style typewriter would. Delays are set per letter in Hero.tsx. */
+@keyframes heroLetterIn {
+  from {
+    opacity: 0;
+    transform: translateY(0.16em);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+.hero-letter {
+  animation: heroLetterIn 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-letter {
+    animation: none;
+  }
+}
+
 .hero-animate-aside {
   animation: heroEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
 }
@@ -716,32 +768,36 @@
 
 
 /* ----------------------------------------------------------------
-   TYPOGRAPHY HARDENING — single-family (Cormorant Garamond) pass
+   TYPOGRAPHY HARDENING — single-family (Playfair Display) pass
    ----------------------------------------------------------------
-   Cormorant is a light-set serif with a small x-height, so the weights
-   and sizes that read fine in Plus Jakarta Sans turn into hairlines here.
-   These rules sit outside @layer so they win over Tailwind's utilities,
-   clamping every weight to >= 500 and nudging the smallest UI sizes up.
-   Do not lower these values. */
+   Playfair has a large x-height and a sturdy stem, so it needs far less
+   propping up than Cormorant did — the size nudges below are roughly half
+   what the previous family required. What it does share is high stroke
+   contrast: at 10-12px the thin strokes thin out, so small UI text keeps
+   weight 600 rather than being scaled up further.
+
+   These rules sit outside @layer so they win over Tailwind's utilities.
+   Weight never drops below 500 anywhere. Do not lower these values. */
 .font-thin,
 .font-extralight,
 .font-light,
 .font-normal { font-weight: 500; }
-.font-medium { font-weight: 600; }
+.font-medium { font-weight: 500; }
 .font-semibold { font-weight: 600; }
 .font-bold { font-weight: 700; }
 
 /* Small uppercase UI text: nav, chips, labels, badges, captions. */
-.text-\[10px\] { font-size: 11.5px; font-weight: 700; }
-.text-\[11px\] { font-size: 12.5px; font-weight: 700; }
-.text-\[0\.625rem\] { font-size: 0.71rem; font-weight: 700; }
-.text-\[0\.6875rem\] { font-size: 0.78rem; font-weight: 700; }
-.text-xs { font-size: 0.8125rem; }
+.text-\[9px\] { font-size: 10px; font-weight: 600; }
+.text-\[10px\] { font-size: 11px; font-weight: 600; }
+.text-\[11px\] { font-size: 12px; font-weight: 600; }
+.text-\[0\.625rem\] { font-size: 0.6875rem; font-weight: 600; }
+.text-\[0\.6875rem\] { font-size: 0.75rem; font-weight: 600; }
+.text-xs { font-size: 0.78125rem; }
 
 /* Form controls keep the serif but need body weight to stay readable. */
 input,
 textarea,
 select,
-button { font-family: var(--font-sans); font-weight: 600; }
+button { font-family: var(--font-sans); font-weight: 500; }
 input::placeholder,
 textarea::placeholder { font-weight: 500; }

@@ -11,6 +11,7 @@ import {
   Navigation,
 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { projectData } from '../../data/projectData';
 
@@ -19,20 +20,20 @@ interface LocationConnectivityProps {
 }
 
 const keyArterials = [
-  { label: 'MALAD WEST', detail: 'Prime Pin Code 400064', note: 'Direct Boulevard Access' },
-  { label: 'NEW LINK ROAD', detail: '18.3-Metre Boulevard', note: 'Behind Evershine Mall' },
-  { label: 'METRO 2A', detail: '4 Minutes', note: 'D.N. Nagar to Dahisar' },
-  { label: 'WESTERN EXPRESS', detail: '12 Minutes', note: 'Arterial North-South Spine' },
-  { label: 'AIRPORT', detail: 'CSMIA Terminal', note: 'Seamless Highway Corridor' },
+  { label: 'MALAD WEST', detail: 'Mumbai 400064', note: 'Mindspace Neighbourhood' },
+  { label: 'NEW LINK ROAD', detail: '18.3 m Access Road', note: 'Behind Evershine Mall' },
+  { label: 'METRO 2A', detail: '3 Minutes', note: 'Malad West Station' },
+  { label: 'WESTERN EXPRESS', detail: '14 Minutes', note: 'North–South Highway' },
+  { label: 'AIRPORT', detail: '42 Minutes', note: 'CSMIA, T1 & T2' },
 ];
 
 const transitHighlights = [
-  { icon: Train, label: 'Metro 2A', time: '4 min', note: 'D.N. Nagar Station' },
-  { icon: ShoppingBag, label: 'Inorbit Mall', time: '6 min', note: 'Retail & Dining' },
-  { icon: MapPin, label: 'Mindspace', time: '2 min', note: 'IT Business Hub' },
-  { icon: GraduationCap, label: 'Ryan Intl.', time: '5 min', note: 'Top School' },
-  { icon: HeartPulse, label: 'Kokilaben', time: '8 min', note: 'Super-Specialty' },
-  { icon: Plane, label: 'WEH / Airport', time: '12 min', note: 'Express Transit' },
+  { icon: Train, label: 'Metro 2A', time: '3 min', note: 'Malad West Station' },
+  { icon: ShoppingBag, label: 'Inorbit Mall', time: '4 min', note: 'Retail & Dining' },
+  { icon: MapPin, label: 'Malad Station', time: '9 min', note: 'Western Railway' },
+  { icon: GraduationCap, label: 'Vibgyor Rise', time: '2 min', note: 'School' },
+  { icon: HeartPulse, label: 'CritiCare Asia', time: '2 min', note: 'Multispeciality' },
+  { icon: Plane, label: 'Airport', time: '42 min', note: 'CSMIA' },
 ];
 
 export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
@@ -51,17 +52,11 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
 
       <Container size="showcase">
         {/* Chapter Header */}
-        <div className="text-center mb-10 sm:mb-12">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-5">
-            STRATEGIC CONVERGENCE
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ivory uppercase mb-6 leading-[1.05]">
-            Connected to<br />Everything That Matters
-          </h2>
-          <p className="font-sans text-sm sm:text-base text-ivory-muted font-light max-w-2xl mx-auto leading-relaxed">
-            Positioned behind Evershine Mall and Mindspace, serviced by a dedicated 18.3-metre grand boulevard connecting directly to New Link Road.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Location"
+          title="A Neighbourhood of Quick Access"
+          subtitle="Behind Evershine Mall in Mindspace, Malad West, a few minutes from the metro, schools, hospitals and malls."
+        />
 
         {/* ─── Progressive Arterial Reveal Strip ─── */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-14">
@@ -111,23 +106,23 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
             <div className="lg:col-span-12 space-y-6">
               <div>
                 <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-champagne-400 font-semibold mb-2 block">
-                  Suburban Epicenter
+                  The Approach
                 </span>
                 <h3 className="font-serif text-2xl sm:text-3xl text-ivory font-light">
-                  Serviced by an 18.3-Metre Grand Boulevard
+                  Straight onto New Link Road
                 </h3>
               </div>
 
               <p className="font-sans text-sm text-ivory-muted leading-relaxed font-light">
-                Direct arterial access to New Link Road guarantees swift passage without commercial traffic friction. Integrated with upcoming infrastructure catalysts like the Coastal Road extension and GMLR corridor.
+                An 18.3-metre-wide access road leads from Aranya straight onto New Link Road. Metro Line 2A already runs close by, and the Coastal Road northern extension, the GMLR tunnel and Metro Line 6 will bring more of the city within reach.
               </p>
 
               {/* Category Links */}
               <div className="space-y-2.5 pt-2">
                 {[
-                  { cat: 'transit', label: 'Transit & Metro Hubs', sub: 'Metro 2A, WEH, Link Road' },
-                  { cat: 'education', label: 'Schools & Colleges', sub: 'Ryan Intl., Witty Intl., NM College' },
-                  { cat: 'healthcare', label: 'Super-Specialty Hospitals', sub: 'Kokilaben, Holy Spirit, Criticare' },
+                  { cat: 'transit', label: 'Transit & Highways', sub: 'Metro 2A, Malad Station, WEH' },
+                  { cat: 'education', label: 'Schools', sub: 'Vibgyor Rise, Ryan Intl., Oberoi Intl.' },
+                  { cat: 'healthcare', label: 'Hospitals', sub: 'CritiCare Asia, Cloudnine, Lifeline Medicare' },
                 ].map((item) => (
                   <button
                     key={item.cat}
@@ -153,7 +148,7 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
                   icon={<Maximize2 size={15} />}
                   onClick={() => handleLaunchModal('all')}
                 >
-                  EXPAND FULL MAP
+                  VIEW FULL MAP
                 </Button>
                 <a
                   href={

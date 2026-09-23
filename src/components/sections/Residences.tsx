@@ -5,6 +5,7 @@ import {
   Maximize2,
 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
 import { Button } from '../common/Button';
 import { residencesData } from '../../data/residencesData';
@@ -41,20 +42,14 @@ export const Residences: React.FC<ResidencesProps> = ({
 
       <Container size="showcase">
         {/* Chapter Header */}
-        <div className="text-center mb-10 sm:mb-12">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-5">
-            SANCTUARIES OF PROPORTION
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ivory uppercase mb-6">
-            Space to Live
-          </h2>
-          <p className="font-sans text-sm sm:text-base text-ivory-muted font-light max-w-2xl mx-auto leading-relaxed">
-            Homes engineered around generous volumes, cross-ventilating private sundecks, and uncompromised privacy.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="The Residences"
+          title="Room to Breathe"
+          subtitle="Spacious, Vastu-compliant 2, 3 & 4 BHK homes with private sundecks, French windows and ceiling heights of up to 11 ft."
+        />
 
         {/* ─── Elegant Glass Configuration Selector ─── */}
-        <div className="flex justify-center mb-14">
+        <div className="flex justify-center mb-8">
           <div className="inline-flex p-1.5 glass-panel rounded-full max-w-lg w-full justify-between gap-1.5">
             {residencesData.map((unit) => {
               const isActive = selectedId === unit.id;
@@ -64,15 +59,19 @@ export const Residences: React.FC<ResidencesProps> = ({
                   onClick={() => setSelectedId(unit.id)}
                   className={`flex-1 py-3 px-3 sm:px-6 text-center font-sans transition-all duration-300 cursor-pointer rounded-full ${
                     isActive
-                      ? 'bg-champagne-400 text-dark-950 font-bold shadow-md'
+                      ? 'bg-champagne-400 text-dark-950 shadow-md'
                       : 'text-ivory-muted hover:text-ivory hover:bg-white/[0.04]'
                   }`}
                   aria-pressed={isActive}
                 >
-                  <span className="block text-xs sm:text-sm uppercase tracking-[0.16em] font-semibold">
+                  {/* Same classes as the navbar links, not merely similar ones:
+                      index.css nudges the small sizes and clamps the weights, so
+                      only the identical utilities land on identical metrics. The
+                      gold fill carries the active state — no weight jump. */}
+                  <span className="block text-[11px] font-sans font-medium tracking-[0.2em] uppercase">
                     {unit.type}
                   </span>
-                  <span className="block text-[10px] tracking-wider opacity-75 mt-0.5 normal-case">
+                  <span className="block text-[10px] font-sans font-medium tracking-[0.12em] opacity-75 mt-0.5 normal-case">
                     {unit.carpetArea}
                   </span>
                 </button>
@@ -126,13 +125,13 @@ export const Residences: React.FC<ResidencesProps> = ({
             <div className="lg:col-span-4 space-y-6">
               <div>
                 <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-champagne-400 font-semibold mb-2 block">
-                  Configuration Profile
+                  The Residence
                 </span>
                 <h3 className="font-serif text-2xl sm:text-3xl text-ivory font-light">
                   {currentUnit.title}
                 </h3>
                 <p className="font-serif italic text-base text-champagne-300/80 mt-1">
-                  {currentUnit.type} Luxury Residence
+                  {currentUnit.type} Residence
                 </p>
               </div>
 
@@ -182,7 +181,7 @@ export const Residences: React.FC<ResidencesProps> = ({
                   }}
                   className="w-full"
                 >
-                  VIEW BLUEPRINT
+                  VIEW FLOOR PLANS
                 </Button>
 
                 <button
@@ -191,14 +190,14 @@ export const Residences: React.FC<ResidencesProps> = ({
                   }
                   className="btn-lux w-full py-3.5 px-6 text-xs font-sans font-semibold tracking-[0.16em] uppercase text-ivory-muted hover:text-ivory border border-white/[0.12] hover:border-champagne-400/50 rounded-[3px] glass-panel-subtle transition-all duration-300 cursor-pointer"
                 >
-                  REQUEST DETAILS
+                  REQUEST AREA &amp; PRICE
                 </button>
               </div>
 
               {/* 4 BHK note */}
               {currentUnit.id === '4bhk' && (
                 <p className="text-[11px] text-ivory-muted/60 font-sans font-light leading-relaxed">
-                  * 4 BHK Presidential Residences occupy select upper floors.
+                  * 4 BHK availability and floor options on request.
                 </p>
               )}
             </div>

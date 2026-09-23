@@ -50,10 +50,10 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
         {/* Section Pre-title */}
         <div className="text-center max-w-3xl mx-auto mb-8 sm:mb-10">
           <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.35em] text-champagne-300 font-medium block mb-3">
-            DEVELOPER HERITAGE & PARTNERSHIP
+            THE DEVELOPERS
           </span>
-          <h2 className="font-serif text-2xl sm:text-4xl lg:text-5xl text-ivory font-light tracking-tight">
-            A Legacy of Trust, Vision & Excellence
+          <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ivory font-light tracking-tight">
+            The Partnership Behind Aranya
           </h2>
         </div>
 
@@ -62,7 +62,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
           
           {/* Left Column: Architectural Skyline Editorial (Twilight View from Sky Deck) */}
           <div
-            className="lg:col-span-6 relative min-h-[420px] sm:min-h-[540px] lg:min-h-[720px] bg-dark-950 overflow-hidden flex flex-col justify-between group/img cursor-zoom-in"
+            className="lg:col-span-7 relative min-h-[420px] sm:min-h-[540px] lg:min-h-[720px] bg-dark-950 overflow-hidden flex flex-col justify-between group/img cursor-zoom-in"
             onClick={() =>
               onOpenLightbox?.(
                 '/assets/branding/skyline-editorial.jpg',
@@ -84,7 +84,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
             {/* Top Badge: Official Partnership */}
             <div className="relative z-10 p-6 sm:p-8">
               <span className="inline-block px-3.5 py-1.5 rounded-full bg-dark-950/75 backdrop-blur-md border border-white/10 text-[10px] font-sans font-medium tracking-[0.22em] text-champagne-300 uppercase">
-                STRATEGIC ALLIANCE
+                JOINT VENTURE
               </span>
             </div>
 
@@ -94,13 +94,13 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
                 Zaveri Realty × BKM Mindspace
               </span>
               <span className="text-[10px] font-sans tracking-[0.25em] text-ivory-muted uppercase block mt-1">
-                Elevating Mumbai's Skyline with Structural Longevity
+                Presenting The Lushury Life at Malad West
               </span>
             </div>
           </div>
 
           {/* Right Column: Warm Champagne / Beige Editorial Branding Card */}
-          <div className="lg:col-span-6 relative bg-[#BFA370] text-[#1D1B16] p-6 sm:p-9 lg:p-14 flex flex-col justify-between overflow-hidden">
+          <div className="lg:col-span-5 relative bg-[#BFA370] text-[#1D1B16] p-6 sm:p-9 lg:p-12 flex flex-col justify-between overflow-hidden">
             {/* Subtle organic botanical pattern overlay (pure decorative texture, 100% text-free) */}
             <div
               className="absolute inset-0 opacity-20 pointer-events-none mix-blend-multiply bg-repeat"
@@ -113,7 +113,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
                 <img
                   src="/assets/branding/aranya-logo.png"
                   alt="Aranya The Park Official Logo"
-                  className="h-28 sm:h-32 w-auto object-contain drop-shadow-sm"
+                  className="h-28 sm:h-32 w-auto object-contain drop-shadow-sm brightness-[0.25] contrast-[1.4]"
                   loading="lazy"
                 />
               </div>
@@ -195,7 +195,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
           </div>
 
           <p className="font-serif text-xs sm:text-sm text-ivory-muted/75 font-light tracking-wide max-w-2xl mx-auto">
-            A distinguished joint partnership dedicated to uncompromised construction excellence, biophilic spatial planning, and timely project delivery in Mumbai.
+            A joint venture of Zaveri Realty and BKM Mindspace, developed by Anuradha Real Estate Developers Private Limited.
           </p>
         </div>
 
@@ -234,10 +234,10 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
             <div>
               <div className="flex items-center justify-between mb-6">
                 <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-champagne-300 font-medium">
-                  TRUSTED TECHNICAL PARTNERS
+                  TRUSTED PARTNERS
                 </span>
                 <span className="text-[10px] text-ivory-muted/60 tracking-wider">
-                  STATUTORY CONSORTIUM
+                  THE PROJECT TEAM
                 </span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
@@ -258,7 +258,7 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
             </div>
 
             <p className="text-[11px] font-sans text-ivory-muted/60 pt-6 mt-4 border-t border-white/[0.06] font-light leading-relaxed">
-              Executed with leading municipal and structural engineering teams ensuring seismic integrity, biophilic landscape execution, and seamless statutory transparency.
+              Architecture, structure, landscape, interiors and legal counsel, each entrusted to a dedicated specialist.
             </p>
           </div>
         </div>

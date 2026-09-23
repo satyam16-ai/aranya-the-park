@@ -218,13 +218,13 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
 
           <div className="space-y-1.5">
             <span className="text-[10px] font-sans uppercase tracking-[0.25em] text-champagne-300 font-semibold">
-              Direct Developer Registration
+              Enquiry Received
             </span>
             <h4 className="font-serif text-2xl text-ivory font-light">
               Thank You, {fullName}
             </h4>
             <p className="text-ivory-muted font-sans text-xs sm:text-sm leading-relaxed max-w-sm mx-auto font-light">
-              Your inquiry regarding <strong className="text-ivory">{configuration}</strong> has been logged directly with the authorized sales concierge desk under reference <strong className="text-champagne-300">{generatedLeadId}</strong>.
+              Your enquiry for <strong className="text-ivory">{configuration}</strong> is with our sales team under reference <strong className="text-champagne-300">{generatedLeadId}</strong>.
             </p>
           </div>
 
@@ -235,7 +235,7 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
               <span className="uppercase tracking-wider font-semibold">{contactMethod}</span>
             </div>
             <p className="text-[11px] text-ivory-muted/70 font-light">
-              A designated senior relationship manager will connect with you shortly with authentic floor plans and pricing.
+              A member of our sales team will be in touch shortly with floor plans and current pricing.
             </p>
           </div>
 
@@ -250,7 +250,7 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
               className="btn-lux w-full py-2.5 px-4 bg-[#25D366] text-white font-sans text-xs uppercase tracking-widest font-bold inline-flex items-center justify-center gap-2 hover:brightness-105 transition-all rounded-[4px] shadow-md"
             >
               <MessageSquare size={14} />
-              <span>Connect Instantly on WhatsApp</span>
+              <span>Continue on WhatsApp</span>
             </a>
 
             {/* Follow the project — hidden until the URLs are filled in projectData */}
@@ -475,7 +475,7 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
               rows={2}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="e.g. Interested in high floor 3 BHK with sunrise sundeck view..."
+              placeholder="e.g. Preferred floor, budget or a good time to call"
               className="w-full h-[76px] bg-white/[0.03] border border-white/[0.12] rounded-[4px] p-3 text-ivory placeholder:text-ivory-muted/30 focus:outline-none focus:border-champagne-400 focus:bg-white/[0.06] transition-all resize-none text-base sm:text-xs"
             />
           </div>
@@ -491,7 +491,7 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
               required
             />
             <label htmlFor="consent-check" className="text-[10px] text-ivory-muted/65 leading-relaxed font-light cursor-pointer select-none">
-              I authorize representatives of Aranya The Park (Zaveri Realty & BKM Mindspace) to contact me via Call, WhatsApp, or Email regarding floor plans and private site visits. Zero brokerage.
+              I authorise representatives of Aranya The Park (Zaveri Realty & BKM Mindspace) to contact me by call, WhatsApp or email about floor plans, pricing and site visits.
             </label>
           </div>
 
@@ -506,10 +506,10 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
               icon={<Send size={13} />}
             >
               {isSubmitting
-                ? 'Registering…'
+                ? 'Sending…'
                 : otpStage !== 'verified'
                   ? 'VERIFY YOUR NUMBER TO CONTINUE'
-                  : 'REQUEST A PRIVATE VIEWING'}
+                  : 'REQUEST A PRIVATE VISIT'}
             </Button>
           </div>
 

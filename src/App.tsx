@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
-import { StoryArrival } from './components/sections/StoryArrival';
 import { StoryGreens } from './components/sections/StoryGreens';
 import { Residences } from './components/sections/Residences';
 import { FloorPlans } from './components/sections/FloorPlans';
@@ -99,8 +98,8 @@ export default function App() {
     setLightbox({
       url: imageUrl,
       title,
-      description: 'Architectural floor plan layout.',
-      category: 'Floor Plan Blueprint',
+      description: 'Indicative floor plan, subject to approvals.',
+      category: 'Floor Plan',
     });
   }, []);
 
@@ -122,13 +121,10 @@ export default function App() {
         onOpenLocationModal={() => handleOpenLocationModal('all')}
       />
 
-      {/* ─── Chapter 00: Cinematic Hero ─── */}
-      <Hero onOpenLeadModal={handleOpenLeadModal} />
+      {/* ─── Chapter 00: Hero — The Arrival (Pinned GSAP Scroll Story) ─── */}
+      <Hero />
 
-      {/* ─── Chapter 01: Arrival (Pinned GSAP Scroll Story) ─── */}
-      <StoryArrival />
-
-      {/* ─── Chapter 02: A New Kind of Luxury (40% Open Greens) ─── */}
+      {/* ─── Chapter 01: A New Kind of Luxury (40% Open Greens) ─── */}
       <StoryGreens onOpenLightbox={handleOpenLightbox} />
 
       {/* ─── Chapter 03: Residences (Living Volumes) ─── */}

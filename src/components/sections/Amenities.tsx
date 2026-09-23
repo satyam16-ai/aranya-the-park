@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
   Trophy,
   Users,
@@ -18,7 +18,9 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
+import { Img } from '../common/Img';
 import { amenitiesData } from '../../data/amenitiesData';
 import type { AmenityItem } from '../../types';
 
@@ -51,13 +53,92 @@ const groupLabels: Record<AmenityItem['category'], string> = {
   building: 'Building',
 };
 
+/** Panel geometry, fixed so the flip decision needs no measuring pass. */
+const PREVIEW_W = 340;
+const PREVIEW_H = 256;
+/** Clears the floating navbar when the panel flips below its card. */
+const TOP_SAFE = 96;
+const SHOW_DELAY = 90;
+const HIDE_DELAY = 80;
+
+interface HoverState {
+  item: AmenityItem;
+  el: HTMLElement;
+}
+
 /**
- * Amenities — every space as a marked tile. The photograph is deliberately
- * held back: tapping a tile opens it in the lightbox, which keeps the section
- * compact and makes the full set scannable at a glance.
+ * Amenities — every space as a marked tile.
+ *
+ * The photograph used to be a click away; the client's 23-09 note asked for it
+ * on hover instead, so a tile now raises a floating preview and the click is
+ * kept for the full lightbox. Touch devices have no hover, so there the tap
+ * still goes straight to the lightbox — the preview is a pointer affordance,
+ * never the only way to the image.
  */
 export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLeadModal }) => {
   const groups: AmenityItem['category'][] = ['ground', 'terrace', 'building'];
+
+  const [hovered, setHovered] = useState<HoverState | null>(null);
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
+  const showTimer = useRef<number | null>(null);
+  const hideTimer = useRef<number | null>(null);
+
+  const clearTimers = () => {
+    if (showTimer.current) window.clearTimeout(showTimer.current);
+    if (hideTimer.current) window.clearTimeout(hideTimer.current);
+    showTimer.current = null;
+    hideTimer.current = null;
+  };
+
+  useEffect(() => clearTimers, []);
+
+  const handleEnter = useCallback(
+    (item: AmenityItem, el: HTMLElement) => {
+      if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      clearTimers();
+      // Sweeping from one tile to the next should swap the image, not replay
+      // the entrance — the delay only guards the very first reveal.
+      if (hovered) {
+        setHovered({ item, el });
+        return;
+      }
+      showTimer.current = window.setTimeout(() => setHovered({ item, el }), SHOW_DELAY);
+    },
+    [hovered]
+  );
+
+  const handleLeave = useCallback(() => {
+    clearTimers();
+    hideTimer.current = window.setTimeout(() => setHovered(null), HIDE_DELAY);
+  }, []);
+
+  // Anchor to the tile rather than the cursor: one measurement per tile instead
+  // of one per mousemove, and it works for keyboard focus unchanged.
+  useLayoutEffect(() => {
+    // No reset on leave: the panel is gated on `hovered`, and this effect runs
+    // before paint, so the next tile's position lands in the same frame.
+    if (!hovered) return;
+
+    const place = () => {
+      const r = hovered.el.getBoundingClientRect();
+      const left = Math.max(
+        16,
+        Math.min(r.left + r.width / 2 - PREVIEW_W / 2, window.innerWidth - PREVIEW_W - 16)
+      );
+      let top = r.top - PREVIEW_H - 12;
+      if (top < TOP_SAFE) top = r.bottom + 12;
+      top = Math.min(top, window.innerHeight - PREVIEW_H - 16);
+      setPos({ left, top });
+    };
+
+    place();
+    window.addEventListener('scroll', place, { passive: true });
+    window.addEventListener('resize', place);
+    return () => {
+      window.removeEventListener('scroll', place);
+      window.removeEventListener('resize', place);
+    };
+  }, [hovered]);
 
   return (
     <section id="amenities" className="section-spacing bg-dark-950 text-ivory relative overflow-hidden">
@@ -66,18 +147,11 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
 
       <Container size="showcase">
         {/* Section Header */}
-        <div className="text-center mb-12 sm:mb-14">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-4">
-            WELLNESS &amp; RECREATION
-          </span>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-ivory uppercase mb-4 leading-[1.05]">
-            Life Beyond<br />Four Walls
-          </h2>
-          <p className="font-sans text-sm text-ivory-muted font-light max-w-2xl mx-auto leading-relaxed">
-            From sunrise yoga on the skyline deck to vigorous pickleball rallies and sunset
-            gatherings under the gazebo. Select any space to view it.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Wellness & Recreation"
+          title={<>Life Beyond Four Walls</>}
+          subtitle="Fourteen spaces across the ground level and the rooftop terraces, from sunrise yoga to pickleball and evenings under the gazebo. Hover to preview; select to view in full."
+        />
 
         {/* ─── Amenity marks, grouped by level ─── */}
         <div className="space-y-10">
@@ -100,13 +174,20 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
                 <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
                   {items.map((amenity) => {
                     const Icon = amenityIcons[amenity.id] ?? Trophy;
+                    const isPreviewing = hovered?.item.id === amenity.id;
                     return (
                       <li key={amenity.id}>
                         <button
                           type="button"
                           onClick={() => onSelectAmenity(amenity)}
+                          onMouseEnter={(e) => handleEnter(amenity, e.currentTarget)}
+                          onMouseLeave={handleLeave}
+                          onFocus={(e) => handleEnter(amenity, e.currentTarget)}
+                          onBlur={handleLeave}
                           aria-label={`${amenity.name} — view image`}
-                          className="group relative w-full h-full text-left p-4 sm:p-5 rounded-[4px] glass-panel-subtle border border-white/[0.07] hover:border-champagne-400/40 hover:bg-white/[0.03] transition-all duration-300 cursor-pointer"
+                          className={`group relative w-full h-full text-left p-4 sm:p-5 rounded-[4px] glass-panel-subtle border transition-all duration-300 cursor-pointer hover:border-champagne-400/40 hover:bg-white/[0.03] ${
+                            isPreviewing ? 'border-champagne-400/40 bg-white/[0.03]' : 'border-white/[0.07]'
+                          }`}
                         >
                           <span className="inline-flex items-center justify-center w-11 h-11 rounded-full border border-champagne-400/30 text-champagne-300 group-hover:border-champagne-400/70 group-hover:text-champagne-200 transition-colors">
                             <Icon size={19} strokeWidth={1.4} />
@@ -145,14 +226,41 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
             <Button
               variant="outline"
               size="md"
-              onClick={() => onOpenLeadModal('Amenity Tour Request')}
+              onClick={() => onOpenLeadModal('Arrange a Private Site Visit')}
               className="tracking-wider uppercase text-xs"
             >
-              Schedule an Amenity Tour
+              Arrange a Private Site Visit
             </Button>
           </div>
         )}
       </Container>
+
+      {/* ─── Floating hover preview ─── */}
+      {hovered && pos && (
+        <div
+          role="presentation"
+          className="fixed z-40 pointer-events-none animate-scale-in"
+          style={{ left: pos.left, top: pos.top, width: PREVIEW_W }}
+        >
+          <div className="rounded-[4px] overflow-hidden border border-champagne-400/30 bg-dark-900 shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
+            <div className="aspect-[16/9] w-full overflow-hidden bg-dark-900">
+              <Img
+                key={hovered.item.id}
+                src={hovered.item.image}
+                alt={hovered.item.name}
+                sizes="340px"
+                className="w-full h-full object-cover animate-fade-in"
+              />
+            </div>
+            <div className="px-4 py-3 border-t border-white/[0.07]">
+              <p className="font-serif text-sm text-ivory leading-snug">{hovered.item.name}</p>
+              <p className="font-sans text-[11px] text-ivory-muted/70 mt-0.5 leading-snug line-clamp-1">
+                {hovered.item.tagline}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

@@ -25,13 +25,13 @@ export const Footer: React.FC = () => {
                 loading="lazy"
                 className="h-12 sm:h-14 w-auto max-w-full object-contain block"
               />
-              <span className="text-[10px] tracking-[0.35em] uppercase text-champagne-300 font-medium block mt-1">
+              <span className="text-[10px] tracking-[0.18em] uppercase text-champagne-300 font-medium block mt-1 whitespace-nowrap">
                 THE LUSHURY LIFE · MALAD WEST
               </span>
             </div>
           </div>
           <p className="font-serif text-lg sm:text-xl text-ivory/80 italic font-light max-w-md">
-            "A parkside residence crafted for those who value volume, tranquility, and refined distinction."
+            "A serene metropolitan address, where life is lush with open greens and generous with space."
           </p>
         </div>
 
@@ -40,10 +40,10 @@ export const Footer: React.FC = () => {
           {/* Col 1: MahaRERA compliance */}
           <div className="space-y-4">
             <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivory font-semibold">
-              RERA Compliance
+              MahaRERA Registration
             </h4>
             <p className="text-ivory-muted text-xs leading-relaxed font-light">
-              Aranya The Park is registered under MahaRERA as a luxury joint-venture residential estate.
+              Aranya The Park is a MahaRERA-registered project. Scan the code to view its registration.
             </p>
             <div className="p-3.5 rounded-[3px] bg-white/[0.03] border border-white/[0.08] flex items-start gap-4">
               <a
@@ -82,7 +82,7 @@ export const Footer: React.FC = () => {
           {/* Col 2: Experience Center */}
           <div className="space-y-4">
             <h4 className="font-sans text-[11px] uppercase tracking-[0.25em] text-ivory font-semibold">
-              Experience Center
+              Site Address
             </h4>
             <div className="space-y-3.5 text-xs">
               <div className="flex items-start gap-2.5">
@@ -127,7 +127,7 @@ export const Footer: React.FC = () => {
             <span>•</span>
             <a href="#overview" className="hover:text-ivory transition-colors">Terms of Use</a>
             <span>•</span>
-            <a href="#enquiry" className="hover:text-champagne-300 transition-colors">VIP Concierge</a>
+            <a href="#enquiry" className="hover:text-champagne-300 transition-colors">Enquire</a>
           </div>
         </div>
       </Container>

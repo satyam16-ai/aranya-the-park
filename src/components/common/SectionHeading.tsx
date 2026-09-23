@@ -4,62 +4,68 @@ interface SectionHeadingProps {
   /** Small uppercase eyebrow text above the title */
   eyebrow?: string;
   /** Main section title — rendered in editorial serif */
-  title: string;
+  title: React.ReactNode;
   /** Supporting subtitle paragraph */
-  subtitle?: string;
-  /** Center or left-align */
-  align?: 'center' | 'left';
-  /** Color scheme */
+  subtitle?: React.ReactNode;
+  /**
+   * The section's own controls — tabs, filters, a count, a button. On large
+   * screens they sit on the heading's row instead of forming a second band
+   * beneath it, which is where most of the reclaimed height comes from.
+   */
+  aside?: React.ReactNode;
+  /** Left is the house style; `center` is kept for the few hero-like sections. */
+  align?: 'left' | 'center';
   theme?: 'dark' | 'light';
   className?: string;
 }
 
 /**
- * SectionHeading — clean editorial heading unit.
- * Eyebrow label + serif title + supporting prose. No ornamental clutter.
+ * SectionHeading — the one heading unit every section uses.
+ *
+ * Left-aligned and deliberately small: the client's 23-09 note was that the
+ * headings and their supporting copy were eating the page. Sizing lives in
+ * `.eyebrow` / `.heading-serif` / `.prose-editorial` (src/index.css) so the
+ * whole site retunes from one place rather than nine hand-rolled headers.
  */
 export const SectionHeading: React.FC<SectionHeadingProps> = ({
   eyebrow,
   title,
   subtitle,
-  align = 'center',
+  aside,
+  align = 'left',
   theme = 'dark',
   className = '',
 }) => {
   const isDark = theme === 'dark';
   const isCentered = align === 'center';
-  const alignment = isCentered ? 'text-center mx-auto' : 'text-left';
 
   return (
-    <div className={`max-w-3xl ${alignment} ${className}`}>
-      {/* Eyebrow */}
-      {eyebrow && (
-        <p
-          className={`eyebrow mb-5 block ${isCentered ? 'text-center' : 'text-left'}`}
-        >
-          {eyebrow}
-        </p>
-      )}
+    <div
+      className={`mb-7 sm:mb-9 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-10 ${
+        isCentered ? 'lg:flex-col lg:items-center' : ''
+      } ${className}`}
+    >
+      <div className={isCentered ? 'max-w-2xl mx-auto text-center' : 'max-w-2xl'}>
+        {eyebrow && <span className="eyebrow block mb-2">{eyebrow}</span>}
 
-      {/* Title */}
-      <h2
-        className={`heading-serif mb-6 ${
-          isDark ? 'text-cream-100' : 'text-stone-900'
-        } ${isCentered ? 'text-center' : 'text-left'}`}
-      >
-        {title}
-      </h2>
-
-      {/* Subtitle */}
-      {subtitle && (
-        <p
-          className={`prose-editorial max-w-2xl ${
-            isCentered ? 'mx-auto text-center' : 'text-left'
-          } ${isDark ? 'text-cream-300' : 'text-stone-600'}`}
+        <h2
+          className={`heading-serif uppercase ${isDark ? 'text-ivory' : 'text-stone-900'}`}
         >
-          {subtitle}
-        </p>
-      )}
+          {title}
+        </h2>
+
+        {subtitle && (
+          <p
+            className={`prose-editorial mt-2.5 max-w-xl ${
+              isDark ? 'text-ivory-muted' : 'text-stone-600'
+            } ${isCentered ? 'mx-auto' : ''}`}
+          >
+            {subtitle}
+          </p>
+        )}
+      </div>
+
+      {aside && <div className="shrink-0 lg:pb-1">{aside}</div>}
     </div>
   );
 };

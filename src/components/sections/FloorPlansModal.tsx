@@ -161,7 +161,7 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Interactive Floor Plan Explorer Pop-up Window"
+      aria-label="Floor plans"
     >
       {/* Backdrop */}
       <div
@@ -176,11 +176,11 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-champagne-300 text-[10px] tracking-[0.3em] uppercase font-sans font-semibold">
-                ARCHITECTURAL BLUEPRINTS
+                FLOOR PLANS
               </span>
             </div>
             <h2 className="font-serif text-base sm:text-xl text-ivory font-light truncate">
-              Interactive Floor Plan Explorer
+              Explore the Floor Plans
             </h2>
           </div>
 
@@ -211,9 +211,9 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
               variant="outline-gold"
               size="sm"
               className="hidden sm:inline-flex"
-              onClick={() => onOpenLeadModal(`Inquiry from Floor Plan: ${currentPlan.title}`)}
+              onClick={() => onOpenLeadModal(`Enquire: ${currentPlan.title}`)}
             >
-              Request CAD Plans
+              Request Plan Details
             </Button>
 
             <button
@@ -316,7 +316,7 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-1.5 rounded-[3px] border border-white/[0.08] text-ivory-muted hover:text-champagne-300 hover:bg-white/[0.06] transition-colors inline-flex items-center ml-1"
-                title="Download High-Res Blueprint"
+                title="Download high-resolution plan"
               >
                 <Download size={14} />
               </a>
@@ -367,7 +367,7 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
                   Floor plans available on request
                 </h4>
                 <p className="text-xs text-ivory-muted leading-relaxed">
-                  Share your details to unlock the detailed Tower A &amp; Tower B plates.
+                  Share your details to unlock the detailed Tower A &amp; Tower B plans.
                 </p>
               </div>
               <button
@@ -425,10 +425,10 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
                 size="sm"
                 onClick={() => {
                   onClose();
-                  onOpenLeadModal(`Interested in ${currentPlan.title}`);
+                  onOpenLeadModal(`Enquire: ${currentPlan.title}`);
                 }}
               >
-                Inquire For This Unit
+                Enquire About This Plan
               </Button>
               <Button
                 variant="outline"
@@ -438,7 +438,7 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
                 rel="noopener noreferrer"
                 icon={<Download size={13} />}
               >
-                Download Blueprint
+                Download Plan
               </Button>
             </div>
           </div>

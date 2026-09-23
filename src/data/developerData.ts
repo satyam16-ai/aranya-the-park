@@ -5,7 +5,7 @@ export const developerData = {
   entity: 'Anuradha Real Estate Developers Private Limited',
   promoters: 'Zaveri Realty & BKM Mindspace',
   narrative:
-    'Zaveri Realty and BKM Mindspace bring together their collective expertise to present The Lushury Life at Aranya The Park — a landmark development built on the pillars of uncompromised trust, architectural foresight, and engineering excellence. This premier joint partnership reflects a steadfast dedication to upholding the highest benchmarks of structural durability, biophilic master planning, and timely execution, creating timeless residential heirlooms for generations to come.',
+    'Zaveri Realty and BKM Mindspace bring together their collective expertise to present The Lushury Life at Aranya The Park, a development built on the pillars of trust, vision and excellence. The partnership reflects a commitment to the highest standards of design, construction and reliability, for the families who live here today and for the generations to come.',
   pillars: [
     {
       title: 'Architectural Vision',
@@ -31,13 +31,13 @@ export const developerData = {
       description: 'Master planners of iconic residential & commercial architecture across Mumbai.',
     },
     {
-      role: 'Liasoning Architect',
+      role: 'Liaisoning Architect',
       name: 'YMS Consultant',
       description: 'Statutory approvals, municipal architecture, and regulatory liaison specialists.',
     },
     {
       role: 'Landscape Architect',
-      name: 'Beyond Green',
+      name: 'BeyondGreen',
       description: 'Pioneering biophilic landscape designers integrating native flora, 40% open greens, and aroma gardens.',
     },
     {
@@ -47,7 +47,7 @@ export const developerData = {
     },
     {
       role: 'Legal Advisor',
-      name: 'P.V. Shankar',
+      name: 'P. Y. Shankar',
       description: 'Distinguished real estate legal counsel ensuring clear title and flawless statutory adherence.',
     },
     {

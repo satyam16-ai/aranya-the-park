@@ -20,6 +20,75 @@ export interface LocationModalProps {
   initialCategory?: string;
 }
 
+/** Category tones, matched to the dots in the destination list under the map. */
+const CATEGORY_TONE: Record<string, string> = {
+  connectivity: '#7DD3FC',
+  education: '#6EE7B7',
+  healthcare: '#FDA4AF',
+  entertainment: '#FCD34D',
+};
+
+/**
+ * Where each destination sits on the schematic, in viewBox units, with the short
+ * name its label carries and the side that label hangs off.
+ *
+ * These are drawing coordinates, not survey ones. What they do hold to is the
+ * corridor each landmark actually sits on — the metro stations on the metro
+ * line, Malad Station on the railway, the highway nodes on the WEH — and enough
+ * room between neighbours that two labels never land on top of each other.
+ *
+ * The plot sits east of New Link Road, between Link Road and S. V. Road, just
+ * south of Rejoice International School — the position the brochure map marks
+ * with the Aranya crest, confirmed by the client on 24-09.
+ *
+ * New Link Road itself gets no marker: it is drawn as a corridor and named at
+ * the top of the map, and the access-road plate already says how the site meets
+ * it. It still appears in the destination list, where "Direct" reads correctly.
+ */
+const NODE_LAYOUT: Record<
+  string,
+  { x: number; y: number; short: string; side: 'n' | 's' | 'e' | 'w' }
+> = {
+  c1: { x: 386, y: 230, short: 'Malad West Metro', side: 'w' },
+  c2: { x: 386, y: 412, short: 'Lower Malad Metro', side: 'e' },
+  c3: { x: 840, y: 240, short: 'Malad Station', side: 'e' },
+  c4: { x: 1010, y: 300, short: 'W. E. Highway', side: 'w' },
+  c5: { x: 1010, y: 515, short: 'Airport (CSMIA)', side: 'w' },
+  e1: { x: 412, y: 478, short: 'Inorbit Mall', side: 'w' },
+  e2: { x: 250, y: 190, short: 'Goregaon Sports Club', side: 's' },
+  e3: { x: 140, y: 120, short: 'Infiniti Mall', side: 's' },
+  e4: { x: 1040, y: 420, short: 'Oberoi Mall', side: 'w' },
+  ed1: { x: 560, y: 222, short: 'Kothari Starz', side: 'n' },
+  ed2: { x: 200, y: 440, short: 'Vibgyor Rise', side: 's' },
+  ed3: { x: 472, y: 200, short: 'Rejoice Intl.', side: 'n' },
+  ed4: { x: 300, y: 95, short: 'Ryan Intl.', side: 's' },
+  ed5: { x: 768, y: 360, short: 'Witty Intl.', side: 's' },
+  ed6: { x: 640, y: 120, short: 'Orchids Intl.', side: 'n' },
+  ed7: { x: 1040, y: 195, short: 'Oberoi Intl.', side: 'w' },
+  h1: { x: 180, y: 285, short: 'CritiCare Asia', side: 'n' },
+  h2: { x: 500, y: 440, short: 'Cloudnine', side: 's' },
+  h3: { x: 800, y: 130, short: 'Lifeline Medicare', side: 'n' },
+};
+
+/** The parcel centre; routes are drawn from here, under the parcel itself. */
+const SITE_ORIGIN = { x: 596, y: 308 };
+
+const PLATE_H = 15;
+
+/** Hang a label plate off the chosen side of its marker. */
+const platePosition = (side: 'n' | 's' | 'e' | 'w', w: number) => {
+  switch (side) {
+    case 'n':
+      return { x: -w / 2, y: -17 - PLATE_H, tx: 0, ty: -17 - PLATE_H + 10.5 };
+    case 's':
+      return { x: -w / 2, y: 17, tx: 0, ty: 27.5 };
+    case 'e':
+      return { x: 16, y: -PLATE_H / 2, tx: 16 + w / 2, ty: 3 };
+    default:
+      return { x: -16 - w, y: -PLATE_H / 2, tx: -16 - w / 2, ty: 3 };
+  }
+};
+
 export const LocationModal: React.FC<LocationModalProps> = ({
   isOpen,
   onClose,
@@ -30,15 +99,29 @@ export const LocationModal: React.FC<LocationModalProps> = ({
   const [mapMode, setMapMode] = useState<'schematic' | 'brochure'>('schematic');
   const [isBrochureZoomed, setIsBrochureZoomed] = useState<boolean>(false);
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<string>(initialCategory || 'all');
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
 
   const activeSelectedNode = locationNodes.find((n) => n.id === selectedNodeId) || locationNodes[0];
+  const activeLayout = NODE_LAYOUT[selectedNodeId];
+
+  /**
+   * Picking a category also moves the selection into it, so the map, the
+   * detail card and the list never disagree about what is on screen.
+   */
+  const applyCategoryFilter = useCallback((cat: string) => {
+    setActiveCategoryFilter(cat);
+    if (cat !== 'all') {
+      const first = locationNodes.find((n) => n.category === cat);
+      if (first) setSelectedNodeId(first.id);
+    }
+  }, []);
 
   // Sync category if provided
   useEffect(() => {
     if (isOpen && initialCategory) {
-      setActiveCategoryFilter(initialCategory);
+      applyCategoryFilter(initialCategory);
     }
-  }, [isOpen, initialCategory]);
+  }, [isOpen, initialCategory, applyCategoryFilter]);
 
   // Lock body scroll
   useEffect(() => {
@@ -94,7 +177,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
       className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 md:p-6"
       role="dialog"
       aria-modal="true"
-      aria-label="Connected to Everything That Matters Pop-up Window"
+      aria-label="Location and connectivity"
     >
       {/* Backdrop */}
       <div
@@ -117,7 +200,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
               </span>
             </div>
             <h2 className="font-serif text-base sm:text-xl text-ivory font-light truncate">
-              Connected to Everything That Matters
+              A Neighbourhood of Quick Access
             </h2>
           </div>
 
@@ -141,7 +224,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                 variant="outline-gold"
                 size="sm"
                 className="hidden md:inline-flex"
-                onClick={() => onOpenLeadModal('Location Visit Consultation')}
+                onClick={() => onOpenLeadModal('Arrange a Private Site Visit')}
               >
                 Schedule Site Visit
               </Button>
@@ -163,7 +246,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
           {/* Brief Context & Appreciation Strip */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 rounded-[4px] bg-white/[0.02] border border-white/[0.08] text-xs">
             <div className="max-w-2xl text-ivory-muted leading-relaxed font-light">
-              Positioned directly behind Evershine Mall and Mindspace, serviced by an exclusive 18.3-metre grand boulevard connecting straight to New Link Road. Seamless connectivity to Metro Line 2A, Western Express Highway, and Mumbai’s top corporate corridors.
+              Behind Evershine Mall in Mindspace, Malad West, with an 18.3-metre-wide access road straight onto New Link Road. Malad West Metro is 3 minutes away, the Western Express Highway 14.
             </div>
             <div className="inline-flex flex-wrap items-center gap-3 text-[11px] text-ivory-muted bg-white/[0.03] border border-white/[0.08] px-3.5 py-1.5 rounded-[3px] shrink-0">
               <span className="text-champagne-300 font-medium flex items-center gap-1">
@@ -182,7 +265,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-champagne-400 animate-pulse" />
                 <span className="font-sans text-xs font-semibold uppercase tracking-wider text-champagne-300">
-                  {mapMode === 'schematic' ? 'Interactive Transit Schematic' : 'Master Regional Route Map'}
+                  {mapMode === 'schematic' ? 'Transit Schematic' : 'Regional Map'}
                 </span>
               </div>
 
@@ -213,190 +296,311 @@ export const LocationModal: React.FC<LocationModalProps> = ({
 
             {/* Map Content Viewport */}
             {mapMode === 'schematic' ? (
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/10] bg-[#0c0d0c] overflow-hidden select-none">
-                <svg
-                  viewBox="0 0 1000 500"
-                  className="w-full h-full object-cover"
-                  preserveAspectRatio="xMidYMid slice"
-                >
-                  <defs>
-                    <pattern id="modalMapGrid" width="40" height="40" patternUnits="userSpaceOnUse">
-                      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255, 255, 255, 0.03)" strokeWidth="1" />
-                    </pattern>
-                    <linearGradient id="modalWaterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#081014" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#0c0d0c" stopOpacity="0" />
-                    </linearGradient>
-                    <radialGradient id="modalAranyaPulse" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#C8A96B" stopOpacity="0.6" />
-                      <stop offset="70%" stopColor="#C8A96B" stopOpacity="0.15" />
-                      <stop offset="100%" stopColor="#C8A96B" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
+              <div className="relative w-full bg-[#0c0d0c] select-none overflow-x-auto overflow-y-hidden">
+                {/* The schematic needs width to stay legible, so on a narrow
+                    screen it scrolls sideways instead of shrinking away. */}
+                <div className="relative min-w-[900px] aspect-[2/1]">
+                  <svg
+                    viewBox="0 0 1120 560"
+                    className="w-full h-full"
+                    preserveAspectRatio="xMidYMid meet"
+                    role="img"
+                    aria-label="Schematic map of Aranya The Park, east of New Link Road, with its 18.3 metre access road and the transit, schools, hospitals and retail around it"
+                  >
+                    <defs>
+                      <pattern id="modalMapGrid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="1" />
+                      </pattern>
+                      <linearGradient id="modalWaterGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#081014" stopOpacity="0.85" />
+                        <stop offset="100%" stopColor="#0c0d0c" stopOpacity="0" />
+                      </linearGradient>
+                      <radialGradient id="modalAranyaPulse" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="#C8A96B" stopOpacity="0.45" />
+                        <stop offset="60%" stopColor="#C8A96B" stopOpacity="0.10" />
+                        <stop offset="100%" stopColor="#C8A96B" stopOpacity="0" />
+                      </radialGradient>
+                    </defs>
 
-                  <rect width="1000" height="500" fill="url(#modalMapGrid)" />
+                    <rect width="1120" height="560" fill="#0c0d0c" />
+                    <rect width="1120" height="560" fill="url(#modalMapGrid)" />
 
-                  {/* Western Coastline */}
-                  <path d="M 0,0 L 90,0 Q 140,250 80,500 L 0,500 Z" fill="url(#modalWaterGrad)" />
-                  <text x="35" y="260" fill="rgba(200, 169, 107, 0.25)" fontSize="11" letterSpacing="4" transform="rotate(-90, 35, 260)" fontFamily="sans-serif">
-                    MALAD CREEK / ARABIAN SEA
-                  </text>
-
-                  {/* Mindspace IT Park */}
-                  <polygon points="160,220 280,220 280,420 160,420" fill="#141514" stroke="rgba(255, 255, 255, 0.12)" strokeWidth="1.5" strokeDasharray="4 2" />
-                  <text x="220" y="325" fill="#B9B3A8" fontSize="10" fontWeight="600" textAnchor="middle" letterSpacing="1.5" fontFamily="sans-serif">
-                    MINDSPACE
-                  </text>
-                  <text x="220" y="340" fill="rgba(255, 255, 255, 0.3)" fontSize="8" textAnchor="middle" fontFamily="sans-serif">
-                    COMMERCIAL IT PARK
-                  </text>
-
-                  {/* Evershine Mall */}
-                  <rect x="240" y="260" width="45" height="45" fill="#1b1c1b" stroke="rgba(200, 169, 107, 0.4)" strokeWidth="1" />
-                  <text x="262" y="286" fill="#F4F0E8" fontSize="7" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
-                    EVERSHINE
-                  </text>
-                  <text x="262" y="295" fill="#C8A96B" fontSize="6" textAnchor="middle" fontFamily="sans-serif">
-                    MALL
-                  </text>
-
-                  {/* Arterial 1: New Link Road */}
-                  <line x1="360" y1="0" x2="360" y2="500" stroke="#1f201f" strokeWidth="22" />
-                  <line x1="360" y1="0" x2="360" y2="500" stroke="#C8A96B" strokeWidth="2" strokeDasharray="12 8" opacity="0.6" />
-                  <text x="360" y="30" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
-                    NEW LINK ROAD
-                  </text>
-
-                  {/* Arterial 2: Metro Line 2A */}
-                  <line x1="380" y1="0" x2="380" y2="500" stroke="#EAB308" strokeWidth="3" strokeDasharray="6 4" opacity="0.8" />
-                  <text x="390" y="470" fill="#EAB308" fontSize="9" letterSpacing="1.5" transform="rotate(-90, 390, 470)" fontFamily="sans-serif">
-                    METRO LINE 2A (YELLOW LINE)
-                  </text>
-
-                  {/* 18.3M Dedicated Boulevard */}
-                  <path d="M 360,310 L 260,310" stroke="#C8A96B" strokeWidth="8" strokeLinecap="round" />
-                  <line x1="360" y1="310" x2="260" y2="310" stroke="#080908" strokeWidth="2" strokeDasharray="4 2" />
-                  <rect x="270" y="295" width="80" height="12" fill="#080908" stroke="#C8A96B" strokeWidth="0.8" rx="2" />
-                  <text x="310" y="304" fill="#F4F0E8" fontSize="7" fontWeight="bold" textAnchor="middle" letterSpacing="0.5" fontFamily="sans-serif">
-                    18.3M BOULEVARD
-                  </text>
-
-                  {/* Arterial 3: Western Railway */}
-                  <line x1="580" y1="0" x2="580" y2="500" stroke="#1c1d1c" strokeWidth="18" />
-                  <line x1="575" y1="0" x2="575" y2="500" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="6 3" opacity="0.5" />
-                  <line x1="585" y1="0" x2="585" y2="500" stroke="#94A3B8" strokeWidth="1.5" strokeDasharray="6 3" opacity="0.5" />
-                  <text x="580" y="30" fill="#CBD5E1" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
-                    WESTERN RAILWAY LINE
-                  </text>
-
-                  {/* Arterial 4: Western Express Highway */}
-                  <line x1="820" y1="0" x2="820" y2="500" stroke="#222322" strokeWidth="24" />
-                  <line x1="820" y1="0" x2="820" y2="500" stroke="#C8A96B" strokeWidth="2" strokeDasharray="14 10" opacity="0.6" />
-                  <text x="820" y="30" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
-                    WESTERN EXPRESS HIGHWAY (WEH)
-                  </text>
-
-                  {/* Connecting Flyovers */}
-                  <path d="M 360,180 L 580,180 L 820,160" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" />
-                  <text x="470" y="172" fill="#B9B3A8" fontSize="8" textAnchor="middle" fontFamily="sans-serif">
-                    MITHOWKI FLYOVER
-                  </text>
-
-                  <path d="M 360,380 L 580,380 L 820,400" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" />
-                  <text x="700" y="394" fill="#B9B3A8" fontSize="8" textAnchor="middle" fontFamily="sans-serif">
-                    MRINAL TAI GORE FLYOVER
-                  </text>
-
-                  {/* Aranya Site Pin */}
-                  <g transform="translate(230, 270)">
-                    <circle cx="0" cy="0" r="32" fill="url(#modalAranyaPulse)" />
-                    <circle cx="0" cy="0" r="14" fill="#C8A96B" stroke="#080908" strokeWidth="3" />
-                    <text x="0" y="4" fill="#080908" fontSize="9" fontWeight="bold" textAnchor="middle" fontFamily="serif">
-                      A
+                    {/* ─── Malad Creek, on the western edge ─── */}
+                    <path d="M 0,0 L 75,0 Q 115,280 65,560 L 0,560 Z" fill="url(#modalWaterGrad)" />
+                    <text
+                      x="28"
+                      y="300"
+                      fill="rgba(200,169,107,0.22)"
+                      fontSize="11"
+                      letterSpacing="4"
+                      transform="rotate(-90, 28, 300)"
+                      fontFamily="sans-serif"
+                    >
+                      MALAD CREEK
                     </text>
-                    <rect x="-70" y="-36" width="140" height="22" fill="#080908" stroke="#C8A96B" strokeWidth="1.2" rx="2" />
+
+                    {/* ─── Arterials, west to east ─── */}
+                    {/* Metro 2A runs along the western flank of Link Road */}
+                    <line x1="386" y1="44" x2="386" y2="560" stroke="#EAB308" strokeWidth="3" strokeDasharray="7 5" opacity="0.85" />
+                    <text
+                      x="376"
+                      y="548"
+                      fill="#EAB308"
+                      fontSize="8.5"
+                      letterSpacing="1.4"
+                      transform="rotate(-90, 376, 548)"
+                      fontFamily="sans-serif"
+                    >
+                      METRO LINE 2A
+                    </text>
+
+                    <line x1="412" y1="0" x2="412" y2="560" stroke="#1f201f" strokeWidth="22" />
+                    <line x1="412" y1="0" x2="412" y2="560" stroke="rgba(255,255,255,0.32)" strokeWidth="1.5" strokeDasharray="12 9" />
+                    <text x="412" y="26" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                      NEW LINK ROAD
+                    </text>
+
+                    <line x1="730" y1="0" x2="730" y2="560" stroke="#1a1b1a" strokeWidth="15" />
+                    <text x="730" y="26" fill="rgba(244,240,232,0.5)" fontSize="9" letterSpacing="2" textAnchor="middle" fontFamily="sans-serif">
+                      S. V. ROAD
+                    </text>
+
+                    <line x1="840" y1="0" x2="840" y2="560" stroke="#1c1d1c" strokeWidth="16" />
+                    <line x1="835" y1="0" x2="835" y2="560" stroke="#94A3B8" strokeWidth="1.4" strokeDasharray="6 4" opacity="0.45" />
+                    <line x1="845" y1="0" x2="845" y2="560" stroke="#94A3B8" strokeWidth="1.4" strokeDasharray="6 4" opacity="0.45" />
+                    <text x="840" y="26" fill="#CBD5E1" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                      WESTERN RAILWAY
+                    </text>
+
+                    <line x1="1010" y1="0" x2="1010" y2="560" stroke="#222322" strokeWidth="24" />
+                    <line x1="1010" y1="0" x2="1010" y2="560" stroke="rgba(255,255,255,0.28)" strokeWidth="1.5" strokeDasharray="14 10" />
+                    <text x="1010" y="26" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                      W. E. HIGHWAY
+                    </text>
+
+                    {/* East–west links */}
+                    <path d="M 412,150 L 840,150 L 1010,136" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" fill="none" />
+                    <path d="M 730,470 L 1010,486" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" fill="none" />
+                    <text x="872" y="464" fill="#8d887e" fontSize="7.5" textAnchor="middle" letterSpacing="0.6" fontFamily="sans-serif">
+                      GOREGAON–MULUND LINK ROAD
+                    </text>
+
+                    {/* ─── Mindspace, the commercial pocket west of Link Road ─── */}
+                    <rect
+                      x="150"
+                      y="300"
+                      width="180"
+                      height="100"
+                      rx="3"
+                      fill="rgba(255,255,255,0.016)"
+                      stroke="rgba(255,255,255,0.11)"
+                      strokeWidth="1.4"
+                      strokeDasharray="5 4"
+                    />
+                    <text x="240" y="345" fill="#B9B3A8" fontSize="9.5" fontWeight="600" textAnchor="middle" letterSpacing="1.6" fontFamily="sans-serif">
+                      MINDSPACE
+                    </text>
+                    <text x="240" y="358" fill="rgba(255,255,255,0.28)" fontSize="7.5" textAnchor="middle" fontFamily="sans-serif">
+                      COMMERCIAL IT PARK
+                    </text>
+
+                    {/* ─── Route from the site to the selected destination ─── */}
+                    {/* Drawn before the parcel so it slips out from under it. */}
+                    {activeLayout && (
+                      <line
+                        x1={SITE_ORIGIN.x}
+                        y1={SITE_ORIGIN.y}
+                        x2={activeLayout.x}
+                        y2={activeLayout.y}
+                        stroke="#C8A96B"
+                        strokeWidth="1.5"
+                        strokeDasharray="7 7"
+                        opacity="0.45"
+                        className="pointer-events-none"
+                      />
+                    )}
+
+                    {/* Evershine Mall — the project sits behind it, off Link Road */}
+                    <rect x="448" y="268" width="56" height="46" rx="2" fill="#1b1c1b" stroke="rgba(200,169,107,0.35)" strokeWidth="1" />
+                    <text x="476" y="288" fill="#F4F0E8" fontSize="7" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                      EVERSHINE
+                    </text>
+                    <text x="476" y="298" fill="#C8A96B" fontSize="6.5" textAnchor="middle" fontFamily="sans-serif">
+                      MALL
+                    </text>
+
+                    {/* The 18.3 m access road, parcel gate west onto New Link Road */}
+                    <line x1="412" y1="332" x2="522" y2="332" stroke="#C8A96B" strokeWidth="9" strokeLinecap="round" />
+                    <line x1="412" y1="332" x2="522" y2="332" stroke="#0c0d0c" strokeWidth="1.6" strokeDasharray="5 4" />
+                    <circle cx="412" cy="332" r="5.5" fill="#C8A96B" stroke="#080908" strokeWidth="2" />
+                    <circle cx="522" cy="332" r="5.5" fill="#C8A96B" stroke="#080908" strokeWidth="2" />
+                    <rect x="420" y="338" width="94" height="15" rx="2" fill="#080908" stroke="rgba(200,169,107,0.5)" strokeWidth="0.8" />
+                    <text x="467" y="348.5" fill="#F4F0E8" fontSize="7.5" fontWeight="bold" textAnchor="middle" letterSpacing="0.4" fontFamily="sans-serif">
+                      18.3 M ACCESS ROAD
+                    </text>
+
+                    {/* ─── Aranya The Park: its own parcel, east of New Link Road ─── */}
+                    <circle cx="596" cy="308" r="68" fill="url(#modalAranyaPulse)" />
+                    <rect x="522" y="262" width="148" height="92" rx="3" fill="rgba(200,169,107,0.09)" stroke="#C8A96B" strokeWidth="1.6" />
                     <image
                       href="/assets/branding/aranya-wordmark-light.png"
-                      x="-62"
-                      y="-34"
+                      x="534"
+                      y="282"
                       width="124"
-                      height="18"
+                      height="35"
                       preserveAspectRatio="xMidYMid meet"
                     >
                       <title>Aranya The Park</title>
                     </image>
-                  </g>
+                    <text x="596" y="340" fill="rgba(244,240,232,0.55)" fontSize="7" textAnchor="middle" letterSpacing="1.4" fontFamily="sans-serif">
+                      THE SITE
+                    </text>
 
-                  {/* Schematic Interactive Landmark Nodes */}
-                  {locationNodes.map((node) => {
-                    const isSelected = selectedNodeId === node.id;
-                    const coords = node.coords || { x: 50, y: 50 };
-                    const px = (coords.x / 100) * 1000;
-                    const py = (coords.y / 100) * 500;
+                    {/* ─── Destination markers ─── */}
+                    {locationNodes.map((node) => {
+                      const spot = NODE_LAYOUT[node.id];
+                      if (!spot) return null;
 
-                    return (
-                      <g
-                        key={node.id}
-                        transform={`translate(${px}, ${py})`}
-                        onClick={() => setSelectedNodeId(node.id)}
-                        className="cursor-pointer transition-all duration-300 group"
-                      >
-                        <circle
-                          cx="0"
-                          cy="0"
-                          r={isSelected ? 18 : 10}
-                          fill={isSelected ? '#C8A96B' : '#1a1b1a'}
-                          stroke={isSelected ? '#FFFFFF' : '#C8A96B'}
-                          strokeWidth={isSelected ? 2.5 : 1.2}
-                          className="transition-all duration-300"
-                        />
-                        <text
-                          x="0"
-                          y="3"
-                          fill={isSelected ? '#080908' : '#F4F0E8'}
-                          fontSize="8"
-                          fontWeight="bold"
-                          textAnchor="middle"
-                          fontFamily="sans-serif"
+                      const tone = CATEGORY_TONE[node.category] || '#C8A96B';
+                      const isSelected = selectedNodeId === node.id;
+                      const isHovered = hoveredNodeId === node.id;
+                      const inFilter =
+                        activeCategoryFilter === 'all' || node.category === activeCategoryFilter;
+                      const minutes = node.time.match(/\d+/)?.[0] ?? '·';
+
+                      return (
+                        <g
+                          key={node.id}
+                          transform={`translate(${spot.x}, ${spot.y})`}
+                          opacity={inFilter ? 1 : 0.15}
+                          style={{ pointerEvents: inFilter ? 'auto' : 'none' }}
+                          className="cursor-pointer focus:outline-none"
+                          role="button"
+                          tabIndex={inFilter ? 0 : -1}
+                          aria-label={`${node.name}, ${node.time}`}
+                          onClick={() => setSelectedNodeId(node.id)}
+                          onMouseEnter={() => setHoveredNodeId(node.id)}
+                          onMouseLeave={() => setHoveredNodeId(null)}
+                          onFocus={() => setHoveredNodeId(node.id)}
+                          onBlur={() => setHoveredNodeId(null)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setSelectedNodeId(node.id);
+                            }
+                          }}
                         >
-                          {node.time}
-                        </text>
-                        <g transform="translate(0, -18)" className={isSelected ? 'block' : 'hidden group-hover:block'}>
-                          <rect
-                            x={-node.name.length * 3.2 - 10}
-                            y="-14"
-                            width={node.name.length * 6.4 + 20}
-                            height="16"
-                            fill="#080908"
-                            stroke="#C8A96B"
-                            strokeWidth="1"
-                            rx="2"
+                          {(isSelected || isHovered) && (
+                            <circle r="20" fill={tone} opacity={isSelected ? 0.2 : 0.12} />
+                          )}
+                          <circle
+                            r={isSelected ? 12.5 : isHovered ? 11 : 9.5}
+                            fill={isSelected ? tone : '#12130f'}
+                            stroke={tone}
+                            strokeWidth={isSelected ? 2 : 1.4}
+                            className="transition-all duration-200"
                           />
-                          <text x="0" y="-3" fill="#FFFFFF" fontSize="8" fontWeight="600" textAnchor="middle" fontFamily="sans-serif">
-                            {node.name} ({node.time})
+                          <text
+                            y="3"
+                            fill={isSelected ? '#080908' : tone}
+                            fontSize="7.5"
+                            fontWeight="bold"
+                            textAnchor="middle"
+                            fontFamily="sans-serif"
+                            className="pointer-events-none"
+                          >
+                            {minutes}
                           </text>
                         </g>
-                      </g>
-                    );
-                  })}
-                </svg>
+                      );
+                    })}
 
-                {/* Bottom Left Schematic Legend */}
-                <div className="absolute bottom-3 left-3 bg-dark-950/95 border border-white/[0.08] p-2.5 rounded-[3px] text-[10px] space-y-1 backdrop-blur-md hidden sm:block">
-                  <div className="text-champagne-300 font-semibold uppercase tracking-wider text-[9px] mb-1">
-                    Arterial Legend
+                    {/* ─── Labels, painted last so they never sit under a marker ─── */}
+                    {locationNodes.map((node) => {
+                      const spot = NODE_LAYOUT[node.id];
+                      if (!spot) return null;
+
+                      const isSelected = selectedNodeId === node.id;
+                      const isHovered = hoveredNodeId === node.id;
+                      const inFilter =
+                        activeCategoryFilter === 'all' || node.category === activeCategoryFilter;
+                      // Every destination on the map carries its name. The layout above
+                      // is spaced so all of the plates can sit up at once without
+                      // colliding, so nothing is left as an unexplained bubble.
+                      if (!inFilter) return null;
+
+                      const tone = CATEGORY_TONE[node.category] || '#C8A96B';
+                      const text = `${spot.short} · ${node.time}`;
+                      const w = text.length * 4.75 + 18;
+                      const plate = platePosition(spot.side, w);
+
+                      return (
+                        <g
+                          key={`${node.id}-label`}
+                          transform={`translate(${spot.x}, ${spot.y})`}
+                          className="pointer-events-none"
+                        >
+                          <rect
+                            x={plate.x}
+                            y={plate.y}
+                            width={w}
+                            height={PLATE_H}
+                            rx="2"
+                            fill="#080908"
+                            stroke={isSelected || isHovered ? tone : 'rgba(255,255,255,0.14)'}
+                            strokeWidth={isSelected ? 1.2 : 0.8}
+                            opacity="0.96"
+                          />
+                          <text
+                            x={plate.tx}
+                            y={plate.ty}
+                            fill={isSelected || isHovered ? '#FFFFFF' : '#D9D4CA'}
+                            fontSize="8.5"
+                            fontWeight={isSelected ? 700 : 600}
+                            textAnchor="middle"
+                            fontFamily="sans-serif"
+                          >
+                            {text}
+                          </text>
+                        </g>
+                      );
+                    })}
+                  </svg>
+
+                  {/* Legend */}
+                  <div className="absolute bottom-3 left-3 bg-dark-950/95 border border-white/[0.08] p-2.5 rounded-[3px] text-[10px] backdrop-blur-md hidden sm:block">
+                    <div className="text-champagne-300 font-semibold uppercase tracking-wider text-[9px] mb-1.5">
+                      Map Legend
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                      {[
+                        { tone: CATEGORY_TONE.connectivity, label: 'Transit & Highways' },
+                        { tone: CATEGORY_TONE.education, label: 'Schools' },
+                        { tone: CATEGORY_TONE.healthcare, label: 'Hospitals' },
+                        { tone: CATEGORY_TONE.entertainment, label: 'Retail & Leisure' },
+                      ].map((row) => (
+                        <div key={row.label} className="flex items-center gap-1.5 text-ivory-muted">
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: row.tone }} />
+                          <span className="whitespace-nowrap">{row.label}</span>
+                        </div>
+                      ))}
+                      <div className="flex items-center gap-1.5 text-ivory-muted">
+                        <span className="w-3 h-[3px] bg-[#EAB308] shrink-0" />
+                        <span className="whitespace-nowrap">Metro Line 2A</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-ivory-muted">
+                        <span className="w-3 h-[3px] bg-[#C8A96B] shrink-0" />
+                        <span className="whitespace-nowrap">18.3 m Access Road</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2 text-ivory-muted">
-                    <span className="w-3 h-1 bg-[#EAB308]" />
-                    <span>Metro Line 2A (Yellow)</span>
+
+                  {/* Hint */}
+                  <div className="absolute bottom-3 right-3 bg-dark-950/90 border border-white/[0.08] px-2.5 py-1.5 rounded-[3px] text-[10px] text-ivory-muted/80 backdrop-blur-md hidden sm:block">
+                    Select a marker to trace the route · numbers are minutes
                   </div>
-                  <div className="flex items-center gap-2 text-ivory-muted">
-                    <span className="w-3 h-1 bg-[#C8A96B]" />
-                    <span>18.3M Dedicated Boulevard</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-ivory-muted">
-                    <span className="w-3 h-1 bg-white/[0.4]" />
-                    <span>New Link Road / WEH</span>
+                  <div className="absolute bottom-3 left-3 bg-dark-950/90 border border-white/[0.08] px-2.5 py-1.5 rounded-[3px] text-[10px] text-ivory-muted/80 backdrop-blur-md sm:hidden">
+                    Swipe the map · tap a marker for details
                   </div>
                 </div>
               </div>
@@ -433,13 +637,13 @@ export const LocationModal: React.FC<LocationModalProps> = ({
             {[
               { id: 'all', label: 'All Destinations' },
               { id: 'connectivity', label: 'Transit & Highways' },
-              { id: 'education', label: 'Top Schools' },
+              { id: 'education', label: 'Schools' },
               { id: 'healthcare', label: 'Hospitals' },
-              { id: 'entertainment', label: 'Retail & Commercial' },
+              { id: 'entertainment', label: 'Retail & Leisure' },
             ].map((cat) => (
               <button
                 key={cat.id}
-                onClick={() => setActiveCategoryFilter(cat.id)}
+                onClick={() => applyCategoryFilter(cat.id)}
                 className={`px-3.5 py-1.5 text-xs font-sans uppercase tracking-wider whitespace-nowrap transition-colors cursor-pointer rounded-full border ${
                   activeCategoryFilter === cat.id
                     ? 'bg-champagne-400 text-dark-950 border-champagne-300 font-semibold'
@@ -529,7 +733,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
           {/* ─── Upcoming Infrastructure Catalysts Timeline ─── */}
           <div className="pt-4 border-t border-white/[0.08]">
             <h4 className="font-serif text-sm uppercase tracking-[0.2em] text-champagne-300 font-semibold mb-4">
-              Major Infrastructure Catalysts Driving Malad West
+              Infrastructure Shaping Malad West
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {infrastructureProjects.map((proj) => (
@@ -561,7 +765,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
               size="sm"
               onClick={() => {
                 onClose();
-                if (onOpenLeadModal) onOpenLeadModal('Site Visit Booking');
+                if (onOpenLeadModal) onOpenLeadModal('Book a Site Visit');
               }}
             >
               Book Site Visit

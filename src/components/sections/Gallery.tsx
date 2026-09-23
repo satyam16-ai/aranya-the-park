@@ -59,16 +59,14 @@ export const Gallery: React.FC<GalleryProps> = ({ onOpenLeadModal: _onOpenLeadMo
       <Container size="showcase" className="relative z-10">
         {/* Section Heading */}
         <SectionHeading
-          eyebrow="CURATED VISUAL CHRONICLES"
-          title="Project Gallery"
-          subtitle="Explore the architectural elevation, living volumes, wellness decks, and verdant parkscapes."
-          align="center"
+          eyebrow="Gallery"
+          title="A Closer Look"
+          subtitle="The architecture, the homes, the amenities and the gardens, in pictures."
           theme="dark"
-          className="mb-8 sm:mb-10"
         />
 
         {/* Category Pill Tabs */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 sm:gap-3 overflow-x-auto overflow-touch pb-3 sm:pb-0 px-1 sm:px-0 mb-8 sm:mb-10">
+        <div className="flex items-center justify-start gap-2 sm:gap-3 overflow-x-auto overflow-touch pb-3 sm:pb-0 px-1 sm:px-0 mb-6 sm:mb-7">
           {tabs.map((tab) => {
             const isActive = activeTab === tab.value;
             return (

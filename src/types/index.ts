@@ -80,7 +80,6 @@ export interface LocationNode {
   time: string;
   distanceNote?: string;
   routeNote?: string;
-  coords?: { x: number; y: number };
   highlight?: boolean;
 }
 

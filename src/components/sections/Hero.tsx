@@ -1,167 +1,307 @@
-import React from 'react';
-import { ArrowRight, Play } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { projectData } from '../../data/projectData';
 
-interface HeroProps {
-  onOpenLeadModal?: (purpose?: string) => void;
+/** The headline sets itself letter by letter; these drive the stagger. */
+const LETTER_START = 0.45;
+const LETTER_STEP = 0.055;
+
+/**
+ * The headline split into words, each letter carrying the moment it arrives.
+ * Built once at module scope: the schedule never changes, so it has no business
+ * being recomputed on every render.
+ */
+const HEADLINE_WORDS = (() => {
+  let i = 0;
+  return projectData.positioning.split(' ').map((word, w) => ({
+    key: `${word}-${w}`,
+    letters: Array.from(word).map((char, c) => ({
+      key: `${word}-${w}-${c}`,
+      char,
+      delay: +(LETTER_START + i++ * LETTER_STEP).toFixed(3),
+    })),
+  }));
+})();
+
+/** The address waits for the last letter to land. */
+const ADDRESS_DELAY = +(
+  LETTER_START +
+  HEADLINE_WORDS.reduce((n, w) => n + w.letters.length, 0) * LETTER_STEP +
+  0.25
+).toFixed(3);
+
+interface HeroSlide {
+  src: string;
+  srcSet?: string;
+  /** Narrow-viewport source, used through <picture> when present. */
+  mobileSrc?: string;
+  width: number;
+  height: number;
+  alt: string;
+  /** Crop bias — these frames are far taller than the fold they sit in. */
+  position: string;
 }
 
-const RAIL_LABELS = [
-  ['Urban', 'Serenity'],
-  ['Timeless', 'Living'],
-  ['Mumbai Lives', 'Elevated'],
+/**
+ * The hero frames, in order. Add or remove one here and the slideshow, the dots
+ * and the preload schedule all follow; nothing else needs touching.
+ */
+const HERO_SLIDES: HeroSlide[] = [
+  {
+    src: '/assets/opt/life-garden-walk-2000.webp',
+    srcSet:
+      '/assets/opt/life-garden-walk-640.webp 640w, /assets/opt/life-garden-walk-1280.webp 1280w, /assets/opt/life-garden-walk-2000.webp 2000w',
+    width: 2000,
+    height: 1787,
+    alt: 'A resident walking barefoot along a flowering garden path at Aranya The Park',
+    position: 'object-[34%_center] lg:object-center',
+  },
+  {
+    src: '/assets/story-arrival-aerial.jpg',
+    mobileSrc: '/assets/story-arrival-aerial-mobile.jpg',
+    width: 2000,
+    height: 2519,
+    alt: 'Aranya The Park — twin towers rising from a secluded green canopy beside the 18.3-metre boulevard',
+    position: 'object-top sm:object-center',
+  },
+  {
+    src: '/assets/opt/grand-lobby-2000.webp',
+    srcSet:
+      '/assets/opt/grand-lobby-640.webp 640w, /assets/opt/grand-lobby-1280.webp 1280w, /assets/opt/grand-lobby-2000.webp 2000w',
+    width: 2000,
+    height: 1445,
+    alt: 'The double-height air-conditioned arrival lobby at Aranya The Park',
+    position: 'object-center',
+  },
 ];
 
-export const Hero: React.FC<HeroProps> = ({ onOpenLeadModal }) => {
+/** Dwell per frame, and the cross-fade that carries one into the next. */
+const SLIDE_MS = 6000;
+const FADE_MS = 1400;
+/** The later frames stay off the network until the first one has landed. */
+const PRELOAD_DELAY_MS = 1200;
+
+const prefersReducedMotion = () =>
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Hero — The Arrival.
+ *
+ * Layer one is deliberately bare: the positioning line in gold, setting itself
+ * one letter at a time, over its address. The frames behind it cross-fade on a
+ * timer — the client's 23-09 note asked for a slideshow in place of the pinned
+ * GSAP sequence that revealed the second frame on scroll, so the hero is now a
+ * single viewport that costs no scroll distance at all.
+ *
+ * The timer stops whenever the hero is off-screen or the tab is hidden, and
+ * `prefers-reduced-motion` holds the first frame with the dots still working.
+ */
+export const Hero: React.FC = () => {
+  const [active, setActive] = useState(0);
+  const [preloadRest, setPreloadRest] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const timerRef = useRef<number | null>(null);
+  /** Why the slideshow is currently held, if it is. */
+  const pausedRef = useRef({ hidden: false, offscreen: false });
+
+  const stop = () => {
+    if (timerRef.current) window.clearInterval(timerRef.current);
+    timerRef.current = null;
+  };
+
+  const schedule = useCallback(() => {
+    stop();
+    if (HERO_SLIDES.length < 2 || prefersReducedMotion()) return;
+    if (pausedRef.current.hidden || pausedRef.current.offscreen) return;
+    timerRef.current = window.setInterval(
+      () => setActive((i) => (i + 1) % HERO_SLIDES.length),
+      SLIDE_MS
+    );
+  }, []);
+
+  const goTo = useCallback(
+    (i: number) => {
+      setPreloadRest(true);
+      setActive(i);
+      // A manual pick earns a full dwell, not the remainder of the old one.
+      schedule();
+    },
+    [schedule]
+  );
+
+  // Give the first frame the network to itself; it is the LCP element.
+  useEffect(() => {
+    const t = window.setTimeout(() => setPreloadRest(true), PRELOAD_DELAY_MS);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  useEffect(() => {
+    const onVisibility = () => {
+      pausedRef.current.hidden = document.hidden;
+      schedule();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        pausedRef.current.offscreen = !entry.isIntersecting;
+        schedule();
+      },
+      { threshold: 0.15 }
+    );
+    if (sectionRef.current) io.observe(sectionRef.current);
+
+    schedule();
+    return () => {
+      stop();
+      document.removeEventListener('visibilitychange', onVisibility);
+      io.disconnect();
+    };
+  }, [schedule]);
+
   return (
     <section
       id="overview"
-      className="relative min-h-[100svh] lg:h-screen lg:min-h-[760px] flex flex-col overflow-hidden bg-dark-950 text-ivory select-none"
+      ref={sectionRef}
+      className="relative h-[100dvh] min-h-[100svh] sm:h-screen w-full overflow-hidden flex flex-col bg-dark-950 text-ivory select-none"
     >
-      {/* ─── Tower Render — sized to viewport height, anchored left, dissolving right ─── */}
-      <div className="absolute inset-y-0 left-0 w-full lg:w-auto lg:left-[-3%] z-0">
-        <img
-          src="/assets/opt/render-tower-day-963.webp"
-          srcSet="/assets/opt/render-tower-day-800.webp 800w, /assets/opt/render-tower-day-963.webp 963w"
-          sizes="(min-width: 1024px) 60vw, 100vw"
-          width={963}
-          height={1280}
-          alt="Aranya The Park — tower elevation, Malad West"
-          className="h-full w-full lg:w-auto object-cover object-[50%_bottom] lg:object-bottom brightness-[0.82] saturate-[0.92] contrast-[1.02]"
-          style={{
-            WebkitMaskImage:
-              'linear-gradient(to right, black 0%, black 62%, rgba(0,0,0,0.5) 80%, transparent 100%)',
-            maskImage:
-              'linear-gradient(to right, black 0%, black 62%, rgba(0,0,0,0.5) 80%, transparent 100%)',
-          }}
-          fetchPriority="high"
-        />
-        {/* Mobile readability veil */}
-        <div className="absolute inset-0 lg:hidden bg-gradient-to-b from-dark-950/55 via-dark-950/35 to-dark-950" />
-        {/* Desktop: settle the daylight sky into the deep-green surface */}
-        <div className="absolute inset-0 hidden lg:block bg-gradient-to-t from-dark-950 via-dark-950/25 via-35% to-dark-950/45" />
-        {/* Ground + navbar-zone fades */}
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-dark-950 to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-dark-950/70 to-transparent" />
+      {/* ─── Frames ─── */}
+      {/* The frames are clipped here: each one is scaled past the fold by the
+          slow push, and this is what keeps that off the page. */}
+      <div data-hero-frames className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {HERO_SLIDES.map((slide, i) => {
+          const isActive = i === active;
+          // Frames past the first stay unmounted until the hero has settled.
+          if (i > 0 && !preloadRest) return null;
+
+          const img = (
+            <img
+              src={slide.src}
+              srcSet={slide.srcSet}
+              sizes="100vw"
+              width={slide.width}
+              height={slide.height}
+              alt={isActive ? slide.alt : ''}
+              fetchPriority={i === 0 ? 'high' : 'low'}
+              className={`w-full h-full object-cover transform-gpu ${slide.position}`}
+            />
+          );
+
+          return (
+            <div
+              key={slide.src}
+              className={`absolute inset-0 transition-opacity ease-out ${
+                isActive ? 'opacity-100 hero-slide-active' : 'opacity-0'
+              }`}
+              style={{ transitionDuration: `${FADE_MS}ms` }}
+            >
+              {slide.mobileSrc ? (
+                <picture>
+                  <source media="(max-width: 1023px)" srcSet={slide.mobileSrc} />
+                  {img}
+                </picture>
+              ) : (
+                img
+              )}
+            </div>
+          );
+        })}
+
+        {/* Readability stack — neutral black, never the brand green: a green
+            wash over the photography is what the client rejected on 23-09.
+            Weight goes only where the copy is, plus the two edge fades that
+            seam the frame into the page. */}
+        <div className="hidden lg:block absolute inset-0 bg-[radial-gradient(ellipse_56%_38%_at_50%_50%,rgba(0,0,0,0.7)_0%,rgba(0,0,0,0.38)_50%,transparent_84%)]" />
+        {/* The mobile crop is a narrow slice of a wide frame, so it takes a
+            single soft veil instead of the desktop centre scrim. */}
+        <div className="absolute inset-0 lg:hidden bg-gradient-to-b from-black/45 via-black/32 to-black/55" />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/55 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-dark-950 to-transparent" />
       </div>
 
-      {/* ─── Faint crest watermark on the dark canvas ─── */}
-      <img
-        src="/assets/branding/aranya-crest.png"
-        alt=""
-        aria-hidden="true"
-        className="hidden lg:block absolute -right-40 top-1/2 -translate-y-1/2 w-[720px] opacity-[0.045] z-0 pointer-events-none"
-      />
-
       {/* ─── Top-right Developer Branding ─── */}
-      <img
-        src="/assets/branding/project-by-zaveri-bkm-light.png"
-        alt={`Project by ${projectData.jointVenture}`}
-        className="hidden lg:block absolute right-8 xl:right-12 top-[14%] z-10 h-14 xl:h-16 w-auto object-contain opacity-90 hero-animate-aside"
-      />
-
-      {/* ─── Left Editorial Rail ─── */}
-      <div className="hidden lg:flex absolute left-7 xl:left-10 top-[19%] bottom-[9%] z-10 flex-col justify-between items-start hero-animate-aside">
-        {RAIL_LABELS.map(([a, b], i) => (
-          <React.Fragment key={a}>
-            {i > 0 && (
-              <span className="flex-1 w-px my-5 bg-gradient-to-b from-transparent via-champagne-400/40 to-transparent" />
-            )}
-            <span className="font-sans text-[9px] uppercase tracking-[0.32em] text-ivory-muted/80 leading-[1.9] drop-shadow-[0_1px_6px_rgba(0,0,0,0.9)]">
-              {a}
-              <br />
-              {b}
-            </span>
-          </React.Fragment>
-        ))}
+      <div className="hidden lg:block absolute right-8 xl:right-12 top-[14%] z-20">
+        <img
+          src="/assets/branding/project-by-zaveri-bkm-light.png"
+          alt={`Project by ${projectData.jointVenture}`}
+          className="h-14 xl:h-16 w-auto object-contain opacity-90 hero-animate-aside"
+        />
       </div>
 
       {/* ─── Navbar spacer ─── */}
-      <div className="relative z-10 pt-24 sm:pt-28 lg:pt-[clamp(5.5rem,9vh,8rem)] shrink-0" />
+      <div className="relative z-20 pt-[4.5rem] sm:pt-28 lg:pt-[clamp(5.5rem,9vh,8rem)] shrink-0" />
 
-      {/* ─── Main Composition ─── */}
-      <div className="relative z-10 flex-1 flex items-center px-5 sm:px-8 lg:pl-0 lg:pr-8 xl:pr-12 py-6 lg:py-0">
-        <div className="w-full grid grid-cols-1 lg:grid-cols-[22%_minmax(0,1fr)_22%] 2xl:grid-cols-[24%_minmax(0,1fr)_24%] items-center gap-8 xl:gap-10">
-          {/* Centre column (over the dissolving image edge) */}
-          <div className="lg:col-start-2 text-center max-w-2xl mx-auto lg:max-w-none">
-            {/* Eyebrow */}
-            <div className="flex items-center justify-center gap-4 mb-5 sm:mb-7 hero-animate-eyebrow">
-              <span className="w-8 sm:w-12 h-px bg-champagne-400/70" />
-              <span className="font-sans text-[10px] sm:text-[11px] uppercase tracking-[0.38em] text-champagne-300 font-medium whitespace-nowrap">
-                Malad West · Mumbai
-              </span>
-              <span className="w-8 sm:w-12 h-px bg-champagne-400/70" />
-            </div>
+      {/* ─── The statement ─── */}
+      <div className="relative z-20 flex-1 flex items-center px-5 sm:px-8 py-4 lg:py-0">
+        {/* One statement and its address, nothing else: the client's 23-09
+            note took the wordmark, the supporting copy and both buttons out
+            of the first fold. Enquiry lives in the navbar and the sticky bar. */}
+        <div className="w-full max-w-5xl mx-auto text-center">
+          <h1 className="m-0 font-serif uppercase text-champagne-400 leading-[1.06] tracking-[0.08em] sm:tracking-[0.12em] text-[clamp(1.875rem,7vw,4.5rem)] drop-shadow-[0_4px_26px_rgba(0,0,0,0.8)]">
+            {/* The line is announced once, in full, from here; the animated
+                letters are decoration and stay out of the a11y tree. */}
+            <span className="sr-only">
+              {projectData.name} &mdash; {projectData.positioning}
+            </span>
+            <span aria-hidden="true">
+              {HEADLINE_WORDS.map((word, w) => (
+                <React.Fragment key={word.key}>
+                  {/* A real space between words, so the line can still wrap
+                      on a narrow screen. */}
+                  {w > 0 && ' '}
+                  <span className="inline-block">
+                    {word.letters.map((letter) => (
+                      <span
+                        key={letter.key}
+                        className="hero-letter inline-block"
+                        style={{ animationDelay: `${letter.delay}s` }}
+                      >
+                        {letter.char}
+                      </span>
+                    ))}
+                  </span>
+                </React.Fragment>
+              ))}
+            </span>
+          </h1>
 
-            {/* Title — Official Aranya The Park wordmark lockup */}
-            <h1 className="hero-animate-title m-0">
-              <img
-                src="/assets/branding/aranya-wordmark-light.png"
-                alt="Aranya The Park"
-                width={2393}
-                height={678}
-                fetchPriority="high"
-                className="w-[clamp(17rem,44vw,36rem)] max-w-full h-auto mx-auto object-contain drop-shadow-[0_6px_30px_rgba(0,0,0,0.65)]"
-              />
-            </h1>
-
-            {/* Ornament divider */}
-            <div className="flex items-center justify-center gap-4 my-6 sm:my-8 lg:my-[clamp(1.25rem,2.6vh,2rem)] hero-animate-subtitle">
-              <span className="w-12 sm:w-16 h-px bg-gradient-to-r from-transparent to-champagne-400/70" />
-              <img
-                src="/assets/branding/aranya-crest.png"
-                alt=""
-                aria-hidden="true"
-                className="h-6 w-6 sm:h-7 sm:w-7 opacity-90"
-              />
-              <span className="w-12 sm:w-16 h-px bg-gradient-to-l from-transparent to-champagne-400/70" />
-            </div>
-
-            {/* Tagline + supporting copy */}
-            <div className="hero-animate-subtitle">
-              <p className="font-serif uppercase tracking-[0.35em] text-ivory/85 text-sm sm:text-lg lg:text-xl mb-4 sm:mb-5 pl-[0.35em]">
-                {projectData.positioning}
-              </p>
-              <p className="font-sans font-light text-ivory-muted text-sm sm:text-base lg:text-[1.05rem] leading-relaxed max-w-[460px] mx-auto">
-                Where modern living meets nature&rsquo;s calm. Thoughtfully designed 2, 3 &amp; 4 BHK
-                residences amid 40% open greens, for a more meaningful tomorrow.
-              </p>
-            </div>
-
-            {/* CTAs */}
-            <div className="mt-8 sm:mt-10 lg:mt-[clamp(1.5rem,3.2vh,2.5rem)] flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 hero-animate-cta">
-              <button
-                onClick={() => onOpenLeadModal?.('Hero Enquiry')}
-                className="btn-lux group w-full sm:w-auto inline-flex items-center justify-center gap-3 px-8 sm:px-9 py-3.5 sm:py-4 rounded-full bg-champagne-400 hover:bg-champagne-300 text-dark-950 font-sans font-semibold text-[11px] sm:text-xs uppercase tracking-[0.22em] transition-all duration-300 shadow-[0_8px_30px_rgba(200,169,107,0.28)] hover:shadow-[0_10px_36px_rgba(200,169,107,0.42)] cursor-pointer"
-              >
-                <span>Enquire Now</span>
-                <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-              </button>
-              <a
-                href="#residences"
-                className="btn-lux group w-full sm:w-auto inline-flex items-center justify-center gap-3 pl-8 sm:pl-9 pr-3 py-2.5 rounded-full border border-ivory/25 hover:border-champagne-400/60 text-ivory font-sans font-medium text-[11px] sm:text-xs uppercase tracking-[0.22em] transition-all duration-300 glass-panel-subtle cursor-pointer"
-              >
-                <span className="py-1">Explore Residences</span>
-                <span className="w-8 h-8 rounded-full border border-ivory/30 group-hover:border-champagne-400 group-hover:bg-champagne-400/15 flex items-center justify-center transition-all duration-300">
-                  <Play size={10} className="fill-current ml-0.5" />
-                </span>
-              </a>
-            </div>
+          <div
+            className="hero-animate-subtitle mt-5 sm:mt-7 flex items-center justify-center gap-4 sm:gap-5"
+            style={{ animationDelay: `${ADDRESS_DELAY}s` }}
+          >
+            <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
+            <p className="font-sans uppercase text-champagne-300 font-medium leading-relaxed tracking-[0.14em] sm:tracking-[0.24em] text-[11px] sm:text-sm lg:text-base drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+              Behind Evershine Mall &middot; {projectData.location}
+            </p>
+            <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
           </div>
-
         </div>
       </div>
 
-      {/* ─── Scroll Cue (aligned under the centre column) ─── */}
-      <div className="relative z-10 shrink-0 pb-24 sm:pb-28 lg:pb-[clamp(1.25rem,2.5vh,2.25rem)] lg:pr-8 xl:pr-12 grid grid-cols-1 lg:grid-cols-[22%_minmax(0,1fr)_22%] 2xl:grid-cols-[24%_minmax(0,1fr)_24%] hero-animate-cue">
-        <div className="lg:col-start-2 flex flex-col items-center gap-3 lg:gap-2.5">
+      {/* ─── Frame dots + scroll cue ─── */}
+      <div className="relative z-20 shrink-0 pb-16 sm:pb-20 lg:pb-[clamp(1.25rem,2.5vh,2.25rem)]">
+        <div className="flex flex-col items-center gap-4 lg:gap-3.5 hero-animate-cue">
+          <div className="flex items-center gap-2" aria-label="Hero frames">
+            {HERO_SLIDES.map((slide, i) => (
+              <button
+                key={slide.src}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Show frame ${i + 1} of ${HERO_SLIDES.length}`}
+                aria-current={i === active}
+                className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                  i === active ? 'w-7 bg-champagne-400' : 'w-1.5 bg-ivory/35 hover:bg-ivory/70'
+                }`}
+              />
+            ))}
+          </div>
+
           <img
             src="/assets/branding/project-by-zaveri-bkm-light.png"
             alt={`Project by ${projectData.jointVenture}`}
-            className="lg:hidden h-9 w-auto object-contain opacity-85 mb-3"
+            className="lg:hidden h-9 w-auto object-contain opacity-85"
           />
           <a
-            href="#story-arrival"
+            href="#story-greens"
             className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.35em] text-ivory-muted/70 hover:text-champagne-300 transition-colors duration-300 cursor-pointer"
           >
             Scroll to Explore

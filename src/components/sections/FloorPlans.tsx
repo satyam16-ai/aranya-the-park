@@ -9,6 +9,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { Img } from '../common/Img';
 import { hasUnlockedPlans } from '../../services/enquiryService';
@@ -94,56 +95,50 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
 
       <Container size="showcase">
         {/* Section Header */}
-        <div className="text-center mb-14 sm:mb-16">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-5">
-            ARCHITECTURAL BLUEPRINTS
-          </span>
-          <h2 className="font-serif text-4xl sm:text-6xl lg:text-7xl font-light tracking-tight text-ivory uppercase mb-5">
-            Find Your Space
-          </h2>
-          <p className="font-sans text-sm sm:text-base text-ivory-muted font-light max-w-2xl mx-auto leading-relaxed">
-            Inspect authentic MahaRERA approved floor plates with fluid zoom and detail navigation.
-          </p>
-        </div>
-
-        {/* ─── Primary Tower Selector (Modern Glass Pill) ─── */}
-        <div className="flex justify-center mb-6 px-4">
-          <div className="inline-flex p-1 sm:p-1.5 glass-panel rounded-full max-w-md w-full justify-between gap-1 sm:gap-1.5">
-            <button
-              onClick={() => handleTowerChange('tower-a')}
-              className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full ${
-                selectedTower === 'tower-a'
-                  ? 'bg-champagne-400 text-dark-950 font-bold shadow-md'
-                  : 'text-ivory-muted hover:text-ivory'
-              }`}
-            >
-              A TOWER
-            </button>
-            <button
-              onClick={() => handleTowerChange('tower-b')}
-              className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full ${
-                selectedTower === 'tower-b'
-                  ? 'bg-champagne-400 text-dark-950 font-bold shadow-md'
-                  : 'text-ivory-muted hover:text-ivory'
-              }`}
-            >
-              B TOWER
-            </button>
-            <button
-              onClick={() => handleTowerChange('master')}
-              className={`flex-1 py-2 sm:py-2.5 px-2 sm:px-4 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full ${
-                selectedTower === 'master'
-                  ? 'bg-champagne-400 text-dark-950 font-bold shadow-md'
-                  : 'text-ivory-muted hover:text-ivory'
-              }`}
-            >
-              MASTER PLAN
-            </button>
-          </div>
-        </div>
+        {/* Heading and tower selector share one row; they used to be two
+            stacked, centred bands. */}
+        <SectionHeading
+          eyebrow="Floor Plans"
+          title="Find Your Space"
+          subtitle="The master layout and every floor of Tower A and Tower B. Zoom in to study each plan."
+          aside={
+            <div className="inline-flex p-1 sm:p-1.5 glass-panel rounded-full gap-1 sm:gap-1.5">
+              <button
+                onClick={() => handleTowerChange('tower-a')}
+                className={`py-2 sm:py-2.5 px-3.5 sm:px-5 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full whitespace-nowrap ${
+                  selectedTower === 'tower-a'
+                    ? 'bg-champagne-400 text-dark-950 shadow-md'
+                    : 'text-ivory-muted hover:text-ivory'
+                }`}
+              >
+                A TOWER
+              </button>
+              <button
+                onClick={() => handleTowerChange('tower-b')}
+                className={`py-2 sm:py-2.5 px-3.5 sm:px-5 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full whitespace-nowrap ${
+                  selectedTower === 'tower-b'
+                    ? 'bg-champagne-400 text-dark-950 shadow-md'
+                    : 'text-ivory-muted hover:text-ivory'
+                }`}
+              >
+                B TOWER
+              </button>
+              <button
+                onClick={() => handleTowerChange('master')}
+                className={`py-2 sm:py-2.5 px-3.5 sm:px-5 text-center font-sans text-[11px] sm:text-xs uppercase tracking-[0.12em] sm:tracking-[0.18em] font-semibold transition-all duration-300 cursor-pointer rounded-full whitespace-nowrap ${
+                  selectedTower === 'master'
+                    ? 'bg-champagne-400 text-dark-950 shadow-md'
+                    : 'text-ivory-muted hover:text-ivory'
+                }`}
+              >
+                MASTER PLAN
+              </button>
+            </div>
+          }
+        />
 
         {/* ─── Contextual Sub-Floor Selector ─── */}
-        <div className="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto overflow-touch pb-3 mb-8 px-4 sm:px-0">
+        <div className="flex items-center justify-start gap-2 overflow-x-auto overflow-touch pb-3 mb-6 px-4 sm:px-0">
           {towerPlans.map((plan) => {
             const isActive = plan.id === currentPlan.id;
             return (
@@ -237,8 +232,8 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
                     Floor plans available on request
                   </h4>
                   <p className="text-xs text-ivory-muted leading-relaxed">
-                    Share your details and the sales desk will unlock the detailed Tower A &amp;
-                    Tower B plates, along with current pricing.
+                    Share your details and our sales team will unlock the detailed Tower A &amp;
+                    Tower B plans, along with current pricing.
                   </p>
                 </div>
                 <Button
@@ -266,11 +261,11 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
 
             <div className="flex items-center gap-4 shrink-0">
               <button
-                onClick={() => onOpenLeadModal('Floor Plan Architectural PDF')}
+                onClick={() => onOpenLeadModal('Request the Floor Plan PDF')}
                 className="inline-flex items-center gap-2 text-xs font-sans uppercase tracking-[0.16em] text-champagne-300 hover:text-white transition-colors cursor-pointer"
               >
                 <FileDown size={14} />
-                <span>Download Blueprint PDF</span>
+                <span>Request Floor Plan PDF</span>
               </button>
             </div>
           </div>

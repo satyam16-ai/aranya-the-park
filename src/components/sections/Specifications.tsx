@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Container } from '../common/Container';
+import { SectionHeading } from '../common/SectionHeading';
 import { specificationsData } from '../../data/specificationsData';
 import { Button } from '../common/Button';
 import { Compass } from 'lucide-react';
@@ -22,20 +23,14 @@ export const Specifications: React.FC<SpecificationsProps> = ({
 
       <Container>
         {/* Chapter Header */}
-        <div className="text-center mb-14 sm:mb-20">
-          <span className="font-sans text-[11px] sm:text-xs uppercase tracking-[0.4em] text-champagne-300 font-medium block mb-4">
-            ARCHITECTURAL STANDARDS
-          </span>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-tight text-ivory uppercase mb-5 leading-[1.1]">
-            Project Specifications
-          </h2>
-          <p className="font-sans text-xs sm:text-sm text-ivory-muted font-light max-w-xl mx-auto leading-relaxed">
-            Essential architectural parameters, fittings, and engineering hallmarks curated for enduring quality and refined metropolitan living.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Specifications"
+          title="Crafted in Every Detail"
+          subtitle="The fittings, finishes and engineering that go into every home at Aranya."
+        />
 
         {/* ─── Category Selection Tabs (Minimalist Glass Pills) ─── */}
-        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 mb-12 sm:mb-16">
+        <div className="flex flex-wrap items-center justify-start gap-2 sm:gap-3 mb-7 sm:mb-9">
           {specificationsData.map((cat, idx) => {
             const isActive = idx === activeCategoryIndex;
             return (
@@ -84,7 +79,7 @@ export const Specifications: React.FC<SpecificationsProps> = ({
             {onOpenLeadModal && (
               <div className="mt-12 pt-8 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <p className="font-sans text-xs text-ivory-muted font-light">
-                  Direct developer consultation regarding materials, layouts, and construction milestones.
+                  Speak directly with the developer's team about materials, layouts and construction progress.
                 </p>
                 <Button
                   variant="gold"
@@ -93,7 +88,7 @@ export const Specifications: React.FC<SpecificationsProps> = ({
                   onClick={() => onOpenLeadModal('Project Specifications', currentCategory.category)}
                   className="shrink-0"
                 >
-                  ENQUIRE FOR SPECIFICATION DETAILS
+                  REQUEST FULL SPECIFICATIONS
                 </Button>
               </div>
             )}
