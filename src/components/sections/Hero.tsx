@@ -63,15 +63,15 @@ const HERO_SLIDES: HeroSlide[] = [
     alt: 'Aranya The Park — twin towers rising from a secluded green canopy beside the 18.3-metre boulevard',
     position: 'object-top sm:object-center',
   },
-  {
-    src: '/assets/opt/grand-lobby-2000.webp',
-    srcSet:
-      '/assets/opt/grand-lobby-640.webp 640w, /assets/opt/grand-lobby-1280.webp 1280w, /assets/opt/grand-lobby-2000.webp 2000w',
-    width: 2000,
-    height: 1445,
-    alt: 'The double-height air-conditioned arrival lobby at Aranya The Park',
-    position: 'object-center',
-  },
+  // {
+  //   src: '/assets/opt/grand-lobby-2000.webp',
+  //   srcSet:
+  //     '/assets/opt/grand-lobby-640.webp 640w, /assets/opt/grand-lobby-1280.webp 1280w, /assets/opt/grand-lobby-2000.webp 2000w',
+  //   width: 2000,
+  //   height: 1445,
+  //   alt: 'The double-height air-conditioned arrival lobby at Aranya The Park',
+  //   position: 'object-center',
+  // },
 ];
 
 /** Dwell per frame, and the cross-fade that carries one into the next. */
