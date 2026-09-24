@@ -21,6 +21,45 @@ company_assets
 reference
 *.pdf
 
+# Superseded images in public/ that the site no longer references: the raw
+# brochure page extracts (2-5 MB PNGs each, replaced by the WebP sets in
+# assets/opt) and the brochure-era WebP sets replaced by the client's own
+# renders and plan PDFs. They stay in git for the asset scripts; the site
+# never requests them. Check a file is unused in src/ before adding it here.
+# Every top-level PNG is a brochure extract except the footer's RERA QR code.
+/public/assets/*.png
+!/public/assets/rera-qr.png
+/public/assets/hero-*.jpg
+/public/assets/branding/aranya-logo-light.png
+/public/assets/branding/champagne-editorial-panel.jpg
+/public/assets/branding/skyline-editorial.jpg
+/public/assets/branding/zaveri-bkm-partnership.png
+/public/assets/opt/city-*
+/public/assets/opt/plan-*
+/public/assets/opt/amenities-overview-*
+/public/assets/opt/amenity-banquet-gazebo-*
+/public/assets/opt/amenity-fitness-center-*
+/public/assets/opt/amenity-games-room-*
+/public/assets/opt/amenity-kids-play-*
+/public/assets/opt/amenity-pickleball-*
+/public/assets/opt/amenity-rooftop-yoga-*
+/public/assets/opt/amenity-senior-citizens-*
+/public/assets/opt/connectivity-conveniences-*
+/public/assets/opt/consultant-partners-*
+/public/assets/opt/developer-profile-*
+/public/assets/opt/hero-elevation-*
+/public/assets/opt/life-lobby-arrival-*
+/public/assets/opt/lifestyle-living-*
+/public/assets/opt/master-layout-plan-*
+/public/assets/opt/project-specifications-*
+/public/assets/opt/render-entrance-drive-*
+/public/assets/opt/render-lift-lobby-*
+/public/assets/opt/render-terrace-a21-night-*
+/public/assets/opt/render-terrace-b-day-*
+/public/assets/opt/render-tower-day-*
+/public/assets/opt/render-tower-dusk-*
+/public/assets/opt/residences-interior-*
+
 # Local tooling, never served
 scripts
 .claude
