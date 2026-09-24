@@ -16,6 +16,8 @@ dist-ssr
 # brochure. The web-ready versions live in public/assets, which IS uploaded.
 JPGs
 LOGO
+company_assets
+/*.mp4
 reference
 *.pdf
 

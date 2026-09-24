@@ -1,5 +1,10 @@
 import type { InfrastructureProject, LocationNode } from '../types';
 
+/*
+ * The destinations are the client's brochure list ("The comfort of next-door
+ * conveniences"), cut down at the 25-09 review to connectivity 2-4, education
+ * 1, 2, 4 and 5, entertainment 1-3 and healthcare 1-3. Times are the brochure's.
+ */
 export const locationNodes: LocationNode[] = [
   // Transit & Connectivity
   {
@@ -10,14 +15,6 @@ export const locationNodes: LocationNode[] = [
     routeNote: 'Metro Line 2A (Yellow Line)',
     distanceNote: 'On the Dahisar – Andheri West metro line',
     highlight: true,
-  },
-  {
-    id: 'c2',
-    name: 'Lower Malad Metro Station',
-    category: 'connectivity',
-    time: '5 Mins',
-    routeNote: 'Metro Line 2A Corridor',
-    distanceNote: 'The next stop south on Line 2A',
   },
   {
     id: 'c3',
@@ -35,23 +32,6 @@ export const locationNodes: LocationNode[] = [
     time: '14 Mins',
     routeNote: 'Via Malad-Goregaon arterial',
     distanceNote: 'Mumbai’s main north–south highway',
-    highlight: true,
-  },
-  {
-    id: 'c5',
-    name: 'Chhatrapati Shivaji Maharaj Intl. Airport',
-    category: 'connectivity',
-    time: '42 Mins',
-    routeNote: 'Via the Western Express Highway',
-    distanceNote: 'Domestic and international flights',
-  },
-  {
-    id: 'c6',
-    name: 'New Link Road',
-    category: 'connectivity',
-    time: 'Direct',
-    routeNote: '18.3 m-wide access road',
-    distanceNote: 'Drive straight from the gate onto New Link Road',
     highlight: true,
   },
 
@@ -81,14 +61,6 @@ export const locationNodes: LocationNode[] = [
     routeNote: 'Link Road North',
     distanceNote: 'Shopping, dining and cinema',
   },
-  {
-    id: 'e4',
-    name: 'Oberoi Mall Goregaon',
-    category: 'entertainment',
-    time: '13 Mins',
-    routeNote: 'Off Western Express Highway',
-    distanceNote: 'Shopping, dining and cinema',
-  },
 
   // Education
   {
@@ -110,14 +82,6 @@ export const locationNodes: LocationNode[] = [
     highlight: true,
   },
   {
-    id: 'ed3',
-    name: 'Rejoice International School',
-    category: 'education',
-    time: '3 Mins',
-    routeNote: 'Malad West',
-    distanceNote: 'School in Malad West',
-  },
-  {
     id: 'ed4',
     name: 'Ryan International School',
     category: 'education',
@@ -132,22 +96,6 @@ export const locationNodes: LocationNode[] = [
     time: '8 Mins',
     routeNote: 'Malad West',
     distanceNote: 'International school in Malad West',
-  },
-  {
-    id: 'ed6',
-    name: 'Orchids The International School',
-    category: 'education',
-    time: '10 Mins',
-    routeNote: 'Malad West',
-    distanceNote: 'International school in Malad West',
-  },
-  {
-    id: 'ed7',
-    name: 'Oberoi International School',
-    category: 'education',
-    time: '15 Mins',
-    routeNote: 'Oberoi Garden City / WEH',
-    distanceNote: 'International school at Oberoi Garden City',
   },
 
   // Healthcare

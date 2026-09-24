@@ -25,9 +25,6 @@ export const Footer: React.FC = () => {
                 loading="lazy"
                 className="h-12 sm:h-14 w-auto max-w-full object-contain block"
               />
-              <span className="text-[10px] tracking-[0.18em] uppercase text-champagne-300 font-medium block mt-1 whitespace-nowrap">
-                THE LUSHURY LIFE · MALAD WEST
-              </span>
             </div>
           </div>
           <p className="font-serif text-lg sm:text-xl text-ivory/80 italic font-light max-w-md">

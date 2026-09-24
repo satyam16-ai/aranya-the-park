@@ -7,6 +7,11 @@ import {
 import { Container } from '../common/Container';
 import { developerData } from '../../data/developerData';
 import { projectData } from '../../data/projectData';
+import { Img } from '../common/Img';
+import { ImageCredit } from '../common/ImageCredit';
+
+/** Stock photography standing in for the view; the brochure's copy had the logos printed on it. */
+const SKYLINE = '/assets/opt/life-skyline-night-2000.webp';
 
 interface DeveloperTrustProps {
   onOpenLightbox?: (
@@ -65,21 +70,24 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
             className="lg:col-span-7 relative min-h-[420px] sm:min-h-[540px] lg:min-h-[720px] bg-dark-950 overflow-hidden flex flex-col justify-between group/img cursor-zoom-in"
             onClick={() =>
               onOpenLightbox?.(
-                '/assets/branding/skyline-editorial.jpg',
+                SKYLINE,
                 'Aranya The Park — Skyline Perspective',
                 developerData.narrative,
                 'Developer Partnership'
               )
             }
           >
-            <img
-              src="/assets/branding/skyline-editorial.jpg"
+            <Img
+              src={SKYLINE}
               alt="Aranya The Park — Skyline Perspective & Developer Partnership"
+              sizes="(min-width: 1024px) 58vw, 100vw"
               className="absolute inset-0 w-full h-full object-cover object-center scale-[1.01] group-hover/img:scale-105 transition-transform duration-1000 ease-out"
               loading="lazy"
             />
             {/* Subtle atmospheric gradient over image */}
             <div className="absolute inset-0 bg-gradient-to-t from-dark-950/80 via-transparent to-dark-950/30" />
+
+            <ImageCredit src={SKYLINE} className="absolute top-6 right-6 sm:top-8 sm:right-8 z-10" />
 
             {/* Top Badge: Official Partnership */}
             <div className="relative z-10 p-6 sm:p-8">

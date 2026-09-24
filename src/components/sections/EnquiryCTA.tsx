@@ -78,7 +78,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
         email: email.trim() || undefined,
         configuration,
         contactMethod: 'WhatsApp',
-        purpose: 'Begin Your Lushury Life (Private Concierge Form)',
+        purpose: 'Begin Your Lushury Life (Site Visit Form)',
       });
 
       setReferenceId(response.leadId);
@@ -103,7 +103,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
             <div className="lg:col-span-6 space-y-8">
               <div>
                 <span className="font-sans text-[11px] uppercase tracking-[0.3em] text-champagne-300 font-medium block mb-3">
-                  PRIVATE SITE VISITS
+                  ARRANGE A SITE VISIT
                 </span>
                 <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl text-ivory font-light tracking-tight leading-[1.1]">
                   Begin Your<br />Lushury Life
@@ -156,7 +156,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                   <div className="pt-4 flex flex-col gap-3">
                     <a
                       href={`https://wa.me/919769766500?text=${encodeURIComponent(
-                        `Hello, I am ${fullName} (${referenceId}). I have requested a private site visit for a ${configuration} at Aranya The Park.`
+                        `Hello, I am ${fullName} (${referenceId}). I have requested a site visit for a ${configuration} at Aranya The Park.`
                       )}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -182,7 +182,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="mb-6">
                     <h3 className="font-serif text-xl sm:text-2xl text-ivory font-light">
-                      Request a Private Site Visit
+                      Arrange a Site Visit
                     </h3>
                     <p className="text-xs text-ivory-muted/70 mt-1 font-sans">
                       Speak directly with the developer's sales team.
@@ -332,7 +332,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                         ? 'Sending…'
                         : otpStage !== 'verified'
                           ? 'VERIFY YOUR NUMBER TO CONTINUE'
-                          : 'REQUEST A PRIVATE VISIT'}
+                          : 'ARRANGE A SITE VISIT'}
                     </Button>
                   </div>
                 </form>

@@ -116,7 +116,9 @@ def main():
         fh.write('// Re-run the script after changing the brochure or the width presets.\n\n')
         fh.write('export interface ManifestEntry {\n')
         fh.write('  srcSet: string;\n  width: number;\n  height: number;\n')
-        fh.write("  kind: 'spread' | 'photo' | 'plan';\n}\n\n")
+        fh.write("  kind: 'spread' | 'photo' | 'plan';\n")
+        fh.write("  /** Printed on the image: an artist's impression, or a representative (stock) photo. */\n")
+        fh.write("  credit?: 'artist' | 'representative';\n}\n\n")
         fh.write('export const imageManifest: Record<string, ManifestEntry> = {\n')
         for src, srcset, w, h, kind in entries:
             fh.write("  '%s': {\n" % src)

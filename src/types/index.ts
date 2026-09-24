@@ -11,6 +11,9 @@ export interface ProjectInfo {
   reraUrl: string;
   /** Google Business Profile short link. Falls back to a maps address search when empty. */
   googleBusinessUrl: string;
+  /** Google Maps embed (the iframe src) for the project's pin. Falls back to a
+   *  maps address search when empty. */
+  mapEmbedUrl: string;
   phone: string;
   phoneRaw: string;
   emailPlaceholder: string;
@@ -109,6 +112,8 @@ export interface GalleryItem {
   caption: string;
   attribution?: string;
   aspect?: 'portrait' | 'landscape' | 'wide' | 'tall';
+  /** object-position for the 4:3 card crop; tall renders keep their crowns with a high focus. */
+  focus?: string;
 }
 
 export interface ConsultantPartner {

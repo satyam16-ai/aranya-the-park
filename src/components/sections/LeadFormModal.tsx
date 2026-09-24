@@ -509,7 +509,7 @@ export const LeadFormModal: React.FC<LeadFormModalProps> = ({
                 ? 'Sending…'
                 : otpStage !== 'verified'
                   ? 'VERIFY YOUR NUMBER TO CONTINUE'
-                  : 'REQUEST A PRIVATE VISIT'}
+                  : 'ARRANGE A SITE VISIT'}
             </Button>
           </div>
 

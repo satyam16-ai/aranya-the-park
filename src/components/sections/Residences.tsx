@@ -7,6 +7,7 @@ import {
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
+import { ImageCredit } from '../common/ImageCredit';
 import { Button } from '../common/Button';
 import { residencesData } from '../../data/residencesData';
 import type { ResidenceUnit } from '../../types';
@@ -103,6 +104,8 @@ export const Residences: React.FC<ResidencesProps> = ({
                     sizes="(min-width: 1024px) 891px, 100vw"
                     className="w-full h-full object-cover object-center group-hover/img:scale-[1.02] transition-transform duration-700 ease-out brightness-[0.92]"
                   />
+
+                  <ImageCredit src={currentUnit.image} className="absolute bottom-5 left-5 z-20" />
 
                   {/* Inspect cue */}
                   <span className="absolute bottom-5 right-5 z-20 p-2.5 rounded-full glass-panel text-ivory group-hover/img:text-champagne-300 group-hover/img:scale-110 transition-all">

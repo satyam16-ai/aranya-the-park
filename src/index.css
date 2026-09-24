@@ -96,12 +96,12 @@
   --color-stone-200: #D5D0C6;
 
   /* — Typography: one family, several variations —
-     Playfair Display carries display, body and UI roles; the roles are
+     Source Serif 4 carries display, body and UI roles; the roles are
      separated by weight, case and tracking rather than by family.
      Minimum weight is 500 everywhere: lighter cuts render as hairlines at 1x. */
-  --font-serif: "Playfair Display", "Georgia", serif;
-  --font-display: "Playfair Display", "Georgia", serif;
-  --font-sans: "Playfair Display", "Georgia", serif;
+  --font-serif: "Source Serif 4", "Georgia", serif;
+  --font-display: "Source Serif 4", "Georgia", serif;
+  --font-sans: "Source Serif 4", "Georgia", serif;
 
   /* — Standardized Section Spacing —
      Trimmed in the 23-09 review: the client reads tall header bands as wasted
@@ -192,6 +192,8 @@
   body {
     font-family: var(--font-sans);
     font-weight: 500;
+    /* Figures sit on the line, so times, areas and stats read as numbers. */
+    font-variant-numeric: lining-nums;
     background-color: var(--color-dark-950);
     color: var(--color-ivory);
     line-height: 1.6;
@@ -268,7 +270,7 @@
   font-family: var(--font-sans);
   font-size: clamp(0.6875rem, 0.35vw + 0.55rem, 0.75rem);
   font-weight: 700;
-  letter-spacing: clamp(0.18em, 0.5vw + 0.1em, 0.28em);
+  letter-spacing: clamp(0.16em, 0.4vw + 0.1em, 0.22em);
   text-transform: uppercase;
   color: var(--color-champagne-400);
 }
@@ -768,13 +770,12 @@
 
 
 /* ----------------------------------------------------------------
-   TYPOGRAPHY HARDENING — single-family (Playfair Display) pass
+   TYPOGRAPHY HARDENING — single-family (Source Serif 4) pass
    ----------------------------------------------------------------
-   Playfair has a large x-height and a sturdy stem, so it needs far less
-   propping up than Cormorant did — the size nudges below are roughly half
-   what the previous family required. What it does share is high stroke
-   contrast: at 10-12px the thin strokes thin out, so small UI text keeps
-   weight 600 rather than being scaled up further.
+   Source Serif 4 was drawn for screens: moderate stroke contrast, open
+   letterforms and an optical-size axis that the browser matches to the
+   font size, so 11-13px text gets the sturdy text cut and headings the
+   finer display cut. Small UI text still keeps weight 600.
 
    These rules sit outside @layer so they win over Tailwind's utilities.
    Weight never drops below 500 anywhere. Do not lower these values. */
@@ -786,13 +787,40 @@
 .font-semibold { font-weight: 600; }
 .font-bold { font-weight: 700; }
 
-/* Small uppercase UI text: nav, chips, labels, badges, captions. */
-.text-\[9px\] { font-size: 10px; font-weight: 600; }
-.text-\[10px\] { font-size: 11px; font-weight: 600; }
+/* Small uppercase UI text: nav, chips, labels, badges, captions.
+   Nothing on the site sets smaller than 11px. */
+.text-\[9px\] { font-size: 11px; font-weight: 600; }
+.text-\[10px\] { font-size: 11.5px; font-weight: 600; }
 .text-\[11px\] { font-size: 12px; font-weight: 600; }
 .text-\[0\.625rem\] { font-size: 0.6875rem; font-weight: 600; }
 .text-\[0\.6875rem\] { font-size: 0.75rem; font-weight: 600; }
-.text-xs { font-size: 0.78125rem; }
+.text-xs { font-size: 0.8125rem; }
+
+/* Wide letter-spacing breaks small caps into separate letters; hold the
+   widest settings to a readable width. */
+.tracking-\[0\.25em\] { letter-spacing: 0.2em; }
+.tracking-\[0\.28em\] { letter-spacing: 0.21em; }
+.tracking-\[0\.3em\] { letter-spacing: 0.22em; }
+.tracking-\[0\.35em\] { letter-spacing: 0.24em; }
+
+/* Secondary text on the dark greens: faded greys fell below a comfortable
+   contrast at small sizes. Keep the hierarchy, lift the floor. */
+.text-ivory-muted\/50,
+.text-ivory-muted\/60 { color: color-mix(in oklab, var(--color-ivory-muted) 76%, transparent); }
+.text-ivory-muted\/65,
+.text-ivory-muted\/70 { color: color-mix(in oklab, var(--color-ivory-muted) 84%, transparent); }
+.text-ivory-muted\/75,
+.text-ivory-muted\/80 { color: color-mix(in oklab, var(--color-ivory-muted) 90%, transparent); }
+.text-cream-300\/60,
+.text-cream-300\/70 { color: color-mix(in oklab, var(--color-cream-300) 82%, transparent); }
+.placeholder\:text-ivory-muted\/30::placeholder { color: color-mix(in oklab, var(--color-ivory-muted) 55%, transparent); }
+
+/* Headings break into even lines; paragraphs avoid a lone last word. */
+h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+
+/* Anchor jumps land with the section's heading clear of the fixed navbar. */
+section[id] { scroll-margin-top: 1.5rem; }
 
 /* Form controls keep the serif but need body weight to stay readable. */
 input,

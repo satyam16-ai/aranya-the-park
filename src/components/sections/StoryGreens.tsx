@@ -3,11 +3,12 @@ import { Maximize2 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
+import { ImageCredit } from '../common/ImageCredit';
 
-const SPREAD = '/assets/opt/lifestyle-park-greens-2800.webp';
+const SPREAD = '/assets/opt/render-fitness-club-2600.webp';
 const SPREAD_TITLE = 'Welcome to a Forevermore Life';
 const SPREAD_CAPTION =
-  '40% open green spaces, an aroma garden and landscaped walks, designed by BeyondGreen.';
+  '40% open green spaces, an aroma garden and landscaped walks.';
 
 interface StoryGreensProps {
   onOpenLightbox?: (
@@ -23,11 +24,10 @@ interface StoryGreensProps {
  * Editorial storytelling with large typography and imagery:
  * "A NEW KIND OF LUXURY" -> "40% OPEN GREEN SPACES"
  *
- * The brochure page is shown in full as a near-full-bleed showcase band. On
- * desktop it is sized by viewport height so the whole spread — photograph and
- * copy page — is readable in one screen. Below `lg` the spread's text would be
- * far too small, so the frame narrows to the single photo page and the full
- * page is one tap away in the lightbox.
+ * The project render of the clubhouse lawns and play area runs as a
+ * near-full-bleed showcase band, sized by viewport height on desktop and as a
+ * 4:3 frame on narrower screens, with the full image one tap away in the
+ * lightbox.
  */
 export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
   const openSpread = () =>
@@ -58,7 +58,7 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
           </div>
 
           <p className="lg:col-span-5 font-sans text-sm sm:text-base text-ivory-muted font-light leading-relaxed">
-            While the world races after fleeting luxuries, Aranya offers a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Life here is lush with 40% open green spaces and generous with sunlit sundecks and spacious homes, all set in a landscape by <strong className="text-ivory font-medium">BeyondGreen</strong>.
+            While the world races after fleeting luxuries, Aranya offers a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Life here is lush with 40% open green spaces and generous with sunlit sundecks and spacious homes.
           </p>
 
           <div className="lg:col-span-3 pt-4 border-t border-white/[0.08] flex items-center gap-6">
@@ -75,23 +75,25 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
         </div>
       </Container>
 
-      {/* ─── Showcase Band: the brochure page at full scale ─── */}
+      {/* ─── Showcase Band: the landscaped grounds ─── */}
       <div className="flex justify-center px-4 sm:px-8">
         <button
           type="button"
           onClick={openSpread}
-          aria-label="View the full brochure page"
-          className="group relative block w-full max-w-[440px] aspect-[692/1000] overflow-hidden rounded-[4px] border border-white/[0.06] shadow-[0_25px_60px_rgba(0,0,0,0.8)] cursor-zoom-in
+          aria-label="View the full image"
+          className="group relative block w-full max-w-[640px] aspect-[4/3] overflow-hidden rounded-[4px] border border-white/[0.06] shadow-[0_25px_60px_rgba(0,0,0,0.8)] cursor-zoom-in
                      lg:max-w-none lg:aspect-auto lg:h-[min(86vh,1250px)]"
         >
           <Img
             src={SPREAD}
-            alt="Verdant parkscapes at Aranya The Park — the Lushury brochure page"
+            alt="The clubhouse, lawns and children’s play area at Aranya The Park"
             sizes="(min-width: 1024px) 100vw, 440px"
             loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover object-left transition-transform duration-1000 ease-out group-hover:scale-[1.02]
+            className="absolute inset-0 h-full w-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-[1.02]
                        lg:static lg:h-full lg:w-full lg:max-w-full lg:object-cover"
           />
+
+          <ImageCredit src={SPREAD} className="absolute bottom-4 left-4 z-10" />
 
           {/* Inspect cue */}
           <span className="absolute bottom-4 right-4 z-10 p-2.5 rounded-full glass-panel text-ivory group-hover:text-champagne-300 group-hover:scale-110 transition-all">
@@ -100,10 +102,9 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
         </button>
       </div>
 
-      {/* Caption sits below the page rather than over it, so it never lands on
-          the brochure's own typography. */}
+      {/* Caption sits below the image rather than over it. */}
       <div className="flex items-center justify-center gap-3 mt-5 px-4 text-[11px] font-sans text-ivory-muted/70 uppercase tracking-wider text-center">
-        <span>BeyondGreen Landscape Architecture</span>
+        <span>The Clubhouse &amp; Lawns</span>
         <span className="w-px h-3 bg-white/[0.12]" />
         <span>Malad West</span>
       </div>

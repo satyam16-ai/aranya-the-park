@@ -10,6 +10,8 @@ import {
   Maximize,
   Minimize,
 } from 'lucide-react';
+import { ImageCredit } from './ImageCredit';
+import { useDragPan } from '../../hooks/useDragPan';
 
 interface LightboxProps {
   isOpen: boolean;
@@ -49,6 +51,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
   const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number | null>(null);
+  const { stageRef, stageProps, transform, dragging, canPan } = useDragPan(zoom, imageUrl);
 
   useEffect(() => {
     if (isOpen) {
@@ -89,9 +92,9 @@ export const Lightbox: React.FC<LightboxProps> = ({
     }
   };
 
-  // Touch Swipe Handlers for Mobile
+  // Touch Swipe Handlers for Mobile. A zoomed image pans instead.
   const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+    touchStartX.current = canPan ? null : e.touches[0].clientX;
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -201,7 +204,13 @@ export const Lightbox: React.FC<LightboxProps> = ({
       </div>
 
       {/* ─── Architectural Canvas with Floating Navigation Arrows ─── */}
-      <div className="relative flex-1 w-full overflow-hidden flex items-center justify-center px-4 sm:px-16 py-2">
+      <div
+        ref={stageRef}
+        {...stageProps}
+        className={`relative flex-1 w-full overflow-hidden flex items-center justify-center px-4 sm:px-16 py-2 ${
+          dragging ? 'cursor-grabbing' : canPan ? 'cursor-grab' : ''
+        }`}
+      >
         {/* Floating Left Arrow */}
         {hasPrev && onPrev && (
           <button
@@ -216,13 +225,16 @@ export const Lightbox: React.FC<LightboxProps> = ({
 
         {/* Scaled Photographic Canvas */}
         <div
-          className="transition-all duration-300 ease-out origin-center flex items-center justify-center max-w-full max-h-full"
-          style={{ transform: `scale(${zoom})` }}
+          className={`ease-out origin-center flex items-center justify-center max-w-full max-h-full ${
+            dragging ? '' : 'transition-all duration-300'
+          }`}
+          style={{ transform }}
         >
           <img
             key={imageUrl}
             src={imageUrl}
             alt={title}
+            draggable={false}
             className="max-h-[72vh] sm:max-h-[78vh] max-w-[94vw] sm:max-w-[85vw] object-contain rounded-[3px] border border-white/[0.08] shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] animate-fade-in"
           />
         </div>
@@ -249,6 +261,8 @@ export const Lightbox: React.FC<LightboxProps> = ({
         ) : (
           <div />
         )}
+
+        <ImageCredit src={imageUrl} />
 
         {/* Mobile Counter */}
         {currentIndex !== undefined && totalCount !== undefined && (

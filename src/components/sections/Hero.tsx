@@ -39,6 +39,19 @@ interface HeroSlide {
   alt: string;
   /** Crop bias — these frames are far taller than the fold they sit in. */
   position: string;
+  /**
+   * Desktop only: shrink the frame into a narrower window over a blurred copy
+   * of itself, for a subject too tall to fit between the navbar and the dots
+   * at full width.
+   */
+  framed?: boolean;
+  /** The frame's own statement. Frames without one keep the positioning line. */
+  copy?: HeroCopy;
+}
+
+interface HeroCopy {
+  title: string;
+  body: string;
 }
 
 /**
@@ -61,7 +74,16 @@ const HERO_SLIDES: HeroSlide[] = [
     width: 2000,
     height: 2519,
     alt: 'Aranya The Park — twin towers rising from a secluded green canopy beside the 18.3-metre boulevard',
-    position: 'object-top sm:object-center',
+    // At full width the towers are taller than the space between the navbar
+    // and the dots, so on desktop the frame is shrunk and the crop set to keep
+    // rooftops and base both in view, even at the end of the slow push.
+    position: 'object-top sm:object-center lg:object-[center_40%]',
+    framed: true,
+    // The second layer of the old pinned GSAP arrival sequence (StoryArrival).
+    copy: {
+      title: 'Where Space, Air & Light Reclaim Their True Meaning',
+      body: "A sanctuary secluded from city cacophony, rising tall on Malad West's most prestigious boulevard.",
+    },
   },
   // {
   //   src: '/assets/opt/grand-lobby-2000.webp',
@@ -77,6 +99,15 @@ const HERO_SLIDES: HeroSlide[] = [
 /** Dwell per frame, and the cross-fade that carries one into the next. */
 const SLIDE_MS = 6000;
 const FADE_MS = 1400;
+const TEXT_OUT_MS = 450;
+/**
+ * The statements hand over rather than cross: the outgoing one clears first,
+ * then the incoming one settles, so two lines never sit on top of each other.
+ */
+const textFade = (on: boolean): React.CSSProperties =>
+  on
+    ? { transitionDuration: `${FADE_MS - TEXT_OUT_MS}ms`, transitionDelay: `${TEXT_OUT_MS}ms` }
+    : { transitionDuration: `${TEXT_OUT_MS}ms` };
 /** The later frames stay off the network until the first one has landed. */
 const PRELOAD_DELAY_MS = 1200;
 
@@ -98,6 +129,7 @@ const prefersReducedMotion = () =>
 export const Hero: React.FC = () => {
   const [active, setActive] = useState(0);
   const [preloadRest, setPreloadRest] = useState(false);
+  const activeCopy = HERO_SLIDES[active].copy;
   const sectionRef = useRef<HTMLElement>(null);
   const timerRef = useRef<number | null>(null);
   /** Why the slideshow is currently held, if it is. */
@@ -173,6 +205,16 @@ export const Hero: React.FC = () => {
           // Frames past the first stay unmounted until the hero has settled.
           if (i > 0 && !preloadRest) return null;
 
+          const withSource = (el: React.ReactElement) =>
+            slide.mobileSrc ? (
+              <picture>
+                <source media="(max-width: 1023px)" srcSet={slide.mobileSrc} />
+                {el}
+              </picture>
+            ) : (
+              el
+            );
+
           const img = (
             <img
               src={slide.src}
@@ -194,13 +236,31 @@ export const Hero: React.FC = () => {
               }`}
               style={{ transitionDuration: `${FADE_MS}ms` }}
             >
-              {slide.mobileSrc ? (
-                <picture>
-                  <source media="(max-width: 1023px)" srcSet={slide.mobileSrc} />
-                  {img}
-                </picture>
+              {slide.framed ? (
+                <>
+                  {/* The backdrop fills the sides the shrunk frame leaves
+                      open. It holds still: a blur that moved with the push
+                      would be repainted on every frame. */}
+                  <div aria-hidden="true" className="hidden lg:block absolute inset-0">
+                    {withSource(
+                      <img
+                        src={slide.src}
+                        srcSet={slide.srcSet}
+                        sizes="100vw"
+                        alt=""
+                        fetchPriority="low"
+                        className="w-full h-full object-cover scale-110 blur-2xl brightness-[0.6] animate-none!"
+                      />
+                    )}
+                  </div>
+                  {/* The mask softens the window's side edges into the
+                      backdrop, and clips the push to the window. */}
+                  <div className="absolute inset-0 lg:inset-x-[9%] lg:[mask-image:linear-gradient(to_right,transparent,#000_9%,#000_91%,transparent)]">
+                    {withSource(img)}
+                  </div>
+                </>
               ) : (
-                img
+                withSource(img)
               )}
             </div>
           );
@@ -234,46 +294,76 @@ export const Hero: React.FC = () => {
       <div className="relative z-20 flex-1 flex items-center px-5 sm:px-8 py-4 lg:py-0">
         {/* One statement and its address, nothing else: the client's 23-09
             note took the wordmark, the supporting copy and both buttons out
-            of the first fold. Enquiry lives in the navbar and the sticky bar. */}
-        <div className="w-full max-w-5xl mx-auto text-center">
-          <h1 className="m-0 font-serif uppercase text-champagne-400 leading-[1.06] tracking-[0.08em] sm:tracking-[0.12em] text-[clamp(1.875rem,7vw,4.5rem)] drop-shadow-[0_4px_26px_rgba(0,0,0,0.8)]">
-            {/* The line is announced once, in full, from here; the animated
-                letters are decoration and stay out of the a11y tree. */}
-            <span className="sr-only">
-              {projectData.name} &mdash; {projectData.positioning}
-            </span>
-            <span aria-hidden="true">
-              {HEADLINE_WORDS.map((word, w) => (
-                <React.Fragment key={word.key}>
-                  {/* A real space between words, so the line can still wrap
-                      on a narrow screen. */}
-                  {w > 0 && ' '}
-                  <span className="inline-block">
-                    {word.letters.map((letter) => (
-                      <span
-                        key={letter.key}
-                        className="hero-letter inline-block"
-                        style={{ animationDelay: `${letter.delay}s` }}
-                      >
-                        {letter.char}
-                      </span>
-                    ))}
-                  </span>
-                </React.Fragment>
-              ))}
-            </span>
-          </h1>
-
+            of the first fold. Enquiry lives in the navbar and the sticky bar.
+            A frame with its own `copy` swaps the statement for that copy; the
+            layers share one grid cell, so the swap is a cross-fade with no
+            reflow. */}
+        <div className="w-full max-w-5xl mx-auto text-center grid place-items-center">
           <div
-            className="hero-animate-subtitle mt-5 sm:mt-7 flex items-center justify-center gap-4 sm:gap-5"
-            style={{ animationDelay: `${ADDRESS_DELAY}s` }}
+            className={`[grid-area:1/1] w-full transition-opacity ease-out ${
+              activeCopy ? 'opacity-0' : 'opacity-100'
+            }`}
+            style={textFade(!activeCopy)}
           >
-            <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
-            <p className="font-sans uppercase text-champagne-300 font-medium leading-relaxed tracking-[0.14em] sm:tracking-[0.24em] text-[11px] sm:text-sm lg:text-base drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
-              Behind Evershine Mall &middot; {projectData.location}
-            </p>
-            <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
+            <h1 className="m-0 font-serif uppercase text-champagne-400 leading-[1.06] tracking-[0.08em] sm:tracking-[0.12em] text-[clamp(1.875rem,7vw,4.5rem)] drop-shadow-[0_4px_26px_rgba(0,0,0,0.8)]">
+              {/* The line is announced once, in full, from here; the animated
+                  letters are decoration and stay out of the a11y tree. */}
+              <span className="sr-only">
+                {projectData.name} &mdash; {projectData.positioning}
+              </span>
+              <span aria-hidden="true">
+                {HEADLINE_WORDS.map((word, w) => (
+                  <React.Fragment key={word.key}>
+                    {/* A real space between words, so the line can still wrap
+                        on a narrow screen. */}
+                    {w > 0 && ' '}
+                    <span className="inline-block">
+                      {word.letters.map((letter) => (
+                        <span
+                          key={letter.key}
+                          className="hero-letter inline-block"
+                          style={{ animationDelay: `${letter.delay}s` }}
+                        >
+                          {letter.char}
+                        </span>
+                      ))}
+                    </span>
+                  </React.Fragment>
+                ))}
+              </span>
+            </h1>
+
+            <div
+              className="hero-animate-subtitle mt-5 sm:mt-7 flex items-center justify-center gap-4 sm:gap-5"
+              style={{ animationDelay: `${ADDRESS_DELAY}s` }}
+            >
+              <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
+              <p className="font-sans uppercase text-champagne-300 font-medium leading-relaxed tracking-[0.14em] sm:tracking-[0.24em] text-[11px] sm:text-sm lg:text-base drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+                Behind Evershine Mall &middot; {projectData.location}
+              </p>
+              <span className="hidden sm:block w-10 lg:w-16 h-px bg-champagne-400/60 shrink-0" />
+            </div>
           </div>
+
+          {HERO_SLIDES.map((slide, i) =>
+            slide.copy ? (
+              <div
+                key={slide.src}
+                aria-hidden={i !== active}
+                className={`[grid-area:1/1] w-full max-w-4xl transition-opacity ease-out ${
+                  i === active ? 'opacity-100' : 'opacity-0'
+                }`}
+                style={textFade(i === active)}
+              >
+                <h2 className="m-0 font-serif uppercase text-champagne-400 leading-[1.12] tracking-[0.06em] sm:tracking-[0.08em] text-[clamp(1.5rem,4.2vw,3.25rem)] text-balance drop-shadow-[0_4px_26px_rgba(0,0,0,0.8)]">
+                  {slide.copy.title}
+                </h2>
+                <p className="mt-4 sm:mt-6 max-w-2xl mx-auto font-sans text-ivory/90 font-medium leading-relaxed text-xs sm:text-base drop-shadow-[0_2px_12px_rgba(0,0,0,0.85)]">
+                  {slide.copy.body}
+                </p>
+              </div>
+            ) : null
+          )}
         </div>
       </div>
 

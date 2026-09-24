@@ -9,9 +9,9 @@ export const amenitiesData: AmenityItem[] = [
     categoryLabel: 'Sport & Play',
     tagline: 'A cheerful zone for shared victories & cherished bonds',
     description:
-      'A 13.4 × 6 m pickleball court, made for quick morning rallies and friendly weekend doubles.',
-    image: '/assets/opt/amenity-pickleball-play-2000.webp',
-    badge: '13.4 × 6 m Court',
+      'A 13.2 × 5.97 m pickleball court, made for quick morning rallies and friendly weekend doubles.',
+    image: '/assets/opt/render-clubhouse-2000.webp',
+    badge: '13.2 × 5.97 m Court',
     highlights: ['Regulation Dimensions (13.4m x 6.0m)', 'Pro-Cushioned Surface', 'Evening Floodlighting'],
   },
   {
@@ -57,7 +57,7 @@ export const amenitiesData: AmenityItem[] = [
     categoryLabel: 'Indoor Recreation',
     tagline: 'A vibrant space for good games and great times',
     description:
-      'A pool table room, card tables and carrom under one roof: the easy place for friendly rivalries and long evenings.',
+      'A pool table room and a carrom room under one roof: the easy place for friendly rivalries and long evenings.',
     image: '/assets/opt/amenity-games-lounge-2000.webp',
     badge: 'Clubhouse',
     highlights: ['Championship Pool Table', 'Card & Board Game Tables', 'Acoustic Wall Panelling'],
@@ -93,9 +93,9 @@ export const amenitiesData: AmenityItem[] = [
     categoryLabel: 'Landscape',
     tagline: 'A fragrant walk through the green',
     description:
-      'A sensory garden of fragrant planting and quiet paths, part of the BeyondGreen landscape and true to Aranya, the Sanskrit word for forest.',
+      'A sensory garden of fragrant planting and quiet paths, part of the landscaped grounds and true to Aranya, the Sanskrit word for forest.',
     image: '/assets/opt/life-garden-walk-2000.webp',
-    badge: 'By BeyondGreen',
+    badge: 'Sensory Garden',
     highlights: ['Indigenous Fragrant Flora', 'Aromatic Therapeutic Shrubs', '40% Open Green Buffer'],
   },
 
@@ -144,7 +144,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Every step a gentle reset',
     description:
       'A textured pathway that works the soles of the feet as you walk: a simple daily ritual for tired feet.',
-    image: '/assets/opt/lifestyle-park-greens-2800.webp',
+    image: '/assets/opt/render-terrace-b-garden-1672.webp',
     badge: 'Wellness Walk',
     highlights: ['River Stone Texture Beds', 'Parallel Handrail Support', 'Aromatherapeutic Green Borders'],
   },
@@ -156,7 +156,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Train in the open air',
     description:
       'Outdoor fitness stations on the terrace for bodyweight and functional training in the fresh air.',
-    image: '/assets/opt/render-fitness-pavilion-2000.webp',
+    image: '/assets/opt/render-terrace-a20-day-1669.webp',
     badge: 'Open-Air',
     highlights: ['All-Weather Training Equipment', 'Open-Air Calisthenics', 'Sunrise Facing Orientation'],
   },
@@ -168,7 +168,7 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Unwind together under open skies',
     description:
       'Comfortable terrace seating where the family can gather over evening tea and conversation.',
-    image: '/assets/opt/life-sunset-terrace-2000.webp',
+    image: '/assets/opt/render-terrace-b-night-1665.webp',
     badge: 'Family Corner',
     highlights: ['Architectural Wind Deflectors', 'Ergonomic All-Weather Loungers', 'Starlit Evening Views'],
   },

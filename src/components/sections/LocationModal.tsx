@@ -43,28 +43,22 @@ const CATEGORY_TONE: Record<string, string> = {
  *
  * New Link Road itself gets no marker: it is drawn as a corridor and named at
  * the top of the map, and the access-road plate already says how the site meets
- * it. It still appears in the destination list, where "Direct" reads correctly.
+ * it.
  */
 const NODE_LAYOUT: Record<
   string,
   { x: number; y: number; short: string; side: 'n' | 's' | 'e' | 'w' }
 > = {
   c1: { x: 386, y: 230, short: 'Malad West Metro', side: 'w' },
-  c2: { x: 386, y: 412, short: 'Lower Malad Metro', side: 'e' },
   c3: { x: 840, y: 240, short: 'Malad Station', side: 'e' },
   c4: { x: 1010, y: 300, short: 'W. E. Highway', side: 'w' },
-  c5: { x: 1010, y: 515, short: 'Airport (CSMIA)', side: 'w' },
   e1: { x: 412, y: 478, short: 'Inorbit Mall', side: 'w' },
   e2: { x: 250, y: 190, short: 'Goregaon Sports Club', side: 's' },
   e3: { x: 140, y: 120, short: 'Infiniti Mall', side: 's' },
-  e4: { x: 1040, y: 420, short: 'Oberoi Mall', side: 'w' },
   ed1: { x: 560, y: 222, short: 'Kothari Starz', side: 'n' },
   ed2: { x: 200, y: 440, short: 'Vibgyor Rise', side: 's' },
-  ed3: { x: 472, y: 200, short: 'Rejoice Intl.', side: 'n' },
   ed4: { x: 300, y: 95, short: 'Ryan Intl.', side: 's' },
   ed5: { x: 768, y: 360, short: 'Witty Intl.', side: 's' },
-  ed6: { x: 640, y: 120, short: 'Orchids Intl.', side: 'n' },
-  ed7: { x: 1040, y: 195, short: 'Oberoi Intl.', side: 'w' },
   h1: { x: 180, y: 285, short: 'CritiCare Asia', side: 'n' },
   h2: { x: 500, y: 440, short: 'Cloudnine', side: 's' },
   h3: { x: 800, y: 130, short: 'Lifeline Medicare', side: 'n' },
@@ -224,7 +218,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                 variant="outline-gold"
                 size="sm"
                 className="hidden md:inline-flex"
-                onClick={() => onOpenLeadModal('Arrange a Private Site Visit')}
+                onClick={() => onOpenLeadModal('Arrange a Site Visit')}
               >
                 Schedule Site Visit
               </Button>

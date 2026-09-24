@@ -18,6 +18,8 @@ export const projectData: ProjectInfo = {
   reraUrl: 'https://maharera.mahaonline.gov.in',
   // TODO(client): replace with the project's Google Business Profile link.
   googleBusinessUrl: '',
+  // TODO(client): paste the src of the project pin's Google Maps embed.
+  mapEmbedUrl: '',
   phone: '+91 976 976 6500',
   phoneRaw: 'tel:+919769766500',
   emailPlaceholder: 'sales@aranyathepark.com',

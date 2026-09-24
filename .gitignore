@@ -29,6 +29,11 @@ reference/
 # Raw client assets (source photos/logos — not needed for deployment)
 JPGs/
 LOGO/
+company_assets/
+/*.mp4
 
 # Vercel CLI link
 .vercel
+
+# Python bytecode from the asset scripts
+__pycache__/

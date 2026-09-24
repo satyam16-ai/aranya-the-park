@@ -6,6 +6,8 @@ export interface ManifestEntry {
   width: number;
   height: number;
   kind: 'spread' | 'photo' | 'plan';
+  /** Printed on the image: an artist's impression, or a representative (stock) photo. */
+  credit?: 'artist' | 'representative';
 }
 
 export const imageManifest: Record<string, ManifestEntry> = {

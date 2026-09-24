@@ -182,9 +182,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 height={45}
                 className="h-11 w-auto object-contain"
               />
-              <span className="text-[9px] font-sans font-medium tracking-[0.35em] uppercase text-champagne-400/90 pl-0.5">
-                THE LUSHURY LIFE · MALAD WEST
-              </span>
             </div>
           </div>
 

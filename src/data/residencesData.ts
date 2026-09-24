@@ -18,8 +18,8 @@ export const residencesData: ResidenceUnit[] = [
       'Vastu-compliant planning',
       'Floor-to-ceiling height of up to 11 ft',
     ],
-    image: '/assets/opt/lifestyle-living-2000.webp',
-    floorPlanImage: '/assets/opt/plan-tower-b-typical-2600.webp',
+    image: '/assets/opt/life-family-sofa-2000.webp',
+    floorPlanImage: '/assets/opt/fp-b-2bhk-2600.webp',
   },
   {
     id: '3bhk',
@@ -38,8 +38,8 @@ export const residencesData: ResidenceUnit[] = [
       'Video door phone',
       'Elegant glass railings',
     ],
-    image: '/assets/opt/residences-interior-2000.webp',
-    floorPlanImage: '/assets/opt/plan-tower-a-typical-2600.webp',
+    image: '/assets/opt/life-family-living-2000.webp',
+    floorPlanImage: '/assets/opt/fp-b-3bhk-2600.webp',
   },
   {
     id: '4bhk',
@@ -58,7 +58,7 @@ export const residencesData: ResidenceUnit[] = [
       'High-speed OTIS elevators',
       'Designer wall tiles & vitrified flooring',
     ],
-    image: '/assets/opt/lifestyle-sundeck-2000.webp',
-    floorPlanImage: '/assets/opt/plan-tower-a-upper-2600.webp',
+    image: '/assets/opt/life-sunset-terrace-2000.webp',
+    floorPlanImage: '/assets/opt/fp-a-19-2600.webp',
   },
 ];

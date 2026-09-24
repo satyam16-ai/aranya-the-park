@@ -188,8 +188,8 @@ export const FloorPlansModal: React.FC<FloorPlansModalProps> = ({
           <div className="hidden lg:flex items-center p-1 bg-white/[0.03] border border-white/[0.08] rounded-full">
             {[
               { id: 'master', label: 'Master Layout' },
-              { id: 'tower-a', label: 'Tower A (3 BHK)' },
-              { id: 'tower-b', label: 'Tower B (2 BHK)' },
+              { id: 'tower-a', label: 'Tower A' },
+              { id: 'tower-b', label: 'Tower B' },
             ].map((tab) => (
               <button
                 key={tab.id}

@@ -10,6 +10,33 @@ export interface DetailedFloorPlan {
   highlights: string[];
 }
 
+/*
+ * Every plan is one sheet of the architect's drawings (company_assets/Data for
+ * Landing Page), rendered by scripts/optimize-photos.py — one drawing per
+ * image. Carpet areas stay on the sheets and out of this copy: the copy shows
+ * beneath the plan while the plan is still locked behind the enquiry form.
+ */
+
+const plan = (slug: string) => `/assets/opt/${slug}-2600.webp`;
+
+const ORDINAL: Record<number, string> = { 1: '1st', 2: '2nd', 3: '3rd' };
+const ordinal = (n: number) => ORDINAL[n] ?? `${n}th`;
+
+/** Tower A's residential floors drawn one per sheet, 4th to 20th. The refuge
+ *  floors (8th and 15th) are not shown. */
+const TOWER_A_FLOORS = [4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20];
+const towerAFloors: DetailedFloorPlan[] = TOWER_A_FLOORS.map((n) => ({
+  id: `tower-a-${n}`,
+  category: 'tower-a',
+  categoryLabel: 'A Tower',
+  floorLabel: `${ordinal(n)} Floor`,
+  title: `Tower A — ${ordinal(n)} Floor`,
+  subtitle: 'Residential floor',
+  image: plan(`fp-a-${String(n).padStart(2, '0')}`),
+  description: `The architect’s plan for the ${ordinal(n)} floor of Tower A, with flat numbers and RERA carpet areas listed on the sheet.`,
+  highlights: [],
+}));
+
 export const detailedFloorPlans: DetailedFloorPlan[] = [
   // ─── MASTER LAYOUT ───
   {
@@ -18,50 +45,45 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     categoryLabel: 'Master Layout',
     floorLabel: 'Master Site Plan',
     title: 'Master Layout',
-    subtitle: 'Two towers, landscaped grounds and an 18.3 m access road',
-    image: '/assets/opt/master-layout-plan-2600.webp',
+    subtitle: 'Two towers, the clubhouse and landscaped grounds',
+    image: plan('fp-master-layout'),
     description:
-      'The complete site plan: Tower A and Tower B within landscaped grounds, the 18.3 m access road from New Link Road, 6 m internal driveways, the car parking tower, the aroma garden, the children’s play area, the senior citizens’ area and a 5% amenity open space.',
+      'The complete site plan: Tower A, Tower B and the clubhouse within landscaped grounds, with the car parking tower, the children’s play area, the aroma garden, the senior citizens’ area and a 5% amenity open space, all linked by internal driveways and a ramp to the basement.',
     highlights: [
-      '18.3 m-wide access road to New Link Road',
-      'Tower A and Tower B within landscaped grounds',
-      '6 m-wide internal driveways',
+      'Tower A, Tower B and the clubhouse',
       'Aroma garden, play area and senior citizens’ area',
-      'Automated car parking tower',
+      'Car parking tower and basement ramp',
+      'Separate residential and commercial entries',
     ],
   },
   {
     id: 'fitness-club-ground',
     category: 'master',
     categoryLabel: 'Master Layout',
-    floorLabel: 'Fitness Club · Ground',
-    title: 'Fitness Club — Ground Floor',
-    subtitle: 'Gym, pool table room, games area and reception',
-    image: '/assets/opt/plan-clubhouse-ground-2600.webp',
+    floorLabel: 'Clubhouse · Ground',
+    title: 'Clubhouse — Ground Floor',
+    subtitle: 'Gym, pool table room, carrom room and reception',
+    image: plan('fp-club-ground'),
     description:
-      'The fitness club’s ground floor brings together a 7.05 × 7.50 m gym, a pool table room, a games area for cards and carrom, and a reception lobby, with washrooms and a water station.',
+      'The clubhouse ground floor: a 7.05 × 7.50 m gym, a pool table room, a carrom room, reception and a locker area, with separate men’s and women’s toilets and a water station.',
     highlights: [
       'Gym: 7.05 × 7.50 m',
       'Pool table room: 3.71 × 5.05 m',
-      'Games area for cards & carrom: 3.43 × 2.85 m',
-      'Reception lobby: 3.43 × 2.35 m',
+      'Carrom room: 4.06 × 2.35 m',
+      'Reception: 2.93 × 3.05 m',
     ],
   },
   {
     id: 'clubhouse-terrace',
     category: 'master',
     categoryLabel: 'Master Layout',
-    floorLabel: 'Club House · Terrace',
-    title: 'Club House — Terrace Level',
-    subtitle: 'Pickleball court at the +4,200 mm level',
-    image: '/assets/opt/plan-clubhouse-ground-2600.webp',
+    floorLabel: 'Clubhouse · First',
+    title: 'Clubhouse — First Floor',
+    subtitle: 'Pickleball court',
+    image: plan('fp-club-first'),
     description:
-      'Above the fitness club, the terrace holds a 13.40 × 6.00 m pickleball court at the +4,200 mm level, reached by a staircase from the ground floor.',
-    highlights: [
-      'Pickleball court: 13.40 × 6.00 m',
-      'Terrace at the +4,200 mm level',
-      'Staircase from the fitness club below',
-    ],
+      'Above the gym, the clubhouse’s first floor is given over to a 13.2 × 5.97 m pickleball court, reached by the clubhouse staircase.',
+    highlights: ['Pickleball court: 13.2 × 5.97 m', 'Staircase from the ground floor'],
   },
 
   // ─── A TOWER ───
@@ -70,16 +92,16 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     category: 'tower-a',
     categoryLabel: 'A Tower',
     floorLabel: 'Ground Floor',
-    title: 'Tower A — Ground Floor & Terrace',
-    subtitle: 'Double-height lobby, parking and the rooftop amenity terrace',
-    image: '/assets/opt/plan-tower-a-ground-terrace-2600.webp',
+    title: 'Tower A — Ground Floor',
+    subtitle: 'Double-height entrance lobby and parking',
+    image: plan('fp-a-ground'),
     description:
-      'Tower A’s arrival level, with a double-height air-conditioned entrance lobby beneath a canopy drop-off and stilt and stack parking on either side, shown with the terrace above: walking path, yoga and meditation lawn, open gym, family seating and party lawn.',
+      'Tower A’s arrival level: a double-height entrance lobby beneath a canopy, with stilt, stack and two-wheeler parking, EV charging parking, the lift lobby and a fire lift.',
     highlights: [
-      'Double-height air-conditioned entrance lobby',
-      'Canopy drop-off at the entrance',
-      'Stilt and stack parking',
-      'Terrace walking path, yoga lawn & open gym',
+      'Double-height entrance lobby: 32′7″ × 21′8″',
+      'Stilt, stack and two-wheeler parking',
+      'EV charging parking',
+      'Lifts and a fire lift',
     ],
   },
   {
@@ -88,16 +110,11 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     categoryLabel: 'A Tower',
     floorLabel: '1st Floor',
     title: 'Tower A — 1st Floor',
-    subtitle: 'The first residential floor, above the double-height lobby',
-    image: '/assets/opt/plan-tower-a-2nd-3rd-2600.webp',
+    subtitle: 'The first residential floor',
+    image: plan('fp-a-01'),
     description:
-      'The first residential level of Tower A, planned around the double-height lobby below. Homes have separate dining areas, balconies, chajjas for weather protection and dedicated AC ledges.',
-    highlights: [
-      'Homes set above the double-height lobby',
-      'Separate dining areas',
-      'Balconies and chajjas',
-      'Dedicated AC ledges',
-    ],
+      'Tower A’s first residential floor, planned around the double-height lobby below, with flat numbers and RERA carpet areas listed on the sheet.',
+    highlights: ['Homes set above the double-height lobby'],
   },
   {
     id: 'tower-a-2nd-3rd',
@@ -105,81 +122,38 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     categoryLabel: 'A Tower',
     floorLabel: '2nd & 3rd Floor',
     title: 'Tower A — 2nd & 3rd Floors',
-    subtitle: 'Residential floors around a central lift core',
-    image: '/assets/opt/plan-tower-a-2nd-3rd-2600.webp',
+    subtitle: 'Residential floors',
+    image: plan('fp-a-02'),
     description:
-      'Tower A’s 2nd and 3rd floors: a mirrored arrangement of homes around a central lift core, each with living and dining areas, bedrooms with attached baths, balconies and AC ledges.',
-    highlights: [
-      'Mirrored homes around a central lift core',
-      'Living and dining areas in every home',
-      'Balconies, chajjas and AC ledges',
-    ],
+      'The 2nd and 3rd floors of Tower A share this plan; flat numbers and RERA carpet areas are listed on the sheet.',
+    highlights: [],
   },
+  // The 19th floor's jodi flat follows the 19th floor.
+  ...towerAFloors.filter((f) => f.id !== 'tower-a-20'),
   {
-    id: 'tower-a-5th-14th',
+    id: 'tower-a-jodi',
     category: 'tower-a',
     categoryLabel: 'A Tower',
-    floorLabel: '5th–14th Floor',
-    title: 'Tower A — 5th to 14th Floors',
-    subtitle: 'The typical floor plan',
-    image: '/assets/opt/plan-tower-a-typical-2600.webp',
+    floorLabel: '19th Floor · Jodi Flat',
+    title: 'Tower A — 19th Floor Jodi Flat',
+    subtitle: 'Flats 1903 and 1904 combined',
+    image: plan('fp-a-jodi'),
     description:
-      'The typical floor of Tower A, repeated from the 5th to the 14th floor: homes arranged around a core of high-speed OTIS elevators, with separate dining areas and well-planned kitchens.',
-    highlights: [
-      'Typical floor, 5th to 14th',
-      'High-speed OTIS elevators',
-      'Separate dining areas and well-planned kitchens',
-    ],
+      'A jodi flat on the 19th floor of Tower A: flats 1903 and 1904 joined into a single residence, drawn with its RERA carpet area.',
+    highlights: ['Two flats joined into one residence'],
   },
+  ...towerAFloors.filter((f) => f.id === 'tower-a-20'),
   {
-    id: 'tower-a-16th-18th',
+    id: 'tower-a-terrace',
     category: 'tower-a',
     categoryLabel: 'A Tower',
-    floorLabel: '16th–18th Floor',
-    title: 'Tower A — 16th to 18th Floors',
-    subtitle: 'Upper floors with wider views',
-    image: '/assets/opt/plan-tower-a-typical-2600.webp',
+    floorLabel: 'Terrace',
+    title: 'Tower A — Terrace',
+    subtitle: 'The rooftop amenity terrace',
+    image: plan('fp-a-roof'),
     description:
-      'Tower A’s upper residential floors, from the 16th to the 18th, with balconies and private sundecks that open to wider views over Malad West.',
-    highlights: [
-      'Upper floors, 16th to 18th',
-      'Balconies and private sundecks',
-      'Wider views over Malad West',
-      'High-speed OTIS elevators',
-    ],
-  },
-  {
-    id: 'tower-a-19th',
-    category: 'tower-a',
-    categoryLabel: 'A Tower',
-    floorLabel: '19th Floor',
-    title: 'Tower A — 19th Floor',
-    subtitle: 'High-floor residences',
-    image: '/assets/opt/plan-tower-a-upper-2600.webp',
-    description:
-      'The 19th floor of Tower A: high-floor homes with separate dining areas, balconies and private sundecks, served by the central lift core.',
-    highlights: [
-      'High-floor residences',
-      'Separate dining areas',
-      'Balconies and private sundecks',
-      'Servant toilets on every floor',
-    ],
-  },
-  {
-    id: 'tower-a-20th',
-    category: 'tower-a',
-    categoryLabel: 'A Tower',
-    floorLabel: '20th Floor',
-    title: 'Tower A — 20th Floor',
-    subtitle: 'The upper residential floor',
-    image: '/assets/opt/plan-tower-a-upper-2600.webp',
-    description:
-      'The 20th floor of Tower A, among the tower’s highest residential levels, with lift access continuing up to the terrace amenities.',
-    highlights: [
-      'Among Tower A’s highest residential floors',
-      'Lift access up to the terrace',
-      'Premium Grohe fittings in all bathrooms',
-    ],
+      'Tower A’s roof, laid out as an amenity terrace: a walking pathway, a yoga and meditation lawn, an open gym, family seating, and a party lawn with a pergola and lounges.',
+    highlights: ['Walking pathway', 'Yoga and meditation lawn', 'Open gym and family seating'],
   },
 
   // ─── B TOWER ───
@@ -188,17 +162,12 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     category: 'tower-b',
     categoryLabel: 'B Tower',
     floorLabel: 'Ground Floor',
-    title: 'Tower B — Ground Floor & Terrace',
-    subtitle: 'Entrance lobby, banquet hall and the rooftop party lawn',
-    image: '/assets/opt/plan-tower-b-ground-terrace-2600.webp',
+    title: 'Tower B — Ground Floor',
+    subtitle: 'Entrance lobby and banquet hall',
+    image: plan('fp-b-ground'),
     description:
-      'Tower B’s ground floor pairs a double-height entrance lobby and society office with the banquet hall, complete with stage area, green rooms, pantry and wash area. The terrace above holds a party lawn with pergola, a reflexology path, stepping stones and an open gym.',
-    highlights: [
-      'Double-height entrance lobby',
-      'Banquet hall for up to 150 guests',
-      'Stage area, green rooms and pantry',
-      'Terrace party lawn, pergola & reflexology path',
-    ],
+      'Tower B’s ground floor: a double-height entrance lobby, and the banquet hall with its stage area, green room, pantry and wash area.',
+    highlights: ['Double-height entrance lobby', 'Banquet hall: 1,432 sq ft', 'Stage area, green room and pantry'],
   },
   {
     id: 'tower-b-1st',
@@ -207,15 +176,10 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     floorLabel: '1st Floor',
     title: 'Tower B — 1st Floor',
     subtitle: 'The first residential floor',
-    image: '/assets/opt/plan-tower-b-typical-2600.webp',
+    image: plan('fp-b-first'),
     description:
-      'The first residential floor of Tower B, set beside the double-height lobby. Homes have separate dining areas, well-planned kitchens and chajjas for weather protection.',
-    highlights: [
-      'Homes beside the double-height lobby',
-      'Separate dining areas',
-      'Well-planned kitchens',
-      'Vastu-compliant planning',
-    ],
+      'Tower B’s first residential floor, set beside the double-height lobby, with homes and a yogalaya on the same level.',
+    highlights: ['Homes beside the double-height lobby', 'A yogalaya on this floor'],
   },
   {
     id: 'tower-b-typical',
@@ -224,29 +188,54 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     floorLabel: '2nd–21st Floor',
     title: 'Tower B — 2nd to 21st Floors',
     subtitle: 'The typical floor plan',
-    image: '/assets/opt/plan-tower-b-typical-2600.webp',
+    image: plan('fp-b-typical'),
     description:
-      'The typical floor of Tower B, from the 2nd to the 21st floor: homes with living and dining areas, bedrooms with attached baths, and balconies.',
-    highlights: [
-      'Typical floor, 2nd to 21st',
-      'Living and dining areas in every home',
-      'Premium Grohe fittings in all bathrooms',
-    ],
+      'The typical floor of Tower B, repeated from the 2nd to the 21st floor, with flat numbers and RERA carpet areas listed on the sheet.',
+    highlights: ['Typical floor, 2nd to 21st'],
   },
   {
-    id: 'tower-b-refuge',
+    id: 'tower-b-2bhk',
     category: 'tower-b',
     categoryLabel: 'B Tower',
-    floorLabel: 'Refuge Floor',
-    title: 'Tower B — Refuge Floor',
-    subtitle: 'Residences alongside a dedicated refuge area',
-    image: '/assets/opt/plan-tower-b-upper-2600.webp',
+    floorLabel: '2 BHK Unit',
+    title: 'Tower B — 2 BHK',
+    subtitle: 'Unit plan',
+    image: plan('fp-b-2bhk'),
+    description: 'A 2 BHK home in Tower B, drawn room by room with its RERA carpet area.',
+    highlights: [],
+  },
+  {
+    id: 'tower-b-3bhk',
+    category: 'tower-b',
+    categoryLabel: 'B Tower',
+    floorLabel: '3 BHK Unit',
+    title: 'Tower B — 3 BHK',
+    subtitle: 'Unit plan',
+    image: plan('fp-b-3bhk'),
+    description: 'A 3 BHK home in Tower B, drawn room by room with its RERA carpet area.',
+    highlights: [],
+  },
+  {
+    id: 'tower-b-5bhk',
+    category: 'tower-b',
+    categoryLabel: 'B Tower',
+    floorLabel: '5 BHK Unit',
+    title: 'Tower B — 5 BHK',
+    subtitle: 'Unit plan',
+    image: plan('fp-b-5bhk'),
+    description: 'A 5 BHK home in Tower B, drawn room by room with its RERA carpet area.',
+    highlights: [],
+  },
+  {
+    id: 'tower-b-terrace',
+    category: 'tower-b',
+    categoryLabel: 'B Tower',
+    floorLabel: 'Terrace',
+    title: 'Tower B — Terrace',
+    subtitle: 'The rooftop amenity terrace',
+    image: plan('fp-b-roof'),
     description:
-      'The refuge floor of Tower B: residences planned alongside a dedicated refuge area, part of the tower’s fire-safety design.',
-    highlights: [
-      'Dedicated refuge area',
-      'Part of the advanced fire-safety systems',
-      'High-floor residences',
-    ],
+      'Tower B’s roof, laid out as an amenity terrace: a party lawn with a pergola, a reflexology path, stepping stones, an open gym and a gazebo.',
+    highlights: ['Party lawn with pergola', 'Reflexology path and stepping stones', 'Open gym and gazebo'],
   },
 ];

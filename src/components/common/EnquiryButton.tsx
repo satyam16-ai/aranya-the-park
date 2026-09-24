@@ -53,7 +53,7 @@ export const EnquiryButton: React.FC<EnquiryButtonProps> = ({
           setIsOpen(false);
           setIsSubmitted(false);
         }}
-        title="Schedule a Private Viewing"
+        title="Arrange a Site Visit"
         size="md"
       >
         {isSubmitted ? (

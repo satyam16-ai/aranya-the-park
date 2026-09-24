@@ -17,7 +17,7 @@ export const specificationsData: SpecificationCategory[] = [
     items: [
       { feature: 'Sanitary Fittings', detail: 'Premium Grohe fittings in all bathrooms' },
       { feature: 'Railings', detail: 'Elegant glass railings' },
-      { feature: 'Lighting', detail: 'Energy-efficient LED lighting' },
+      { feature: 'Electrical', detail: 'Norisys switches & energy-efficient LED lighting' },
     ],
   },
   {

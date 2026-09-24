@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Maximize2 } from 'lucide-react';
 import { Container } from '../common/Container';
 import { Img } from '../common/Img';
+import { ImageCredit } from '../common/ImageCredit';
 import { SectionHeading } from '../common/SectionHeading';
 import { galleryData } from '../../data/galleryData';
 import { Lightbox } from '../common/Lightbox';
@@ -101,8 +102,10 @@ export const Gallery: React.FC<GalleryProps> = ({ onOpenLeadModal: _onOpenLeadMo
                 alt={item.title}
                 sizes="(min-width: 1024px) 490px, (min-width: 640px) 50vw, 100vw"
                 loading="lazy"
-                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out brightness-[0.88] group-hover:brightness-100"
+                className={`w-full h-full object-cover ${item.focus ?? 'object-center'} group-hover:scale-105 transition-transform duration-700 ease-out brightness-[0.88] group-hover:brightness-100`}
               />
+
+              <ImageCredit src={item.image} className="absolute top-3 right-3 z-10" />
 
               {/* Vignette overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/20 to-transparent opacity-70 group-hover:opacity-85 transition-opacity duration-300" />

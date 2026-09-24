@@ -13,6 +13,7 @@ import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { Img } from '../common/Img';
 import { hasUnlockedPlans } from '../../services/enquiryService';
+import { useDragPan } from '../../hooks/useDragPan';
 
 /**
  * Tower floor plates stay blurred until the visitor submits an enquiry; the
@@ -58,6 +59,7 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
   const [activePlanId, setActivePlanId] = useState<string>(towerPlans[0]?.id || 'plan-b-typical');
   const currentPlan = towerPlans.find((p) => p.id === activePlanId) || towerPlans[0] || detailedFloorPlans[0];
   const isLocked = !plansUnlocked && currentPlan.category !== 'master';
+  const { stageRef, stageProps, transform, dragging, canPan } = useDragPan(zoomLevel, currentPlan.id);
 
   const handleTowerChange = (tower: TowerSelection) => {
     setSelectedTower(tower);
@@ -206,14 +208,23 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
           </div>
 
           {/* Large Architectural Blueprint Stage */}
-          <div className="relative h-[420px] sm:h-[520px] lg:h-[600px] bg-black/40 overflow-hidden flex items-center justify-center p-6 sm:p-10 cursor-grab active:cursor-grabbing">
+          <div
+            ref={stageRef}
+            {...stageProps}
+            className={`relative h-[420px] sm:h-[520px] lg:h-[600px] bg-black/40 overflow-hidden flex items-center justify-center p-6 sm:p-10 select-none ${
+              dragging ? 'cursor-grabbing' : canPan ? 'cursor-grab' : ''
+            }`}
+          >
             <div
-              className="transition-transform duration-300 ease-out origin-center flex items-center justify-center w-full h-full"
-              style={{ transform: `scale(${zoomLevel})` }}
+              className={`ease-out origin-center flex items-center justify-center w-full h-full ${
+                dragging ? '' : 'transition-transform duration-300'
+              }`}
+              style={{ transform }}
             >
               <Img
                 src={currentPlan.image}
                 alt={currentPlan.title}
+                draggable={false}
                 sizes="(min-width: 1024px) 1400px, 100vw"
                 className={`max-h-full max-w-full object-contain filter drop-shadow-2xl transition-[filter] duration-500 ${
                   isLocked ? 'blur-[14px] scale-[1.02]' : ''

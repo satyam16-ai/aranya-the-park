@@ -21,6 +21,7 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { Img } from '../common/Img';
+import { ImageCredit } from '../common/ImageCredit';
 import { amenitiesData } from '../../data/amenitiesData';
 import type { AmenityItem } from '../../types';
 
@@ -226,10 +227,10 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
             <Button
               variant="outline"
               size="md"
-              onClick={() => onOpenLeadModal('Arrange a Private Site Visit')}
+              onClick={() => onOpenLeadModal('Arrange a Site Visit')}
               className="tracking-wider uppercase text-xs"
             >
-              Arrange a Private Site Visit
+              Arrange a Site Visit
             </Button>
           </div>
         )}
@@ -243,7 +244,7 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
           style={{ left: pos.left, top: pos.top, width: PREVIEW_W }}
         >
           <div className="rounded-[4px] overflow-hidden border border-champagne-400/30 bg-dark-900 shadow-[0_24px_60px_rgba(0,0,0,0.65)]">
-            <div className="aspect-[16/9] w-full overflow-hidden bg-dark-900">
+            <div className="relative aspect-[16/9] w-full overflow-hidden bg-dark-900">
               <Img
                 key={hovered.item.id}
                 src={hovered.item.image}
@@ -251,6 +252,7 @@ export const Amenities: React.FC<AmenitiesProps> = ({ onSelectAmenity, onOpenLea
                 sizes="340px"
                 className="w-full h-full object-cover animate-fade-in"
               />
+              <ImageCredit src={hovered.item.image} className="absolute bottom-2 right-2" />
             </div>
             <div className="px-4 py-3 border-t border-white/[0.07]">
               <p className="font-serif text-sm text-ivory leading-snug">{hovered.item.name}</p>
