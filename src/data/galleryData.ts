@@ -3,8 +3,8 @@ import type { GalleryItem } from '../types';
 /*
  * The gallery shows the project only: the client's renders (company_assets/
  * Data for Landing Page/Renders), the terrace landscape renders and the
- * lobby and gym renders. Every one is an artist's impression, and each card
- * and the lightbox say so (see src/data/imageCredits.ts).
+ * lobby and gym renders. Renders carry no image label, at the client's
+ * request (see src/data/imageCredits.ts).
  */
 export const galleryData: GalleryItem[] = [
   {

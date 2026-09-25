@@ -45,8 +45,7 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
           title="Luxury, Made Lush"
         />
 
-        {/* Editorial band — the stat, the narrative and the metrics now run the
-            full width so the image below can take the whole stage. */}
+        {/* Editorial band — commented out
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-end mb-10 sm:mb-12 text-left">
           <div className="lg:col-span-4 space-y-2">
             <span className="font-serif text-5xl sm:text-6xl lg:text-7xl text-champagne-300 font-light tracking-tight leading-none block">
@@ -72,6 +71,32 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
               <span className="text-[10px] font-sans uppercase tracking-[0.08em] text-ivory-muted/70 whitespace-nowrap">Compliant Homes</span>
             </div>
           </div>
+        </div>
+        */}
+
+        {/* ─── Brochure-style Stats Bar ─── */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px mb-10 sm:mb-12 rounded-[6px] overflow-hidden border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+          {[
+            { value: '40%+', label: 'Open Green', sublabel: 'Living' },
+            { value: '11 ft', label: 'Ceiling Height,', sublabel: 'Up To' },
+            { value: '18.3 m', label: 'Private Access', sublabel: 'Road' },
+            { value: '3 min', label: 'To Malad West', sublabel: 'Metro' },
+          ].map((stat) => (
+            <div
+              key={stat.value}
+              className="bg-white/[0.03] backdrop-blur-sm px-5 py-6 sm:px-7 sm:py-8 text-center flex flex-col items-center justify-center gap-1.5 hover:bg-white/[0.06] transition-colors duration-300"
+            >
+              <span className="font-serif text-2xl sm:text-3xl lg:text-4xl text-champagne-300 font-light tracking-tight leading-none">
+                {stat.value}
+              </span>
+              <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.22em] text-ivory font-semibold leading-tight">
+                {stat.label}
+              </span>
+              <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.22em] text-ivory-muted/70 font-medium leading-tight">
+                {stat.sublabel}
+              </span>
+            </div>
+          ))}
         </div>
       </Container>
 

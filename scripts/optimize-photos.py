@@ -12,7 +12,8 @@ It also takes the client's landing-page pack in company_assets/: the project
 renders and terrace-landscape renders as photos, and the architect's floor plan
 PDFs, each rendered as one plan per image. A plan is turned to read level, its
 frame and title block are cut away, and the architect's disclaimer is set again
-in a legible band under the drawing, so every plan carries it in full.
+in a legible band under the drawing, so every plan carries it in full. The
+location map is cut from its brochure page the same way (see MAPS).
 
 Every photo carries a credit the site prints on it: 'artist' for renders of the
 project (an artist's impression) and 'representative' for stock lifestyle
@@ -46,6 +47,7 @@ WIDTHS = {
     'photo': [640, 1280, 2000],
     'hero':  [800, 1400, 2000, 2600],
     'plan':  [800, 1600, 2600],
+    'map':   [900, 1600, 2800],
 }
 
 PACK = 'company_assets/Data for Landing Page'
@@ -153,6 +155,19 @@ DISCLAIMER = (
     'owner / developer and the recipient.'
 )
 FONT = 'scripts/fonts/SourceSerif4[opsz,wght].ttf'   # the site's one family (OFL)
+
+# Maps cut from the brochure, which draws them as vector art, so they render
+# sharp at any size: slug -> (PDF, 1-based page, crop, [areas to clear]).
+# Boxes are (left, top, right, bottom) as fractions of the page. The location
+# map keeps only the map: not the green text panel, the gold frame or the
+# footnote under it. The QR code and its caption sit on plain paper in the
+# map's lower-left corner and are cleared to that paper colour. The route film
+# they point to is on the site itself.
+MAPS = {
+    'location-map-cropped': ('Aranya _E_Brochure 2.pdf', 7,
+                             (0.3002, 0.09739, 0.92784, 0.90858),
+                             [(0.30179, 0.81778, 0.45382, 0.8891)]),
+}
 
 QUALITY = 80
 PLAN_QUALITY = 86   # line work smears at the photo setting
@@ -318,6 +333,26 @@ def render_plan(pdf, width, layout):
     return add_disclaimer(im)
 
 
+def render_map(pdf, pno, crop, clear, width):
+    """Render one brochure page so `crop` comes out at least `width` px wide,
+    cut it to `crop`, and paint each `clear` box in its own paper colour."""
+    import fitz  # PyMuPDF
+    import numpy as np
+    page = fitz.open(pdf)[pno - 1]
+    zoom = (width + 2) / ((crop[2] - crop[0]) * page.rect.width)
+    pm = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom), alpha=False)
+    im = Image.frombytes('RGB', (pm.width, pm.height), pm.samples)
+    px = lambda box: tuple(round(f * (im.width if i % 2 == 0 else im.height))
+                           for i, f in enumerate(box))
+    draw = ImageDraw.Draw(im)
+    for box in clear:
+        b = px(box)
+        # The box is mostly bare paper; its median is that paper's colour.
+        paper = np.median(np.asarray(im.crop(b)).reshape(-1, 3), axis=0)
+        draw.rectangle(b, fill=tuple(int(c) for c in paper))
+    return im.crop(px(crop))
+
+
 def set_paths(slug, width, height, kind):
     """The (width, path) pairs a set will have, without decoding anything."""
     out = []
@@ -414,6 +449,24 @@ def main():
         entries.append(entry + ('plan', None))
         total += size
         print('  %-26s plan  %dx%d' % (slug, im.width, im.height))
+
+    # Maps cut from the brochure. The manifest has no map kind; like the
+    # plans they are drawings, so they share that kind and carry no credit.
+    for slug, (pdf, pno, crop, clear) in MAPS.items():
+        cached = None if force else existing_set(slug, 'map')
+        if cached and not (only and only in slug):
+            entries.append(cached + ('plan', None))
+            continue
+        if only and only not in slug:
+            continue
+        if not os.path.exists(pdf):
+            print('  !! missing %s' % pdf)
+            continue
+        im = render_map(pdf, pno, crop, clear, WIDTHS['map'][-1])
+        entry, size = write_set(slug, im, 'map', PLAN_QUALITY)
+        entries.append(entry + ('plan', None))
+        total += size
+        print('  %-26s map   %dx%d' % (slug, im.width, im.height))
 
     if only:
         print('\n  partial run — manifest not rewritten')

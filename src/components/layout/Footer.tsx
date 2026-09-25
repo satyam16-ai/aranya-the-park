@@ -110,7 +110,7 @@ export const Footer: React.FC = () => {
         {/* Legal Disclaimer */}
         <div className="py-6 text-[10px] text-ivory-muted/50 leading-relaxed border-t border-white/[0.08]">
           <p>
-            Disclaimer: The images, artist impressions, specifications, floor plans, dimensions, elevations, and features shown are conceptual and indicative only. Final layout and specifications are subject to approvals by competent planning authorities. MahaRERA Registration No.: <strong className="text-champagne-300/80">{projectData.mahaRera}</strong>, available on the official MahaRERA website (<a href="https://maharera.mahaonline.gov.in" target="_blank" rel="noreferrer" className="text-champagne-400/70 hover:text-champagne-300 underline underline-offset-2 transition-colors">maharera.mahaonline.gov.in</a>).
+            Disclaimer: The images, specifications, floor plans, dimensions, elevations, and features shown are conceptual and indicative only. Final layout and specifications are subject to approvals by competent planning authorities. MahaRERA Registration No.: <strong className="text-champagne-300/80">{projectData.mahaRera}</strong>, available on the official MahaRERA website (<a href="https://maharera.mahaonline.gov.in" target="_blank" rel="noreferrer" className="text-champagne-400/70 hover:text-champagne-300 underline underline-offset-2 transition-colors">maharera.mahaonline.gov.in</a>).
           </p>
         </div>
 

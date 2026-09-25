@@ -20,7 +20,7 @@ const keyArterials = [
   { label: 'MALAD WEST', detail: 'Mumbai 400064', note: 'Mindspace Neighbourhood' },
   { label: 'NEW LINK ROAD', detail: '18.3 m Access Road', note: 'Behind Evershine Mall' },
   { label: 'WESTERN EXPRESS', detail: '14 Minutes', note: 'North–South Highway' },
-  { label: 'AIRPORT', detail: '42 Minutes', note: 'CSMIA, T1 & T2' },
+  // { label: 'AIRPORT', detail: '42 Minutes', note: 'CSMIA, T1 & T2' },
 ];
 
 const transitHighlights = [
@@ -117,11 +117,14 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
         />
 
         {/* ─── Progressive Arterial Reveal Strip ─── */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-14">
-          {keyArterials.map((arterial) => (
+        {/* Three cards: in two columns the last one spans the row rather than sitting alone. */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-14">
+          {keyArterials.map((arterial, i) => (
             <div
               key={arterial.label}
-              className="glass-panel p-4 rounded-[4px] text-center space-y-1 hover:border-champagne-400/30 transition-colors"
+              className={`glass-panel p-4 rounded-[4px] text-center space-y-1 hover:border-champagne-400/30 transition-colors ${
+                i === keyArterials.length - 1 && keyArterials.length % 2 ? 'col-span-2 md:col-span-1' : ''
+              }`}
             >
               <span className="font-sans text-xs uppercase tracking-[0.2em] text-champagne-300 font-bold block">
                 {arterial.label}

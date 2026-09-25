@@ -506,4 +506,10 @@ export const photoManifest: Record<string, ManifestEntry> = {
     height: 2380,
     kind: 'plan',
   },
+  '/assets/opt/location-map-cropped-2800.webp': {
+    srcSet: '/assets/opt/location-map-cropped-900.webp 900w, /assets/opt/location-map-cropped-1600.webp 1600w, /assets/opt/location-map-cropped-2800.webp 2800w',
+    width: 2800,
+    height: 2613,
+    kind: 'plan',
+  },
 };

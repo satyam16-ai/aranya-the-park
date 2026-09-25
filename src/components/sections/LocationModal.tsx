@@ -10,6 +10,7 @@ import {
   X,
 } from 'lucide-react';
 import { Button } from '../common/Button';
+import { Img } from '../common/Img';
 import { locationNodes, infrastructureProjects } from '../../data/locationData';
 import { projectData } from '../../data/projectData';
 
@@ -32,14 +33,21 @@ const CATEGORY_TONE: Record<string, string> = {
  * Where each destination sits on the schematic, in viewBox units, with the short
  * name its label carries and the side that label hangs off.
  *
- * These are drawing coordinates, not survey ones. What they do hold to is the
- * corridor each landmark actually sits on — the metro stations on the metro
- * line, Malad Station on the railway, the highway nodes on the WEH — and enough
- * room between neighbours that two labels never land on top of each other.
+ * These are drawing coordinates, not survey ones, but every position is read
+ * off Google Maps (25-09): each place's pin was located in one fixed map frame
+ * and carried over with the roads straightened into the four north–south
+ * corridors. What holds is the side of each road a place sits on and the
+ * north–south order of places. The dense strip along New Link Road is drawn
+ * wider than life so the labels don't overlap.
  *
- * The plot sits east of New Link Road, between Link Road and S. V. Road, just
- * south of Rejoice International School — the position the brochure map marks
- * with the Aranya crest, confirmed by the client on 24-09.
+ * The plot sits just WEST of New Link Road, in Mindspace, with Evershine Mall
+ * to its north-east between it and the road ("behind Evershine Mall"). North
+ * along the road's west side come Kothari Starz, CritiCare Asia, Goregaon
+ * Sports Club, then Infiniti Mall and the Malad West metro. Cloudnine is across
+ * the road to the south-east, and Inorbit is south on the road. Metro Line 2A
+ * runs along New Link Road itself. An earlier layout put the plot east of the
+ * road, at the brochure map's crest; the crest is only a label, and the
+ * brochure's pin on Link Road marks the site.
  *
  * New Link Road itself gets no marker: it is drawn as a corridor and named at
  * the top of the map, and the access-road plate already says how the site meets
@@ -49,23 +57,23 @@ const NODE_LAYOUT: Record<
   string,
   { x: number; y: number; short: string; side: 'n' | 's' | 'e' | 'w' }
 > = {
-  c1: { x: 386, y: 230, short: 'Malad West Metro', side: 'w' },
-  c3: { x: 840, y: 240, short: 'Malad Station', side: 'e' },
-  c4: { x: 1010, y: 300, short: 'W. E. Highway', side: 'w' },
-  e1: { x: 412, y: 478, short: 'Inorbit Mall', side: 'w' },
-  e2: { x: 250, y: 190, short: 'Goregaon Sports Club', side: 's' },
-  e3: { x: 140, y: 120, short: 'Infiniti Mall', side: 's' },
-  ed1: { x: 560, y: 222, short: 'Kothari Starz', side: 'n' },
-  ed2: { x: 200, y: 440, short: 'Vibgyor Rise', side: 's' },
-  ed4: { x: 300, y: 95, short: 'Ryan Intl.', side: 's' },
-  ed5: { x: 768, y: 360, short: 'Witty Intl.', side: 's' },
-  h1: { x: 180, y: 285, short: 'CritiCare Asia', side: 'n' },
-  h2: { x: 500, y: 440, short: 'Cloudnine', side: 's' },
-  h3: { x: 800, y: 130, short: 'Lifeline Medicare', side: 'n' },
+  c1: { x: 412, y: 216, short: 'Malad West Metro', side: 'e' },
+  c3: { x: 840, y: 187, short: 'Malad Station', side: 'e' },
+  c4: { x: 1010, y: 482, short: 'W. E. Highway', side: 'n' },
+  e1: { x: 400, y: 504, short: 'Inorbit Mall', side: 'w' },
+  e2: { x: 380, y: 296, short: 'Goregaon Sports Club', side: 'w' },
+  e3: { x: 340, y: 232, short: 'Infiniti Mall', side: 'w' },
+  ed1: { x: 340, y: 358, short: 'Kothari Starz', side: 'w' },
+  ed2: { x: 252, y: 384, short: 'Vibgyor Rise', side: 'w' },
+  ed4: { x: 275, y: 73, short: 'Ryan Intl.', side: 'e' },
+  ed5: { x: 796, y: 444, short: 'Witty Intl.', side: 'n' },
+  h1: { x: 384, y: 334, short: 'CritiCare Asia', side: 'e' },
+  h2: { x: 446, y: 462, short: 'Cloudnine', side: 'e' },
+  h3: { x: 708, y: 497, short: 'Lifeline Medicare', side: 'w' },
 };
 
 /** The parcel centre; routes are drawn from here, under the parcel itself. */
-const SITE_ORIGIN = { x: 596, y: 308 };
+const SITE_ORIGIN = { x: 300, y: 440 };
 
 const PLATE_H = 15;
 
@@ -290,6 +298,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
 
             {/* Map Content Viewport */}
             {mapMode === 'schematic' ? (
+              <div>
               <div className="relative w-full bg-[#0c0d0c] select-none overflow-x-auto overflow-y-hidden">
                 {/* The schematic needs width to stay legible, so on a narrow
                     screen it scrolls sideways instead of shrinking away. */}
@@ -299,7 +308,7 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                     className="w-full h-full"
                     preserveAspectRatio="xMidYMid meet"
                     role="img"
-                    aria-label="Schematic map of Aranya The Park, east of New Link Road, with its 18.3 metre access road and the transit, schools, hospitals and retail around it"
+                    aria-label="Schematic map of Aranya The Park, just west of New Link Road in Mindspace, with its 18.3 metre access road and the transit, schools, hospitals and retail around it"
                   >
                     <defs>
                       <pattern id="modalMapGrid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -334,24 +343,22 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                     </text>
 
                     {/* ─── Arterials, west to east ─── */}
-                    {/* Metro 2A runs along the western flank of Link Road */}
-                    <line x1="386" y1="44" x2="386" y2="560" stroke="#EAB308" strokeWidth="3" strokeDasharray="7 5" opacity="0.85" />
+                    {/* New Link Road, with Metro Line 2A running along it */}
+                    <line x1="412" y1="0" x2="412" y2="560" stroke="#1f201f" strokeWidth="22" />
+                    <line x1="412" y1="44" x2="412" y2="560" stroke="#EAB308" strokeWidth="3" strokeDasharray="7 5" opacity="0.85" />
+                    <text x="412" y="26" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                      NEW LINK ROAD
+                    </text>
                     <text
-                      x="376"
-                      y="548"
+                      x="432"
+                      y="196"
                       fill="#EAB308"
                       fontSize="8.5"
                       letterSpacing="1.4"
-                      transform="rotate(-90, 376, 548)"
+                      transform="rotate(-90, 432, 196)"
                       fontFamily="sans-serif"
                     >
                       METRO LINE 2A
-                    </text>
-
-                    <line x1="412" y1="0" x2="412" y2="560" stroke="#1f201f" strokeWidth="22" />
-                    <line x1="412" y1="0" x2="412" y2="560" stroke="rgba(255,255,255,0.32)" strokeWidth="1.5" strokeDasharray="12 9" />
-                    <text x="412" y="26" fill="#F4F0E8" fontSize="10" letterSpacing="2" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
-                      NEW LINK ROAD
                     </text>
 
                     <line x1="730" y1="0" x2="730" y2="560" stroke="#1a1b1a" strokeWidth="15" />
@@ -372,30 +379,32 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                       W. E. HIGHWAY
                     </text>
 
-                    {/* East–west links */}
-                    <path d="M 412,150 L 840,150 L 1010,136" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" fill="none" />
-                    <path d="M 730,470 L 1010,486" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" fill="none" />
-                    <text x="872" y="464" fill="#8d887e" fontSize="7.5" textAnchor="middle" letterSpacing="0.6" fontFamily="sans-serif">
+                    {/* East–west links: a northern cross-road, and the
+                        Goregaon–Mulund Link Road leaving New Link Road at
+                        Inorbit and running east to the highway. */}
+                    <path d="M 423,144 L 760,130 L 840,128 L 1010,100" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" fill="none" />
+                    <path d="M 423,512 L 600,512 L 730,510 L 840,516 L 925,522 L 1010,482 L 1120,470" stroke="#2c2d2c" strokeWidth="7" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+                    <text x="905" y="506" fill="#8d887e" fontSize="7.5" textAnchor="middle" letterSpacing="0.6" fontFamily="sans-serif">
                       GOREGAON–MULUND LINK ROAD
                     </text>
 
-                    {/* ─── Mindspace, the commercial pocket west of Link Road ─── */}
+                    {/* ─── Mindspace, the neighbourhood west of Link Road ─── */}
                     <rect
-                      x="150"
-                      y="300"
-                      width="180"
-                      height="100"
+                      x="110"
+                      y="398"
+                      width="124"
+                      height="82"
                       rx="3"
                       fill="rgba(255,255,255,0.016)"
                       stroke="rgba(255,255,255,0.11)"
                       strokeWidth="1.4"
                       strokeDasharray="5 4"
                     />
-                    <text x="240" y="345" fill="#B9B3A8" fontSize="9.5" fontWeight="600" textAnchor="middle" letterSpacing="1.6" fontFamily="sans-serif">
+                    <text x="172" y="437" fill="#B9B3A8" fontSize="9.5" fontWeight="600" textAnchor="middle" letterSpacing="1.6" fontFamily="sans-serif">
                       MINDSPACE
                     </text>
-                    <text x="240" y="358" fill="rgba(255,255,255,0.28)" fontSize="7.5" textAnchor="middle" fontFamily="sans-serif">
-                      COMMERCIAL IT PARK
+                    <text x="172" y="450" fill="rgba(255,255,255,0.28)" fontSize="7.5" textAnchor="middle" fontFamily="sans-serif">
+                      MALAD WEST
                     </text>
 
                     {/* ─── Route from the site to the selected destination ─── */}
@@ -414,39 +423,38 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                       />
                     )}
 
-                    {/* Evershine Mall — the project sits behind it, off Link Road */}
-                    <rect x="448" y="268" width="56" height="46" rx="2" fill="#1b1c1b" stroke="rgba(200,169,107,0.35)" strokeWidth="1" />
-                    <text x="476" y="288" fill="#F4F0E8" fontSize="7" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
+                    {/* Evershine Mall — the project sits behind it, away from the road */}
+                    <rect x="350" y="378" width="48" height="28" rx="2" fill="#1b1c1b" stroke="rgba(200,169,107,0.35)" strokeWidth="1" />
+                    <text x="374" y="390" fill="#F4F0E8" fontSize="6.5" textAnchor="middle" fontWeight="bold" fontFamily="sans-serif">
                       EVERSHINE
                     </text>
-                    <text x="476" y="298" fill="#C8A96B" fontSize="6.5" textAnchor="middle" fontFamily="sans-serif">
+                    <text x="374" y="400" fill="#C8A96B" fontSize="6" textAnchor="middle" fontFamily="sans-serif">
                       MALL
                     </text>
 
-                    {/* The 18.3 m access road, parcel gate west onto New Link Road */}
-                    <line x1="412" y1="332" x2="522" y2="332" stroke="#C8A96B" strokeWidth="9" strokeLinecap="round" />
-                    <line x1="412" y1="332" x2="522" y2="332" stroke="#0c0d0c" strokeWidth="1.6" strokeDasharray="5 4" />
-                    <circle cx="412" cy="332" r="5.5" fill="#C8A96B" stroke="#080908" strokeWidth="2" />
-                    <circle cx="522" cy="332" r="5.5" fill="#C8A96B" stroke="#080908" strokeWidth="2" />
-                    <rect x="420" y="338" width="94" height="15" rx="2" fill="#080908" stroke="rgba(200,169,107,0.5)" strokeWidth="0.8" />
-                    <text x="467" y="348.5" fill="#F4F0E8" fontSize="7.5" fontWeight="bold" textAnchor="middle" letterSpacing="0.4" fontFamily="sans-serif">
+                    {/* The 18.3 m access road, from the parcel east onto New Link Road */}
+                    <line x1="355" y1="452" x2="401" y2="452" stroke="#C8A96B" strokeWidth="9" strokeLinecap="round" />
+                    <line x1="355" y1="452" x2="401" y2="452" stroke="#0c0d0c" strokeWidth="1.6" strokeDasharray="5 4" />
+                    <circle cx="401" cy="452" r="5.5" fill="#C8A96B" stroke="#080908" strokeWidth="2" />
+                    <rect x="302" y="474" width="94" height="15" rx="2" fill="#080908" stroke="rgba(200,169,107,0.5)" strokeWidth="0.8" />
+                    <text x="349" y="484.5" fill="#F4F0E8" fontSize="7.5" fontWeight="bold" textAnchor="middle" letterSpacing="0.4" fontFamily="sans-serif">
                       18.3 M ACCESS ROAD
                     </text>
 
-                    {/* ─── Aranya The Park: its own parcel, east of New Link Road ─── */}
-                    <circle cx="596" cy="308" r="68" fill="url(#modalAranyaPulse)" />
-                    <rect x="522" y="262" width="148" height="92" rx="3" fill="rgba(200,169,107,0.09)" stroke="#C8A96B" strokeWidth="1.6" />
+                    {/* ─── Aranya The Park: its own parcel, just west of New Link Road ─── */}
+                    <circle cx="300" cy="440" r="56" fill="url(#modalAranyaPulse)" />
+                    <rect x="245" y="412" width="110" height="56" rx="3" fill="rgba(200,169,107,0.09)" stroke="#C8A96B" strokeWidth="1.6" />
                     <image
                       href="/assets/branding/aranya-wordmark-light.png"
-                      x="534"
-                      y="282"
-                      width="124"
-                      height="35"
+                      x="255"
+                      y="418"
+                      width="90"
+                      height="26"
                       preserveAspectRatio="xMidYMid meet"
                     >
                       <title>Aranya The Park</title>
                     </image>
-                    <text x="596" y="340" fill="rgba(244,240,232,0.55)" fontSize="7" textAnchor="middle" letterSpacing="1.4" fontFamily="sans-serif">
+                    <text x="300" y="459" fill="rgba(244,240,232,0.55)" fontSize="7" textAnchor="middle" letterSpacing="1.4" fontFamily="sans-serif">
                       THE SITE
                     </text>
 
@@ -561,67 +569,75 @@ export const LocationModal: React.FC<LocationModalProps> = ({
                     })}
                   </svg>
 
-                  {/* Legend */}
-                  <div className="absolute bottom-3 left-3 bg-dark-950/95 border border-white/[0.08] p-2.5 rounded-[3px] text-[10px] backdrop-blur-md hidden sm:block">
-                    <div className="text-champagne-300 font-semibold uppercase tracking-wider text-[9px] mb-1.5">
-                      Map Legend
-                    </div>
-                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                      {[
-                        { tone: CATEGORY_TONE.connectivity, label: 'Transit & Highways' },
-                        { tone: CATEGORY_TONE.education, label: 'Schools' },
-                        { tone: CATEGORY_TONE.healthcare, label: 'Hospitals' },
-                        { tone: CATEGORY_TONE.entertainment, label: 'Retail & Leisure' },
-                      ].map((row) => (
-                        <div key={row.label} className="flex items-center gap-1.5 text-ivory-muted">
-                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: row.tone }} />
-                          <span className="whitespace-nowrap">{row.label}</span>
-                        </div>
-                      ))}
-                      <div className="flex items-center gap-1.5 text-ivory-muted">
-                        <span className="w-3 h-[3px] bg-[#EAB308] shrink-0" />
-                        <span className="whitespace-nowrap">Metro Line 2A</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-ivory-muted">
-                        <span className="w-3 h-[3px] bg-[#C8A96B] shrink-0" />
-                        <span className="whitespace-nowrap">18.3 m Access Road</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Hint */}
-                  <div className="absolute bottom-3 right-3 bg-dark-950/90 border border-white/[0.08] px-2.5 py-1.5 rounded-[3px] text-[10px] text-ivory-muted/80 backdrop-blur-md hidden sm:block">
-                    Select a marker to trace the route · numbers are minutes
-                  </div>
-                  <div className="absolute bottom-3 left-3 bg-dark-950/90 border border-white/[0.08] px-2.5 py-1.5 rounded-[3px] text-[10px] text-ivory-muted/80 backdrop-blur-md sm:hidden">
-                    Swipe the map · tap a marker for details
-                  </div>
                 </div>
               </div>
+
+              {/* Legend and tip sit under the map, not over it: the site and
+                  its neighbours fill the corners the overlays used to cover. */}
+              <div className="px-4 sm:px-5 py-2.5 bg-dark-900/90 border-t border-white/[0.08] flex flex-wrap items-center justify-between gap-x-6 gap-y-2 text-[10px]">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5">
+                  {[
+                    { tone: CATEGORY_TONE.connectivity, label: 'Transit & Highways' },
+                    { tone: CATEGORY_TONE.education, label: 'Schools' },
+                    { tone: CATEGORY_TONE.healthcare, label: 'Hospitals' },
+                    { tone: CATEGORY_TONE.entertainment, label: 'Retail & Leisure' },
+                  ].map((row) => (
+                    <span key={row.label} className="inline-flex items-center gap-1.5 text-ivory-muted">
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: row.tone }} />
+                      <span className="whitespace-nowrap">{row.label}</span>
+                    </span>
+                  ))}
+                  <span className="inline-flex items-center gap-1.5 text-ivory-muted">
+                    <span className="w-3 h-[3px] bg-[#EAB308] shrink-0" />
+                    <span className="whitespace-nowrap">Metro Line 2A</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 text-ivory-muted">
+                    <span className="w-3 h-[3px] bg-[#C8A96B] shrink-0" />
+                    <span className="whitespace-nowrap">18.3 m Access Road</span>
+                  </span>
+                </div>
+                <span className="text-ivory-muted/80 hidden sm:inline">
+                  Select a marker to trace the route · numbers are minutes
+                </span>
+                <span className="text-ivory-muted/80 sm:hidden">
+                  Swipe the map · tap a marker for details
+                </span>
+              </div>
+              </div>
             ) : (
-              /* Brochure Map View */
-              <div className="relative w-full aspect-[4/3] sm:aspect-[16/9] lg:aspect-[21/10] bg-dark-950 overflow-hidden">
-                <div
-                  className={`w-full h-full flex items-center justify-center p-2 transition-transform duration-500 cursor-zoom-in ${
-                    isBrochureZoomed ? 'scale-150 cursor-zoom-out' : 'scale-100'
-                  }`}
-                  onClick={() => setIsBrochureZoomed(!isBrochureZoomed)}
-                >
-                  <img
-                    src="/assets/opt/location-map-infra-2800.webp"
-                    alt="Aranya The Park — Regional Location Map"
-                    className="max-h-full max-w-full object-contain filter contrast-[1.1] brightness-[0.95]"
-                  />
-                </div>
-                <div className="absolute bottom-3 right-3 z-10">
-                  <button
+              /* Brochure Map View — the map alone, cut from the brochure page
+                 without its text panel, frame and QR code (see MAPS in
+                 scripts/optimize-photos.py). It is nearly square. */
+              <div>
+                <div className="relative w-full aspect-square sm:aspect-[4/3] lg:aspect-[16/10] bg-dark-950 overflow-hidden">
+                  <div
+                    className={`w-full h-full flex items-center justify-center p-2 transition-transform duration-500 cursor-zoom-in ${
+                      isBrochureZoomed ? 'scale-150 cursor-zoom-out' : 'scale-100'
+                    }`}
                     onClick={() => setIsBrochureZoomed(!isBrochureZoomed)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-dark-900/90 border border-white/[0.12] text-champagne-300 hover:text-white text-[11px] font-sans uppercase tracking-wider backdrop-blur-md cursor-pointer rounded-[3px]"
                   >
-                    <Maximize2 size={12} />
-                    <span>{isBrochureZoomed ? 'Reset View' : 'Zoom In'}</span>
-                  </button>
+                    <Img
+                      src="/assets/opt/location-map-cropped-2800.webp"
+                      alt="Aranya The Park — Regional Location Map"
+                      sizes="(min-width: 1280px) 1150px, 100vw"
+                      className="max-h-full max-w-full object-contain filter contrast-[1.1] brightness-[0.95]"
+                    />
+                  </div>
+                  {/* Bottom-left is bare paper on the map, so the control covers nothing. */}
+                  <div className="absolute bottom-3 left-3 z-10">
+                    <button
+                      onClick={() => setIsBrochureZoomed(!isBrochureZoomed)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-dark-900/90 border border-white/[0.12] text-champagne-300 hover:text-white text-[11px] font-sans uppercase tracking-wider backdrop-blur-md cursor-pointer rounded-[3px]"
+                    >
+                      <Maximize2 size={12} />
+                      <span>{isBrochureZoomed ? 'Reset View' : 'Zoom In'}</span>
+                    </button>
+                  </div>
                 </div>
+                {/* The brochure's own caveat, from the footnote cut away with the frame. */}
+                <p className="px-4 sm:px-5 py-2.5 bg-dark-900/90 border-t border-white/[0.08] font-sans text-[11px] text-ivory-muted/80">
+                  Map not to scale. Times and distances may vary during peak hours, with traffic, and with time spent travelling between locations.
+                </p>
               </div>
             )}
           </div>

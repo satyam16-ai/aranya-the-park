@@ -9,9 +9,9 @@ interface ImageCreditProps {
 }
 
 /**
- * The small print on an image: "Artist's impression" on renders of the
- * project, "Representational image" on stock lifestyle photography. Renders
- * nothing for images that need no credit (plans, logos).
+ * The small print on an image: "Representational image" on stock lifestyle
+ * photography. Renders nothing for images that need no credit: the project
+ * renders, plans and logos (see src/data/imageCredits.ts).
  */
 export const ImageCredit: React.FC<ImageCreditProps> = ({ src, className = '' }) => {
   const label = imageCredit(src);
