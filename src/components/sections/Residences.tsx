@@ -146,9 +146,6 @@ export const Residences: React.FC<ResidencesProps> = ({
                 <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
                   {currentUnit.deck}
                 </span>
-                <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
-                  {currentUnit.tower}
-                </span>
               </div>
 
               {/* Description */}

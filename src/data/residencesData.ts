@@ -7,7 +7,6 @@ export const residencesData: ResidenceUnit[] = [
     title: 'The Park Residence',
     carpetArea: 'On Request',
     tag: 'Signature 2 BHK',
-    tower: 'Tower B',
     deck: 'Private Sundeck',
     description:
       'A well-planned home that is open to light and air, with a generous living room, a private sundeck overlooking the greens and Vastu-compliant planning throughout.',
@@ -27,7 +26,6 @@ export const residencesData: ResidenceUnit[] = [
     title: 'The Sundeck Residence',
     carpetArea: 'On Request',
     tag: 'Family 3 BHK',
-    tower: 'Tower A',
     deck: 'Private Sundeck',
     description:
       'Room for a growing family: three bedrooms, a separate dining area and a private sundeck that brings the outdoors into everyday life.',
@@ -47,7 +45,6 @@ export const residencesData: ResidenceUnit[] = [
     title: 'The Grand Residence',
     carpetArea: 'On Request',
     tag: 'Grand 4 BHK',
-    tower: 'Tower A',
     deck: 'Private Sundeck',
     description:
       'Our most generous plan, for families who want space to spread out: four bedrooms, expansive living areas and a private sundeck with open views.',

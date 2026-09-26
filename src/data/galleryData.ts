@@ -2,7 +2,7 @@ import type { GalleryItem } from '../types';
 
 /*
  * The gallery shows the project only: the client's renders (company_assets/
- * Data for Landing Page/Renders), the terrace landscape renders and the
+ * Data for Landing Page/Renders), all seven terrace landscape renders and the
  * lobby and gym renders. Renders carry no image label, at the client's
  * request (see src/data/imageCredits.ts).
  */
@@ -91,6 +91,16 @@ export const galleryData: GalleryItem[] = [
     aspect: 'wide',
   },
   {
+    id: 'terrace-a-rooftop-night',
+    title: 'Tower A Rooftop by Night',
+    category: 'lifestyle',
+    secondaryCategories: ['lifestyle', 'amenities'],
+    categoryLabel: 'Lifestyle / Terrace',
+    image: '/assets/opt/render-terrace-a21-night-1667.webp',
+    caption: 'The rooftop deck after dark: lit planters, a pergola and a lounge at the far end, above the city lights.',
+    aspect: 'wide',
+  },
+  {
     id: 'entrance-gate',
     title: 'Entrance & Frontage',
     category: 'exterior',
@@ -108,6 +118,16 @@ export const galleryData: GalleryItem[] = [
     categoryLabel: 'Interior / Lobby',
     image: '/assets/opt/render-grand-lobby-2000.webp',
     caption: 'The double-height entrance lobby, with its reception and lounge seating.',
+    aspect: 'wide',
+  },
+  {
+    id: 'terrace-b-day',
+    title: 'Tower B Rooftop',
+    category: 'amenities',
+    secondaryCategories: ['amenities', 'lifestyle', 'exterior'],
+    categoryLabel: 'Amenities / Terrace',
+    image: '/assets/opt/render-terrace-b-day-1672.webp',
+    caption: 'Tower B’s roof at golden hour: a shaded lounge under the pergola, trees in planters and views across the city.',
     aspect: 'wide',
   },
   {
@@ -142,6 +162,16 @@ export const galleryData: GalleryItem[] = [
     aspect: 'wide',
   },
   {
+    id: 'terrace-b-gardens',
+    title: 'Tower B Roof Gardens',
+    category: 'amenities',
+    secondaryCategories: ['amenities', 'exterior', 'architecture'],
+    categoryLabel: 'Amenities / Terrace',
+    image: '/assets/opt/render-terrace-b-garden-1672.webp',
+    caption: 'Tower B’s roof from above: tree-lined decks with loungers and pergolas, looking out to the skyline.',
+    aspect: 'wide',
+  },
+  {
     id: 'gym',
     title: 'Gym',
     category: 'amenities',
@@ -161,6 +191,16 @@ export const galleryData: GalleryItem[] = [
     caption: 'Tower B from the garden side, set against the evening sky.',
     aspect: 'tall',
     focus: 'object-[center_28%]',
+  },
+  {
+    id: 'terrace-a-terrace-day',
+    title: 'Tower A Terrace by Day',
+    category: 'amenities',
+    secondaryCategories: ['amenities', 'lifestyle', 'exterior'],
+    categoryLabel: 'Amenities / Terrace',
+    image: '/assets/opt/render-terrace-a20-day-1669.webp',
+    caption: 'The terrace garden by day: a round planter ringed with seating, flowering trees, a pergola and the skyline beyond.',
+    aspect: 'wide',
   },
   {
     id: 'terrace-a-night',

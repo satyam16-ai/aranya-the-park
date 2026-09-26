@@ -46,8 +46,6 @@ export interface ResidenceUnit {
   deck: string;
   description: string;
   features: string[];
-  /** Which tower this configuration sits in. */
-  tower: string;
   image: string;
   floorPlanImage: string;
 }
