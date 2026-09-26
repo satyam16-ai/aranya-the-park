@@ -8,10 +8,13 @@ export const projectData: ProjectInfo = {
   city: 'Mumbai',
   address: 'CTS 1069A/1/A/3, off New Link Road, Ram Nagar, Behind Evershine Mall, Mindspace, Malad West, Mumbai - 400064',
   mahaRera: 'P51800011594',
-  // TODO(client): paste the official profile URLs. Empty entries stay hidden.
+  // Shown as "Follow Aranya The Park", but the links are Zaveri Realty's
+  // channels, as linked from zaverirealty.com: the client's call (26-09), as
+  // the project has no handles of its own yet. Swap in the project's URLs when
+  // it does. Empty entries stay hidden.
   socials: [
-    { label: 'Instagram', url: '' },
-    { label: 'Facebook', url: '' },
+    { label: 'Instagram', url: 'https://www.instagram.com/zaveri.realty/' },
+    { label: 'Facebook', url: 'https://www.facebook.com/ZaveriRealtyOfficial/' },
     { label: 'YouTube', url: '' },
     { label: 'LinkedIn', url: '' },
   ],
@@ -25,6 +28,7 @@ export const projectData: ProjectInfo = {
   emailPlaceholder: 'sales@aranyathepark.com',
   developer: 'Anuradha Real Estate Developers Private Limited',
   jointVenture: 'Zaveri Realty & BKM Mindspace',
+  zaveriRealtyUrl: 'https://zaverirealty.com/',
   architect: 'Plan Arch Associates',
   landscapeArchitect: 'BeyondGreen',
   interiorDesigner: 'Kalpesh Makwana Design Studio',
@@ -38,7 +42,7 @@ export const projectData: ProjectInfo = {
   hallmarks: [
     {
       id: 'homes',
-      title: '2, 3 & 4 BHK Residences',
+      title: '2, 3 & 5 BHK Residences',
       description: 'Expansive living spaces with private sundecks and Vastu-compliant layouts.',
       icon: 'Home',
     },

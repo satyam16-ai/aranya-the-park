@@ -136,10 +136,7 @@ export default function App() {
       />
 
       {/* ─── Chapter 05: Life Beyond Four Walls (Amenities) ─── */}
-      <Amenities
-        onSelectAmenity={handleSelectAmenity}
-        onOpenLeadModal={handleOpenLeadModal}
-      />
+      <Amenities onSelectAmenity={handleSelectAmenity} />
 
       {/* ─── Chapter 06: Location & Connectivity (18.3m Boulevard) ─── */}
       <LocationConnectivity onOpenModal={handleOpenLocationModal} />

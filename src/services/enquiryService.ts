@@ -10,7 +10,7 @@ export interface EnquiryPayload {
   fullName: string;
   phoneNumber: string;
   email?: string;
-  configuration: '2 BHK' | '3 BHK' | '4 BHK' | 'All Configurations';
+  configuration: '2 BHK' | '3 BHK' | '5 BHK' | 'All Configurations';
   contactMethod: 'WhatsApp' | 'Phone Call' | 'Email';
   message?: string;
   purpose: string;

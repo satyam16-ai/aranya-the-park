@@ -10,6 +10,7 @@ import {
 import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { projectData } from '../../data/projectData';
 
 interface LocationConnectivityProps {
@@ -104,9 +105,8 @@ export const LocationConnectivity: React.FC<LocationConnectivityProps> = ({
   };
 
   return (
-    <section id="location" className="section-spacing bg-dark-900 text-ivory relative overflow-hidden">
-      {/* Ambient background glow */}
-      <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+    <section id="location" className="section-spacing bg-dark-900 text-ivory relative isolate overflow-hidden">
+      <SectionBackdrop />
 
       <Container size="showcase">
         {/* Chapter Header */}

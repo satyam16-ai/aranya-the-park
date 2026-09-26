@@ -3,6 +3,7 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { specificationsData } from '../../data/specificationsData';
 import { Button } from '../common/Button';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { Compass } from 'lucide-react';
 
 interface SpecificationsProps {
@@ -16,10 +17,8 @@ export const Specifications: React.FC<SpecificationsProps> = ({
   const currentCategory = specificationsData[activeCategoryIndex] || specificationsData[0];
 
   return (
-    <section id="specifications" className="section-spacing bg-dark-950 text-ivory relative overflow-hidden">
-      {/* Background subtle illumination */}
-      <div className="absolute top-1/3 -right-48 w-[600px] h-[600px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 -left-48 w-[500px] h-[500px] bg-champagne-400/[0.015] rounded-full blur-3xl pointer-events-none" />
+    <section id="specifications" className="section-spacing bg-dark-950 text-ivory relative isolate overflow-hidden">
+      <SectionBackdrop />
 
       <Container>
         {/* Chapter Header */}

@@ -2,6 +2,7 @@ import type { AmenityItem } from '../types';
 
 export const amenitiesData: AmenityItem[] = [
   // ─── GROUND FLOOR AMENITIES ───
+  // Six to a page in the section, so the order sets what shows first.
   {
     id: 'pickleball',
     name: 'Pickleball Court',
@@ -9,10 +10,10 @@ export const amenitiesData: AmenityItem[] = [
     categoryLabel: 'Sport & Play',
     tagline: 'A cheerful zone for shared victories & cherished bonds',
     description:
-      'A 13.2 × 5.97 m pickleball court, made for quick morning rallies and friendly weekend doubles.',
+      'A professional-size pickleball court, made for quick morning rallies and friendly weekend doubles.',
     image: '/assets/opt/render-clubhouse-2000.webp',
-    badge: '13.2 × 5.97 m Court',
-    highlights: ['Regulation Dimensions (13.4m x 6.0m)', 'Pro-Cushioned Surface', 'Evening Floodlighting'],
+    badge: 'Professional Size',
+    highlights: ['Pro-Cushioned Surface', 'Evening Floodlighting'],
   },
   {
     id: 'senior-citizens',
@@ -37,18 +38,6 @@ export const amenitiesData: AmenityItem[] = [
     image: '/assets/opt/amenity-kids-swing-2000.webp',
     badge: 'Play Zone',
     highlights: ['Impact-Absorbent Flooring', 'Zero-Traffic Safe Zone', 'Shaded Seating for Parents'],
-  },
-  {
-    id: 'fitness-center',
-    name: 'Fitness Center',
-    category: 'ground',
-    categoryLabel: 'Wellness & Strength',
-    tagline: 'A high-end gymnasium for energising workouts',
-    description:
-      'A 7.05 × 7.50 m gym in the fitness club, equipped for cardio and strength training, a short walk from your front door.',
-    image: '/assets/opt/render-gym-2000.webp',
-    badge: 'Fitness Club',
-    highlights: ['Biophilic Garden Views', 'World-Class Cardio & Strength', 'Personal Trainer Bay'],
   },
   {
     id: 'games-room',
@@ -82,9 +71,21 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'Charged and ready, right at home',
     description:
       'Dedicated charging for electric vehicles within the project, so your car is ready when you are.',
-    image: '/assets/opt/amenity-parking-2000.webp',
+    image: '/assets/opt/amenity-ev-charging-2000.webp',
     badge: 'EV Ready',
     highlights: ['Fast-Charge Ports', 'Safe Tower Parking Integration', 'Dedicated Fire Protection'],
+  },
+  {
+    id: 'fitness-center',
+    name: 'Fitness Center',
+    category: 'ground',
+    categoryLabel: 'Wellness & Strength',
+    tagline: 'A high-end gymnasium for energising workouts',
+    description:
+      'A 7.05 × 7.50 m gym in the fitness club, equipped for cardio and strength training, a short walk from your front door.',
+    image: '/assets/opt/render-gym-2000.webp',
+    badge: 'Fitness Club',
+    highlights: ['Biophilic Garden Views', 'World-Class Cardio & Strength', 'Personal Trainer Bay'],
   },
   {
     id: 'aranya-garden',

@@ -10,7 +10,7 @@ export const Hallmarks: React.FC = () => {
       subtitle: 'Curated by BeyondGreen',
     },
     {
-      value: '2 / 3 / 4 BHK',
+      value: '2 / 3 / 5 BHK',
       title: 'LUXURY RESIDENCES',
       subtitle: 'Generous Floor Volumes',
     },

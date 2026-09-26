@@ -67,6 +67,13 @@ export const photoManifest: Record<string, ManifestEntry> = {
     kind: 'photo',
     credit: 'representative',
   },
+  '/assets/opt/amenity-ev-charging-2000.webp': {
+    srcSet: '/assets/opt/amenity-ev-charging-640.webp 640w, /assets/opt/amenity-ev-charging-1280.webp 1280w, /assets/opt/amenity-ev-charging-2000.webp 2000w',
+    width: 2000,
+    height: 1335,
+    kind: 'photo',
+    credit: 'representative',
+  },
   '/assets/opt/amenity-pickleball-play-2000.webp': {
     srcSet: '/assets/opt/amenity-pickleball-play-640.webp 640w, /assets/opt/amenity-pickleball-play-1280.webp 1280w, /assets/opt/amenity-pickleball-play-2000.webp 2000w',
     width: 2000,
@@ -148,6 +155,13 @@ export const photoManifest: Record<string, ManifestEntry> = {
     srcSet: '/assets/opt/life-lobby-arrival-640.webp 640w, /assets/opt/life-lobby-arrival-1280.webp 1280w, /assets/opt/life-lobby-arrival-2000.webp 2000w',
     width: 2000,
     height: 1143,
+    kind: 'photo',
+    credit: 'representative',
+  },
+  '/assets/opt/decor-monstera-leaves-2000.webp': {
+    srcSet: '/assets/opt/decor-monstera-leaves-640.webp 640w, /assets/opt/decor-monstera-leaves-1280.webp 1280w, /assets/opt/decor-monstera-leaves-2000.webp 2000w',
+    width: 2000,
+    height: 1333,
     kind: 'photo',
     credit: 'representative',
   },

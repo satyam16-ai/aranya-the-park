@@ -4,7 +4,8 @@ import type { GalleryItem } from '../types';
  * The gallery shows the project only: the client's renders (company_assets/
  * Data for Landing Page/Renders), all seven terrace landscape renders and the
  * lobby and gym renders. Renders carry no image label, at the client's
- * request (see src/data/imageCredits.ts).
+ * request (see src/data/imageCredits.ts). The commercial frontage render
+ * was taken out at the client's 26-09 meeting.
  */
 export const galleryData: GalleryItem[] = [
   {
@@ -98,16 +99,6 @@ export const galleryData: GalleryItem[] = [
     categoryLabel: 'Lifestyle / Terrace',
     image: '/assets/opt/render-terrace-a21-night-1667.webp',
     caption: 'The rooftop deck after dark: lit planters, a pergola and a lounge at the far end, above the city lights.',
-    aspect: 'wide',
-  },
-  {
-    id: 'entrance-gate',
-    title: 'Entrance & Frontage',
-    category: 'exterior',
-    secondaryCategories: ['exterior', 'architecture'],
-    categoryLabel: 'Exterior / Arrival',
-    image: '/assets/opt/render-entrance-gate-2000.webp',
-    caption: 'The entrance gate beside the commercial frontage on the approach road.',
     aspect: 'wide',
   },
   {

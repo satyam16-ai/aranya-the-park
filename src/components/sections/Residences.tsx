@@ -9,6 +9,7 @@ import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
 import { ImageCredit } from '../common/ImageCredit';
 import { Button } from '../common/Button';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { residencesData } from '../../data/residencesData';
 import type { ResidenceUnit } from '../../types';
 
@@ -37,16 +38,15 @@ export const Residences: React.FC<ResidencesProps> = ({
 
 
   return (
-    <section id="residences" className="section-spacing bg-dark-950 text-ivory relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute -left-48 top-1/3 w-[500px] h-[500px] rounded-full bg-champagne-400/[0.02] blur-3xl pointer-events-none" />
+    <section id="residences" className="section-spacing bg-dark-950 text-ivory relative isolate overflow-hidden">
+      <SectionBackdrop />
 
       <Container size="showcase">
         {/* Chapter Header */}
         <SectionHeading
           eyebrow="The Residences"
           title="Room to Breathe"
-          subtitle="Spacious, Vastu-compliant 2, 3 & 4 BHK homes with private sundecks, French windows and ceiling heights of up to 11 ft."
+          subtitle="Spacious, Vastu-compliant 2, 3 & 5 BHK homes with private sundecks, French windows and ceiling heights of up to 11 ft."
         />
 
         {/* ─── Elegant Glass Configuration Selector ─── */}
@@ -141,7 +141,7 @@ export const Residences: React.FC<ResidencesProps> = ({
               {/* Compact Glass Metrics */}
               <div className="flex flex-wrap gap-2.5 text-xs font-sans">
                 <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
-                  Area: {currentUnit.carpetArea}
+                  RERA Carpet: {currentUnit.carpetArea}
                 </span>
                 <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
                   {currentUnit.deck}
@@ -190,14 +190,14 @@ export const Residences: React.FC<ResidencesProps> = ({
                   }
                   className="btn-lux w-full py-3.5 px-6 text-xs font-sans font-semibold tracking-[0.16em] uppercase text-ivory-muted hover:text-ivory border border-white/[0.12] hover:border-champagne-400/50 rounded-[3px] glass-panel-subtle transition-all duration-300 cursor-pointer"
                 >
-                  REQUEST AREA &amp; PRICE
+                  REQUEST PRICE
                 </button>
               </div>
 
-              {/* 4 BHK note */}
-              {currentUnit.id === '4bhk' && (
+              {/* 5 BHK note */}
+              {currentUnit.id === '5bhk' && (
                 <p className="text-[11px] text-ivory-muted/60 font-sans font-light leading-relaxed">
-                  * 4 BHK availability and floor options on request.
+                  * 5 BHK availability and floor options on request.
                 </p>
               )}
             </div>

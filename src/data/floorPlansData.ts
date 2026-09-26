@@ -82,8 +82,8 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     subtitle: 'Pickleball court',
     image: plan('fp-club-first'),
     description:
-      'Above the gym, the clubhouse’s first floor is given over to a 13.2 × 5.97 m pickleball court, reached by the clubhouse staircase.',
-    highlights: ['Pickleball court: 13.2 × 5.97 m', 'Staircase from the ground floor'],
+      'Above the gym, the clubhouse’s first floor is given over to a professional-size pickleball court, reached by the clubhouse staircase.',
+    highlights: ['Professional-size pickleball court', 'Staircase from the ground floor'],
   },
 
   // ─── A TOWER ───

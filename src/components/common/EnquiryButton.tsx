@@ -111,7 +111,7 @@ export const EnquiryButton: React.FC<EnquiryButtonProps> = ({
                 <option value="">Select configuration</option>
                 <option value="2bhk">2 BHK</option>
                 <option value="3bhk">3 BHK</option>
-                <option value="4bhk">4 BHK Duplex</option>
+                <option value="5bhk">5 BHK</option>
               </select>
             </div>
             <Button variant="gold" size="lg" type="submit" className="w-full mt-2">

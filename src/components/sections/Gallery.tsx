@@ -4,6 +4,7 @@ import { Container } from '../common/Container';
 import { Img } from '../common/Img';
 import { ImageCredit } from '../common/ImageCredit';
 import { SectionHeading } from '../common/SectionHeading';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { galleryData } from '../../data/galleryData';
 import { Lightbox } from '../common/Lightbox';
 
@@ -53,9 +54,8 @@ export const Gallery: React.FC<GalleryProps> = ({ onOpenLeadModal: _onOpenLeadMo
   };
 
   return (
-    <section id="gallery" className="section-spacing bg-dark-950 relative overflow-hidden border-t border-white/[0.06]">
-      {/* Ambient glow */}
-      <div className="absolute top-1/3 -left-32 w-96 h-96 bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+    <section id="gallery" className="section-spacing bg-dark-950 relative isolate overflow-hidden border-t border-white/[0.06]">
+      <SectionBackdrop />
 
       <Container size="showcase" className="relative z-10">
         {/* Section Heading */}

@@ -19,6 +19,8 @@ export interface ProjectInfo {
   emailPlaceholder: string;
   developer: string;
   jointVenture: string;
+  /** Zaveri Realty's website, linked wherever the partner is named. */
+  zaveriRealtyUrl: string;
   architect: string;
   landscapeArchitect: string;
   interiorDesigner: string;

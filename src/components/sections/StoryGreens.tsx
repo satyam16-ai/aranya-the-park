@@ -4,6 +4,7 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Img } from '../common/Img';
 import { ImageCredit } from '../common/ImageCredit';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 
 const SPREAD = '/assets/opt/render-fitness-club-2600.webp';
 const SPREAD_TITLE = 'Welcome to a Forevermore Life';
@@ -34,9 +35,8 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
     onOpenLightbox?.(SPREAD, SPREAD_TITLE, SPREAD_CAPTION, 'The Lushury Life');
 
   return (
-    <section id="story-greens" className="section-spacing bg-dark-900 text-ivory relative overflow-hidden">
-      {/* Background ambient warmth */}
-      <div className="absolute top-1/3 -right-48 w-[600px] h-[600px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+    <section id="story-greens" className="section-spacing bg-dark-900 text-ivory relative isolate overflow-hidden">
+      <SectionBackdrop />
 
       <Container size="showcase">
         {/* Chapter Eyebrow */}

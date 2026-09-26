@@ -4,7 +4,7 @@ export const specificationsData: SpecificationCategory[] = [
   {
     category: 'Residences & Living',
     items: [
-      { feature: 'Configurations', detail: 'Premium 2, 3 & 4 BHK residences' },
+      { feature: 'Configurations', detail: 'Premium 2, 3 & 5 BHK residences' },
       { feature: 'Ceiling Height', detail: 'Floor-to-ceiling height of up to 11 ft' },
       { feature: 'Private Sundecks', detail: 'Private sundecks with panoramic views' },
       { feature: 'Windows', detail: 'French windows for natural light' },
@@ -17,14 +17,15 @@ export const specificationsData: SpecificationCategory[] = [
     items: [
       { feature: 'Sanitary Fittings', detail: 'Premium Grohe fittings in all bathrooms' },
       { feature: 'Railings', detail: 'Elegant glass railings' },
-      { feature: 'Electrical', detail: 'Norisys switches & energy-efficient LED lighting' },
+      { feature: 'Electrical', detail: 'Norisys switches & sockets' },
     ],
   },
   {
     category: 'Elevators & Mobility',
     items: [
       { feature: 'Elevators', detail: 'High-speed OTIS elevators' },
-      { feature: 'Terrace Access', detail: 'Lift access up to the terrace level' },
+      { feature: 'Lift Access', detail: 'Lift access from the basement to the terrace' },
+      { feature: 'Wing Connectivity', detail: 'Wings interconnected via the basement' },
       { feature: 'Access Road', detail: '18.3 m-wide access road to New Link Road' },
     ],
   },

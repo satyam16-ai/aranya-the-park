@@ -1,6 +1,7 @@
 import React from 'react';
 import { ShieldCheck, MapPin, Phone, ExternalLink } from 'lucide-react';
 import { Container } from '../common/Container';
+import { SocialLinks, hasSocialLinks } from '../common/SocialLinks';
 import { projectData } from '../../data/projectData';
 
 export const Footer: React.FC = () => {
@@ -27,9 +28,19 @@ export const Footer: React.FC = () => {
               />
             </div>
           </div>
-          <p className="font-serif text-lg sm:text-xl text-ivory/80 italic font-light max-w-md">
-            "A serene metropolitan address, where life is lush with open greens and generous with space."
-          </p>
+          <div className="space-y-4 max-w-md md:text-right">
+            <p className="font-serif text-lg sm:text-xl text-ivory/80 italic font-light">
+              "A serene metropolitan address, where life is lush with open greens and generous with space."
+            </p>
+            {hasSocialLinks && (
+              <div className="flex items-center gap-3 md:justify-end">
+                <span className="text-[11px] uppercase tracking-[0.2em] text-ivory-muted/70">
+                  Follow {projectData.name}
+                </span>
+                <SocialLinks />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Editorial footer grid */}
@@ -102,7 +113,18 @@ export const Footer: React.FC = () => {
             <div className="pt-2 text-[11px] text-ivory-muted/70 leading-relaxed font-light">
               <span>{projectData.developer}</span>
               <br />
-              <span>Joint Venture: {projectData.jointVenture}</span>
+              <span>
+                Joint Venture:{' '}
+                <a
+                  href={projectData.zaveriRealtyUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-champagne-300/90 hover:text-champagne-200 underline underline-offset-2 transition-colors"
+                >
+                  Zaveri Realty
+                </a>{' '}
+                &amp; BKM Mindspace
+              </span>
             </div>
           </div>
         </div>

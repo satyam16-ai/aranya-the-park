@@ -68,6 +68,9 @@ PHOTOS = {
     'amenity-games-lounge':     ('pool-poker-games-room-decorated-with-luxurious-planned-designed-furniture copy.jpg', 'photo'),
     'amenity-banquet-hall':     ('shutterstock_2472597195.jpg', 'photo'),
     'amenity-parking':          ('cars-parked-underground-parking-lot copy.jpg', 'photo'),
+    # Unsplash, Ratio EV Charging (imgZcGytqKM), mirrored so the car sits
+    # clear of the card's text on the left
+    'amenity-ev-charging':      ('unsplash-ev-charging-imgZcGytqKM-mirrored.jpg', 'photo'),
     'amenity-pickleball-play':  ('freepik__enhance__81056 copy.jpg', 'photo'),
     'amenity-seniors-terrace':  ('freepik__enhance__53474.tif', 'photo'),
     'amenity-kids-swing':       ('freepik__enhance__99528.jpg', 'photo'),
@@ -81,6 +84,9 @@ PHOTOS = {
     'life-sunset-terrace':      ('freepik__two-people-average-age-25-average-race-indain-sitt__41183 copy.jpg', 'photo'),
     'life-skyline-night':       ('freepik__enhance__80134 copy.jpg', 'photo'),
     'life-lobby-arrival':       ('freepik__upload__61429 copy.jpg', 'photo'),
+    # decoration: the foliage behind the amenities heading.
+    # Unsplash, Malte Michels (s4wGZw3UuLk)
+    'decor-monstera-leaves':    ('unsplash-monstera-dark-s4wGZw3UuLk.jpg', 'photo'),
     # neighbourhood / connectivity
     'city-shopping':            ('freepik__enhance__78482 copy.jpg', 'photo'),
     'city-school':              ('schoolboy-raising-hand-class.jpg', 'photo'),

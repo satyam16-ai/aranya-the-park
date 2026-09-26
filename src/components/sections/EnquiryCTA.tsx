@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Phone, MessageSquare, ArrowRight, CheckCircle2, Check } from 'lucide-react';
 import { Container } from '../common/Container';
 import { Button } from '../common/Button';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { projectData } from '../../data/projectData';
 import { submitEnquiry, sendOtp, verifyOtp, unlockPlans } from '../../services/enquiryService';
 
@@ -13,7 +14,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
-  const [configuration, setConfiguration] = useState<'2 BHK' | '3 BHK' | '4 BHK'>('2 BHK');
+  const [configuration, setConfiguration] = useState<'2 BHK' | '3 BHK' | '5 BHK'>('2 BHK');
   const [consentAgreed, setConsentAgreed] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -92,9 +93,8 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
   };
 
   return (
-    <section id="enquiry" className="section-spacing bg-dark-950 relative overflow-hidden border-t border-white/[0.06]">
-      {/* Background warm accent glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-champagne-400/[0.025] rounded-full blur-3xl pointer-events-none" />
+    <section id="enquiry" className="section-spacing bg-dark-950 relative isolate overflow-hidden border-t border-white/[0.06]">
+      <SectionBackdrop />
 
       <Container>
         <div className="relative z-10 glass-panel p-8 sm:p-14 lg:p-16 rounded-[4px] border border-white/[0.08]">
@@ -288,7 +288,7 @@ export const EnquiryCTA: React.FC<EnquiryCTAProps> = ({ onOpenLeadModal: _onOpen
                       Configuration
                     </label>
                     <div className="grid grid-cols-3 gap-2">
-                      {(['2 BHK', '3 BHK', '4 BHK'] as const).map((item) => (
+                      {(['2 BHK', '3 BHK', '5 BHK'] as const).map((item) => (
                         <button
                           type="button"
                           key={item}

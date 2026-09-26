@@ -12,6 +12,7 @@ import { Container } from '../common/Container';
 import { SectionHeading } from '../common/SectionHeading';
 import { Button } from '../common/Button';
 import { Img } from '../common/Img';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 import { hasUnlockedPlans } from '../../services/enquiryService';
 import { useDragPan } from '../../hooks/useDragPan';
 
@@ -91,9 +92,8 @@ export const FloorPlans: React.FC<FloorPlansProps> = ({
   };
 
   return (
-    <section id="floor-plans" className="section-spacing bg-dark-900 text-ivory relative overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+    <section id="floor-plans" className="section-spacing bg-dark-900 text-ivory relative isolate overflow-hidden">
+      <SectionBackdrop />
 
       <Container size="showcase">
         {/* Section Header */}

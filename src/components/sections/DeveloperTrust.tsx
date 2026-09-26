@@ -9,6 +9,7 @@ import { developerData } from '../../data/developerData';
 import { projectData } from '../../data/projectData';
 import { Img } from '../common/Img';
 import { ImageCredit } from '../common/ImageCredit';
+import { SectionBackdrop } from '../common/SectionBackdrop';
 
 /** Stock photography standing in for the view; the brochure's copy had the logos printed on it. */
 const SKYLINE = '/assets/opt/life-skyline-night-2000.webp';
@@ -45,11 +46,9 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
   return (
     <section
       id="developer"
-      className="section-spacing bg-dark-900 relative overflow-hidden border-t border-white/[0.06]"
+      className="section-spacing bg-dark-900 relative isolate overflow-hidden border-t border-white/[0.06]"
     >
-      {/* Subtle ambient luxury glow */}
-      <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-champagne-400/[0.03] rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 -left-40 w-[450px] h-[450px] bg-champagne-400/[0.02] rounded-full blur-3xl pointer-events-none" />
+      <SectionBackdrop />
 
       <Container size="showcase" className="relative z-10">
         {/* Section Pre-title */}
@@ -176,15 +175,21 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
 
           {/* Actual Client-Provided Partner Logo Artwork */}
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-14 lg:gap-20 py-4">
-            {/* Zaveri Realty Logo */}
-            <div className="flex items-center justify-center p-4 sm:p-5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-champagne-400/40 transition-all duration-300 w-full max-w-[320px]">
+            {/* Zaveri Realty Logo — links to their site (client's 26-09 meeting) */}
+            <a
+              href={projectData.zaveriRealtyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Zaveri Realty website (opens in a new tab)"
+              className="flex items-center justify-center p-4 sm:p-5 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:border-champagne-400/40 transition-all duration-300 w-full max-w-[320px]"
+            >
               <img
                 src="/assets/branding/zaveri-realty-logo.png"
                 alt="Zaveri Realty"
                 className="h-12 sm:h-14 w-auto object-contain brightness-0 invert opacity-90 hover:opacity-100 transition-opacity"
                 loading="lazy"
               />
-            </div>
+            </a>
 
             {/* Elegant Divider */}
             <div className="font-serif text-xl sm:text-2xl text-champagne-300/60 font-light select-none">
@@ -203,7 +208,16 @@ export const DeveloperTrust: React.FC<DeveloperTrustProps> = ({ onOpenLeadModal,
           </div>
 
           <p className="font-serif text-xs sm:text-sm text-ivory-muted/75 font-light tracking-wide max-w-2xl mx-auto">
-            A joint venture of Zaveri Realty and BKM Mindspace, developed by Anuradha Real Estate Developers Private Limited.
+            A joint venture of{' '}
+            <a
+              href={projectData.zaveriRealtyUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-champagne-300 hover:text-champagne-200 underline underline-offset-2 transition-colors"
+            >
+              Zaveri Realty
+            </a>{' '}
+            and BKM Mindspace, developed by Anuradha Real Estate Developers Private Limited.
           </p>
         </div>
 
