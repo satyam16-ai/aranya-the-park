@@ -2,7 +2,7 @@ import type { AmenityItem } from '../types';
 
 export const amenitiesData: AmenityItem[] = [
   // ─── GROUND FLOOR AMENITIES ───
-  // Six to a page in the section, so the order sets what shows first.
+  // The section shows these four to a row, in this order.
   {
     id: 'pickleball',
     name: 'Pickleball Court',
