@@ -55,8 +55,6 @@ reference
 /public/assets/opt/project-specifications-*
 /public/assets/opt/render-entrance-drive-*
 /public/assets/opt/render-lift-lobby-*
-/public/assets/opt/render-terrace-a21-night-*
-/public/assets/opt/render-terrace-b-day-*
 /public/assets/opt/render-tower-day-*
 /public/assets/opt/render-tower-dusk-*
 /public/assets/opt/residences-interior-*
@@ -64,6 +62,7 @@ reference
 # Local tooling, never served
 scripts
 .claude
+graphify-out
 .vscode
 .idea
 
