@@ -43,7 +43,7 @@ export const projectData: ProjectInfo = {
     {
       id: 'homes',
       title: '2, 3 & 5 BHK Residences',
-      description: 'Expansive living spaces with private sundecks and Vastu-compliant layouts.',
+      description: 'Expansive living spaces and Vastu-compliant layouts.',
       icon: 'Home',
     },
     {

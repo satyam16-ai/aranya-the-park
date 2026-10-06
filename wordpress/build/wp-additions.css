@@ -1,0 +1,141 @@
+/* ----------------------------------------------------------------
+   WORDPRESS ADDITIONS
+   Appended to src/index.css by build/build-css.mjs.
+   ---------------------------------------------------------------- */
+
+/* Elements that start hidden stay hidden until the site script takes over. */
+[ar-cloak] {
+  display: none !important;
+}
+
+/* ----------------------------------------------------------------
+   ELEMENTOR COMPATIBILITY
+   ----------------------------------------------------------------
+   Tailwind v4 puts every utility inside @layer. Elementor's frontend.css
+   is unlayered, and unlayered rules beat layered ones whatever their
+   specificity, so these rules from elementor/assets/css/frontend.css would
+   override the design's classes inside any Elementor page:
+
+     .elementor img            { height:auto; max-width:100%; border:none;
+                                 border-radius:0; box-shadow:none }
+     .elementor a              { box-shadow:none; text-decoration:none }
+     .elementor iframe,
+     .elementor video          { max-width:100%; width:100%; margin:0;
+                                 line-height:1; border:none }
+     .elementor hr             { margin:0; background-color:transparent }
+     .elementor .elementor-widget:not(…):not(…) figure { margin:0 }
+
+   (e.g. `h-full` images would collapse to height:auto.) Inside Aranya
+   widgets (.aranya-w) each property is handed back with `revert-layer`,
+   which discards the unlayered declarations and uses the layered value —
+   i.e. exactly what the Tailwind classes (or preflight) say, as on the
+   React site. Audited against Elementor 4.3; re-check on major upgrades.
+   ---------------------------------------------------------------- */
+.elementor .aranya-w img {
+  height: revert-layer;
+  max-width: revert-layer;
+  border: revert-layer;
+  border-radius: revert-layer;
+  box-shadow: revert-layer;
+}
+
+.elementor .aranya-w a {
+  box-shadow: revert-layer;
+  text-decoration: revert-layer;
+}
+
+/* `.elementor .elementor-widget:not(.elementor-widget-text-editor)
+   :not(.elementor-widget-theme-post-content) figure { margin: 0 }` scores
+   (0,4,1); repeating the class makes this (0,5,1). */
+.elementor .aranya-w.aranya-w.aranya-w.aranya-w figure {
+  margin: revert-layer;
+}
+
+.elementor .aranya-w hr {
+  margin: revert-layer;
+  background-color: revert-layer;
+}
+
+.elementor .aranya-w iframe,
+.elementor .aranya-w video {
+  max-width: revert-layer;
+  width: revert-layer;
+  margin: revert-layer;
+  line-height: revert-layer;
+  border: revert-layer;
+}
+
+/* Aranya sections sit edge to edge: no gaps or padding from their Elementor
+   container, whatever the kit's defaults are. The container is also a plain
+   block rather than Elementor's flex column: a flex column measures a section
+   holding an aspect-ratio box a pixel or so short (Story Greens at 390 px wide
+   came out 1.25 px shorter than its content), which shifts everything below. */
+.e-con.e-con:has(> .aranya-w) {
+  display: block;
+}
+
+.e-con:has(> .aranya-w) {
+  --padding-top: 0px;
+  --padding-bottom: 0px;
+  --padding-left: 0px;
+  --padding-right: 0px;
+  --gap: 0px;
+  --row-gap: 0px;
+  --column-gap: 0px;
+}
+
+/* Fixed-position widgets (navbar, contact closet) and the modals take no room
+   in the flow, so their Elementor wrappers must not either. */
+.aranya-w.elementor-widget-aranya-navbar,
+.aranya-w.elementor-widget-aranya-sticky-bar,
+.aranya-w.elementor-widget-aranya-enquiry-modal {
+  width: 100%;
+}
+
+/* ----------------------------------------------------------------
+   READING LAYOUT — blog posts and pages not built with Elementor
+   (theme/aranya/template-parts/content-*.php). Same family, weights
+   and colours as the site; nothing lighter than 500.
+   ---------------------------------------------------------------- */
+.aranya-prose {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-cream-300);
+}
+.aranya-prose > * + * { margin-top: 1.25em; }
+.aranya-prose h2,
+.aranya-prose h3,
+.aranya-prose h4 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--color-ivory);
+  line-height: 1.2;
+  margin-top: 2em;
+}
+.aranya-prose h2 { font-size: clamp(1.5rem, 1.2vw + 1rem, 2rem); text-transform: uppercase; letter-spacing: 0.01em; }
+.aranya-prose h3 { font-size: 1.35rem; }
+.aranya-prose h4 { font-size: 0.8125rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-champagne-300); }
+.aranya-prose a { color: var(--color-champagne-300); text-decoration: underline; text-underline-offset: 3px; }
+.aranya-prose a:hover { color: var(--color-champagne-200); }
+.aranya-prose strong { color: var(--color-ivory); font-weight: 700; }
+.aranya-prose ul,
+.aranya-prose ol { padding-left: 1.25em; }
+.aranya-prose ul { list-style: disc; }
+.aranya-prose ol { list-style: decimal; }
+.aranya-prose li + li { margin-top: 0.4em; }
+.aranya-prose li::marker { color: var(--color-champagne-400); }
+.aranya-prose blockquote {
+  border-left: 2px solid var(--color-champagne-400);
+  padding-left: 1.25em;
+  font-style: italic;
+  color: var(--color-ivory);
+}
+.aranya-prose img,
+.aranya-prose figure { border-radius: 6px; }
+.aranya-prose figcaption { font-size: 0.8125rem; color: var(--color-ivory-subtle); margin-top: 0.5em; }
+.aranya-prose hr { border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 2.5em 0; }
+.aranya-prose table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; }
+.aranya-prose th,
+.aranya-prose td { border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 0.6em 0.5em; text-align: left; }
+.aranya-prose th { color: var(--color-ivory); font-weight: 700; }

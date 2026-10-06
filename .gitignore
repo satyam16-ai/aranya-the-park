@@ -37,3 +37,9 @@ company_assets/
 
 # Python bytecode from the asset scripts
 __pycache__/
+
+# graphify knowledge graph of the codebase; rebuilt locally, never committed
+graphify-out/
+
+# Local credentials (never commit)
+cred

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   X,
   ZoomIn,
@@ -110,7 +111,10 @@ export const Lightbox: React.FC<LightboxProps> = ({
     touchStartX.current = null;
   };
 
-  return (
+  // Rendered on <body>: inside a section with its own stacking context (the
+  // gallery's `isolate`), the fixed navbar would sit on top of the viewer and
+  // cover its close button on phones.
+  return createPortal(
     <div
       ref={containerRef}
       className="fixed inset-0 z-[100] flex flex-col justify-between bg-[#070807]/98 backdrop-blur-2xl text-ivory select-none animate-fade-in"
@@ -207,6 +211,10 @@ export const Lightbox: React.FC<LightboxProps> = ({
       <div
         ref={stageRef}
         {...stageProps}
+        onClick={(e) => {
+          // A tap on the dark area around the image closes; a zoomed image pans instead.
+          if (e.target === e.currentTarget && !canPan) onClose();
+        }}
         className={`relative flex-1 w-full overflow-hidden flex items-center justify-center px-4 sm:px-16 py-2 ${
           dragging ? 'cursor-grabbing' : canPan ? 'cursor-grab' : ''
         }`}
@@ -273,6 +281,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
           </div>
         )}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

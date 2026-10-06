@@ -1,0 +1,16 @@
+/*
+Theme Name:        Aranya
+Theme URI:         https://aranyathepark.com
+Description:       The Aranya The Park theme. A thin shell around the Aranya Core plugin, which carries the design system and the Elementor widgets: header and footer come from Elementor templates (Templates → Saved Templates → "Aranya Header" / "Aranya Footer"), pages are built in Elementor, and blog posts and plain pages use the site's type and colours.
+Version:           1.0.0
+Requires at least: 6.5
+Requires PHP:      8.1
+Author:            Aranya The Park
+Text Domain:       aranya
+License:           Proprietary
+Tags:              elementor, one-column, custom-colors
+*/
+
+/* The design system (Tailwind build) is loaded by the Aranya Core plugin.
+   This file only keeps pages readable if the plugin is ever deactivated. */
+body { margin: 0; background: #071510; color: #F4F0E8; font-family: Georgia, serif; }

@@ -1,0 +1,3 @@
+build/.tailwind.generated.css
+node_modules/
+dist/

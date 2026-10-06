@@ -19,23 +19,29 @@ export interface DetailedFloorPlan {
 
 const plan = (slug: string) => `/assets/opt/${slug}-2600.webp`;
 
-const ORDINAL: Record<number, string> = { 1: '1st', 2: '2nd', 3: '3rd' };
-const ordinal = (n: number) => ORDINAL[n] ?? `${n}th`;
-
-/** Tower A's residential floors drawn one per sheet, 4th to 20th. The refuge
- *  floors (8th and 15th) are not shown. */
-const TOWER_A_FLOORS = [4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20];
-const towerAFloors: DetailedFloorPlan[] = TOWER_A_FLOORS.map((n) => ({
-  id: `tower-a-${n}`,
+/**
+ * Tower A's residential floors as the client groups them (29 Sep 2026): floors
+ * that share a plan show one tab, drawn on the sheet of a floor in the run.
+ * The terrace has no floor plan; its renders are in the gallery.
+ */
+const towerAFloor = (
+  id: string,
+  floorLabel: string,
+  title: string,
+  subtitle: string,
+  sheet: number,
+  description: string
+): DetailedFloorPlan => ({
+  id: `tower-a-${id}`,
   category: 'tower-a',
   categoryLabel: 'A Tower',
-  floorLabel: `${ordinal(n)} Floor`,
-  title: `Tower A — ${ordinal(n)} Floor`,
-  subtitle: 'Residential floor',
-  image: plan(`fp-a-${String(n).padStart(2, '0')}`),
-  description: `The architect’s plan for the ${ordinal(n)} floor of Tower A, with flat numbers and RERA carpet areas listed on the sheet.`,
+  floorLabel,
+  title: `Tower A — ${title}`,
+  subtitle,
+  image: plan(`fp-a-${String(sheet).padStart(2, '0')}`),
+  description: `${description} Flat numbers and RERA carpet areas are listed on the sheet.`,
   highlights: [],
-}));
+});
 
 export const detailedFloorPlans: DetailedFloorPlan[] = [
   // ─── MASTER LAYOUT ───
@@ -116,44 +122,24 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
       'Tower A’s first residential floor, planned around the double-height lobby below, with flat numbers and RERA carpet areas listed on the sheet.',
     highlights: ['Homes set above the double-height lobby'],
   },
-  {
-    id: 'tower-a-2nd-3rd',
-    category: 'tower-a',
-    categoryLabel: 'A Tower',
-    floorLabel: '2nd & 3rd Floor',
-    title: 'Tower A — 2nd & 3rd Floors',
-    subtitle: 'Residential floors',
-    image: plan('fp-a-02'),
-    description:
-      'The 2nd and 3rd floors of Tower A share this plan; flat numbers and RERA carpet areas are listed on the sheet.',
-    highlights: [],
-  },
-  // The 19th floor's jodi flat follows the 19th floor.
-  ...towerAFloors.filter((f) => f.id !== 'tower-a-20'),
+  towerAFloor('2nd', '2nd Floor', '2nd Floor', 'Residential floor', 2, 'The plan for Tower A’s 2nd floor.'),
+  towerAFloor('3rd-4th', '3rd–4th Floor', '3rd & 4th Floors', 'Residential floors', 4, 'The 3rd and 4th floors of Tower A share this plan.'),
+  towerAFloor('5th-14th', '5th–14th Floor', '5th to 14th Floors', 'Residential floors', 5, 'The 5th to 14th floors of Tower A share this plan; the 9th, with its amenities, has its own.'),
+  towerAFloor('9th', '9th Floor · Flats & Amenities', '9th Floor', 'Flats and amenities', 9, 'Tower A’s 9th floor, where homes share the level with amenities.'),
+  towerAFloor('15th', '15th Floor · Refuge', '15th Floor', 'Homes and refuge area', 15, 'Tower A’s 15th floor: three homes beside the refuge area.'),
+  towerAFloor('16th-19th', '16th–19th Floor', '16th to 19th Floors', 'Residential floors', 16, 'The 16th to 19th floors of Tower A share this plan.'),
+  towerAFloor('20th', '20th Floor', '20th Floor', 'Residential floor', 20, 'The plan for Tower A’s 20th floor.'),
   {
     id: 'tower-a-jodi',
     category: 'tower-a',
     categoryLabel: 'A Tower',
-    floorLabel: '19th Floor · Jodi Flat',
+    floorLabel: 'Jodi Flat',
     title: 'Tower A — 19th Floor Jodi Flat',
     subtitle: 'Flats 1903 and 1904 combined',
     image: plan('fp-a-jodi'),
     description:
       'A jodi flat on the 19th floor of Tower A: flats 1903 and 1904 joined into a single residence, drawn with its RERA carpet area.',
     highlights: ['Two flats joined into one residence'],
-  },
-  ...towerAFloors.filter((f) => f.id === 'tower-a-20'),
-  {
-    id: 'tower-a-terrace',
-    category: 'tower-a',
-    categoryLabel: 'A Tower',
-    floorLabel: 'Terrace',
-    title: 'Tower A — Terrace',
-    subtitle: 'The rooftop amenity terrace',
-    image: plan('fp-a-roof'),
-    description:
-      'Tower A’s roof, laid out as an amenity terrace: a walking pathway, a yoga and meditation lawn, an open gym, family seating, and a party lawn with a pergola and lounges.',
-    highlights: ['Walking pathway', 'Yoga and meditation lawn', 'Open gym and family seating'],
   },
 
   // ─── B TOWER ───
@@ -225,17 +211,5 @@ export const detailedFloorPlans: DetailedFloorPlan[] = [
     image: plan('fp-b-5bhk'),
     description: 'A 5 BHK home in Tower B, drawn room by room with its RERA carpet area.',
     highlights: [],
-  },
-  {
-    id: 'tower-b-terrace',
-    category: 'tower-b',
-    categoryLabel: 'B Tower',
-    floorLabel: 'Terrace',
-    title: 'Tower B — Terrace',
-    subtitle: 'The rooftop amenity terrace',
-    image: plan('fp-b-roof'),
-    description:
-      'Tower B’s roof, laid out as an amenity terrace: a party lawn with a pergola, a reflexology path, stepping stones, an open gym and a gazebo.',
-    highlights: ['Party lawn with pergola', 'Reflexology path and stepping stones', 'Open gym and gazebo'],
   },
 ];

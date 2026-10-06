@@ -829,3 +829,52 @@ select,
 button { font-family: var(--font-sans); font-weight: 500; }
 input::placeholder,
 textarea::placeholder { font-weight: 500; }
+
+/* ─── Site loader ──────────────────────────────────────────────────────────
+   Covers the page until the hero's first frame has loaded, so the site never
+   shows with an empty hero. index.html (React) and the Aranya Core plugin
+   (WordPress) print it with the same gate script, which lifts it. */
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #080908;
+  transition: opacity 600ms ease, visibility 0s linear 600ms;
+  /* Should the gate script never run, the site still shows. */
+  animation: site-loader-failsafe 0s linear 12s forwards;
+}
+.site-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+/* The navbar's size and 1x/2x/3x files, so both pick the same file: a cached
+   2x wordmark would otherwise be reused by the navbar at 1x, and the files'
+   proportions differ by a hair. */
+.site-loader__crest { width: 44px; height: 44px; }
+.site-loader__wordmark { width: auto; height: 44px; }
+.site-loader__line {
+  position: relative;
+  width: 120px;
+  height: 1px;
+  margin-top: 8px;
+  overflow: hidden;
+  background: rgb(200 169 107 / 0.18);
+}
+.site-loader__line::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, #C8A96B, transparent);
+  animation: site-loader-sweep 1.4s ease-in-out infinite;
+}
+@keyframes site-loader-sweep { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+@keyframes site-loader-failsafe { to { opacity: 0; visibility: hidden; pointer-events: none; } }
+/* The hero's entrance waits behind the loader instead of playing unseen. */
+html.aranya-loading [data-aranya-hero] * { animation-play-state: paused !important; }
+@media (prefers-reduced-motion: reduce) {
+  .site-loader { transition: none; }
+  .site-loader__line::after { animation: none; }
+}

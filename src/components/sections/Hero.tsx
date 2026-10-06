@@ -133,7 +133,12 @@ export const Hero: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const timerRef = useRef<number | null>(null);
   /** Why the slideshow is currently held, if it is. */
-  const pausedRef = useRef({ hidden: false, offscreen: false });
+  const pausedRef = useRef({
+    hidden: false,
+    offscreen: false,
+    // The site loader (index.html) still covers the page.
+    loading: document.documentElement.classList.contains('aranya-loading'),
+  });
 
   const stop = () => {
     if (timerRef.current) window.clearInterval(timerRef.current);
@@ -143,7 +148,7 @@ export const Hero: React.FC = () => {
   const schedule = useCallback(() => {
     stop();
     if (HERO_SLIDES.length < 2 || prefersReducedMotion()) return;
-    if (pausedRef.current.hidden || pausedRef.current.offscreen) return;
+    if (pausedRef.current.hidden || pausedRef.current.offscreen || pausedRef.current.loading) return;
     timerRef.current = window.setInterval(
       () => setActive((i) => (i + 1) % HERO_SLIDES.length),
       SLIDE_MS
@@ -172,6 +177,14 @@ export const Hero: React.FC = () => {
       schedule();
     };
     document.addEventListener('visibilitychange', onVisibility);
+    // The first frame gets its full dwell once the loader has lifted.
+    const onReady = () => {
+      pausedRef.current.loading = false;
+      schedule();
+    };
+    window.addEventListener('aranya:ready', onReady);
+    // A cached first frame can lift the loader before this effect runs.
+    if (!document.documentElement.classList.contains('aranya-loading')) pausedRef.current.loading = false;
 
     const io = new IntersectionObserver(
       ([entry]) => {
@@ -186,6 +199,7 @@ export const Hero: React.FC = () => {
     return () => {
       stop();
       document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('aranya:ready', onReady);
       io.disconnect();
     };
   }, [schedule]);
@@ -193,6 +207,7 @@ export const Hero: React.FC = () => {
   return (
     <section
       id="overview"
+      data-aranya-hero
       ref={sectionRef}
       className="relative h-[100dvh] min-h-[100svh] sm:h-screen w-full overflow-hidden flex flex-col bg-dark-950 text-ivory select-none"
     >
@@ -224,6 +239,8 @@ export const Hero: React.FC = () => {
               height={slide.height}
               alt={isActive ? slide.alt : ''}
               fetchPriority={i === 0 ? 'high' : 'low'}
+              // The site loader waits for this one (index.html).
+              data-aranya-lcp={i === 0 ? '' : undefined}
               className={`w-full h-full object-cover transform-gpu ${slide.position}`}
             />
           );

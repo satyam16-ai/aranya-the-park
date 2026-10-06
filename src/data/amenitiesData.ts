@@ -95,7 +95,8 @@ export const amenitiesData: AmenityItem[] = [
     tagline: 'A fragrant walk through the green',
     description:
       'A sensory garden of fragrant planting and quiet paths, part of the landscaped grounds and true to Aranya, the Sanskrit word for forest.',
-    image: '/assets/opt/life-garden-walk-2000.webp',
+    // Its own photo: the hero's garden walk had been repeated here (client, 30 Sep).
+    image: '/assets/opt/amenity-aroma-garden-2000.webp',
     badge: 'Sensory Garden',
     highlights: ['Indigenous Fragrant Flora', 'Aromatic Therapeutic Shrubs', '40% Open Green Buffer'],
   },

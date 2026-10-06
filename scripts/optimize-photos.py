@@ -11,8 +11,9 @@ emit srcSet and intrinsic width/height for layout stability.
 It also takes the client's landing-page pack in company_assets/: the project
 renders and terrace-landscape renders as photos, and the architect's floor plan
 PDFs, each rendered as one plan per image. A plan is turned to read level, its
-frame and title block are cut away, and the architect's disclaimer is set again
-in a legible band under the drawing, so every plan carries it in full. The
+frame, title block and disclaimer are cut away, and a drawing taller than it is
+wide is turned a quarter turn so it fills the site's wide viewer; the site sets
+one common disclaimer under the viewer instead (client, 30 Sep 2026). The
 location map is cut from its brochure page the same way (see MAPS).
 
 Every photo carries a credit the site prints on it: 'artist' for renders of the
@@ -31,7 +32,7 @@ import io
 import os
 import sys
 
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 Image.MAX_IMAGE_PIXELS = None  # some sources are > 100 MP
 
@@ -76,6 +77,9 @@ PHOTOS = {
     'amenity-kids-swing':       ('freepik__enhance__99528.jpg', 'photo'),
     'amenity-yoga-deck':        ('freepik__enhance__96501.jpg', 'photo'),
     'amenity-rooftop-pergola':  ('freepik__enhance__26814 copy.jpg', 'photo'),
+    # Unsplash, Manuel Torres Garcia (ECtplMRWHTo). The brochure's garden photos
+    # are all used elsewhere on the site (client, 30 Sep / 1 Oct 2026).
+    'amenity-aroma-garden':     ('unsplash-lavender-path-ECtplMRWHTo.jpg', 'photo'),
     # lifestyle
     'life-garden-walk':         ('freepik__enhance__33571_ copy.jpg', 'photo'),
     'life-family-garden':       ('freepik__a-cheerful-young-south-indian-white-family-walking__47922 copy.jpg', 'photo'),
@@ -133,34 +137,39 @@ PLANS = {
     'fp-club-ground':   ('CLUB HOUSE GR FLOOR.pdf', PLAIN),
     'fp-club-first':    ('CLUB HOUSE FIRST FLOOR.pdf', PLAIN),
     'fp-a-ground':      ('Tower A/TOWER-A-GROUND FLOOR.pdf', PLAIN),
-    'fp-a-roof':        ('Tower A/Terrace Layout-A.pdf', SIDEWAYS),
     'fp-a-jodi':        ('Tower A/JODI FLAT .pdf', UPRIGHT),
     'fp-b-ground':      ('Tower B/TOWER-B GROUND FLOOR.pdf', PLAIN),
     'fp-b-first':       ('Tower B/TOWER-B FIRST FLOOR.pdf', PLAIN),
     'fp-b-typical':     ('Tower B/03-R1-TYPICAL FLOOR PLAN.pdf', SIDEWAYS),
-    'fp-b-roof':        ('Tower B/Terrace Layout-B.pdf', SIDEWAYS),
     'fp-b-2bhk':        ('Tower B/2BHK-1.pdf', UPRIGHT),
     'fp-b-3bhk':        ('Tower B/3BHK.pdf', UPRIGHT),
     'fp-b-5bhk':        ('Tower B/5BHK.pdf', UPRIGHT),
 }
 # Tower A has a sheet per floor. The 3rd is the 2nd drawn again, so it is
-# left out and the site shows the pair as one. The refuge floors (8th, 15th)
-# are not shown on the site.
+# left out and the site shows the pair as one. Of the refuge floors only the
+# 15th is shown (client, 30 Sep 2026).
 _ORD = {1: 'ST', 2: 'ND'}
-for _n in [1, 2] + [n for n in range(4, 21) if n not in (8, 15)]:
+for _n in [1, 2] + [n for n in range(4, 21) if n != 8]:
     PLANS['fp-a-%02d' % _n] = ('Tower A/%02d-R1-%d%s-FP-ARANYA-061025.pdf' % (
         _n, _n, _ORD.get(_n, 'TH')), SIDEWAYS)
 
-# The architect's disclaimer, word for word from the sheets. On a sheet it is a
-# hairline of type above the title block; every plan here carries it legibly.
-DISCLAIMER = (
-    'Disclaimer: The designs, plans, elevation, specifications, facilities, images etc. '
-    'are only indicative and subject to the approval of the respective authorities. '
-    'The owner / developer reserves the right to change the specifications or features. '
-    'This does not constitute an offer and / or contract of any such type between the '
-    'owner / developer and the recipient.'
-)
-FONT = 'scripts/fonts/SourceSerif4[opsz,wght].ttf'   # the site's one family (OFL)
+# The unit plans stay as drawn, upright, so their room names read level
+# (client, 5 Oct: turned landscape they read sideways). Floor plates are turned.
+KEEP_UPRIGHT = {'fp-b-2bhk', 'fp-b-3bhk', 'fp-b-5bhk'}
+
+# Figures corrected on a drawing until the architect issues a revised sheet:
+# slug -> [(box of the old glyph as fractions of the plan image, new character,
+# font, the drawing's stroke as a fraction of the glyph height)].
+# 2 BHK total 703 -> 704 sq.ft (client, 5 Oct; carpet 683 and balcony 20 stay):
+# the title "2BHK-703 SQ.FT" (a light Arial Narrow) and the table's TOTAL (Arial).
+FONTS_DIR = os.path.join(os.environ.get('WINDIR', 'C:/Windows'), 'Fonts')
+PATCHES = {
+    'fp-b-2bhk': [
+        ((0.36625, 0.86702, 0.37478, 0.88157), '4', 'ARIALN.TTF', 0.0864),
+        ((0.49663, 0.91668, 0.50224, 0.92359), '4', 'arial.ttf', 0.1026),
+    ],
+}
+
 
 # Maps cut from the brochure, which draws them as vector art, so they render
 # sharp at any size: slug -> (PDF, 1-based page, crop, [areas to clear]).
@@ -237,7 +246,7 @@ def strip_title_block(im):
 
 def erase_sheet_disclaimer(im):
     """White out the architect's disclaimer, the two lines of type above the
-    title block, so it is not printed twice once add_disclaimer sets it again.
+    title block; the site prints one common disclaimer under the viewer.
 
     It is the widest run of ink in the lowest line; a key plan may sit beside
     it, so only that run is erased.
@@ -277,41 +286,6 @@ def trim(im, pad):
                     min(box[2] + pad, im.width), min(box[3] + pad, im.height)))
 
 
-def add_disclaimer(im):
-    """Set DISCLAIMER in a band under the drawing, sized to read with it."""
-    w, h = im.size
-    size = round(max(w, h) * 0.011)
-    font = ImageFont.truetype(FONT, size)
-    # Weight 500 and the small-text optical size: on screen the band reads
-    # at 10-13px, however many pixels it has in the file. Axes: wght, opsz.
-    font.set_variation_by_axes([500, 10])
-    measure = min(w * 0.9, size * 58)   # about 110 characters a line
-
-    lines, line = [], ''
-    for word in DISCLAIMER.split():
-        trial = (line + ' ' + word).strip()
-        if line and font.getlength(trial) > measure:
-            lines.append(line)
-            line = word
-        else:
-            line = trial
-    lines.append(line)
-
-    leading = round(size * 1.5)
-    rule_gap = round(size * 1.1)
-    band = rule_gap * 2 + leading * len(lines) + round(size * 0.6)
-    out = Image.new('RGB', (w, h + band), 'white')
-    out.paste(im, (0, 0))
-    d = ImageDraw.Draw(out)
-    text_w = max(font.getlength(l) for l in lines)
-    x0 = round((w - text_w) / 2)
-    d.line((x0, h, x0 + text_w, h), fill=(200, 196, 188), width=max(2, size // 18))
-    y = h + rule_gap
-    for l in lines:
-        d.text((w / 2, y), l, font=font, fill=(64, 64, 64), anchor='ma')
-        y += leading
-    return out
-
 
 def render_drawing(pdf, width, layout):
     """Render a one-sheet plan PDF with the sheet `width` px across, turned to
@@ -329,14 +303,69 @@ def render_drawing(pdf, width, layout):
     return trim(im, round(width * 0.012))
 
 
-def render_plan(pdf, width, layout):
-    """The drawing on a plan sheet with the disclaimer set under it, never
+def landscape(im):
+    """A drawing taller than it is wide, turned a quarter turn anticlockwise
+    (its text then reads from the right, as on a turned sheet)."""
+    return im.transpose(Image.Transpose.ROTATE_90) if im.height > im.width else im
+
+
+def render_plan(pdf, width, layout, turn=True):
+    """The drawing on a plan sheet, landscape (unless `turn` is off), never
     narrower than the largest plan width, so every plan has its full set."""
     min_w = WIDTHS['plan'][-1]
-    im = render_drawing(pdf, width, layout)
+    shape = landscape if turn else (lambda im: im)
+    im = shape(render_drawing(pdf, width, layout))
     if im.width < min_w:   # a small drawing on a large sheet: render it bigger
-        im = render_drawing(pdf, width * min_w / im.width * 1.02, layout)
-    return add_disclaimer(im)
+        im = shape(render_drawing(pdf, width * min_w / im.width * 1.02, layout))
+    return im
+
+
+def _stroke(mask):
+    """Median width of the ink runs across the middle third of a glyph mask."""
+    import numpy as np
+    runs = []
+    for row in mask[mask.shape[0] // 3: 2 * mask.shape[0] // 3]:
+        n = 0
+        for on in list(row) + [False]:
+            if on:
+                n += 1
+            elif n:
+                runs.append(n)
+                n = 0
+    return float(np.median(runs)) if runs else 0.0
+
+
+def patch_glyphs(im, patches):
+    """Redraw single characters on a drawing (see PATCHES): the old glyph is
+    painted out and the new one drawn in its box, its strokes thinned to the
+    drawing's weight."""
+    import numpy as np
+    W, H = im.size
+    ss = 8   # supersampling
+    for (fx0, fy0, fx1, fy1), char, font, stroke in patches:
+        x0, y0, x1, y1 = round(fx0 * W), round(fy0 * H), round(fx1 * W), round(fy1 * H)
+        w, h = x1 - x0 + 1, y1 - y0 + 1
+        face = ImageFont.truetype(os.path.join(FONTS_DIR, font), round(h * ss * 1.4))
+
+        def glyph(c):
+            m = Image.new('L', (h * ss * 3, h * ss * 3), 0)
+            ImageDraw.Draw(m).text((h * ss // 2, 0), c, font=face, fill=255)
+            return m.crop(m.getbbox())
+
+        mask = glyph(char)
+        ref = np.asarray(glyph('0')) > 127
+        sh = _stroke(ref) / ref.shape[0] * mask.height   # the font's stroke here
+        want = stroke * h                                # the drawing's
+        mw = mask.width
+        thin = (sh * w - want * mw) / (2 * (w - want))
+        r = max(0, round(thin))
+        if r:
+            mask = mask.filter(ImageFilter.MinFilter(2 * r + 1))
+            mask = mask.crop(mask.getbbox())
+        mask = mask.resize((w, h), Image.Resampling.LANCZOS)
+        ImageDraw.Draw(im).rectangle((x0 - 2, y0 - 2, x1 + 2, y1 + 2), fill='white')
+        im.paste((1, 1, 1), (x0, y0), mask)
+    return im
 
 
 def render_map(pdf, pno, crop, clear, width):
@@ -450,7 +479,9 @@ def main():
             continue
         # Rendered at twice the largest width, so a drawing that fills only part
         # of its sheet still has the pixels once the margin is trimmed away.
-        im = render_plan(pdf, WIDTHS['plan'][-1] * 2, layout)
+        im = render_plan(pdf, WIDTHS['plan'][-1] * 2, layout, turn=slug not in KEEP_UPRIGHT)
+        if slug in PATCHES:
+            im = patch_glyphs(im, PATCHES[slug])
         entry, size = write_set(slug, im, 'plan', PLAN_QUALITY)
         entries.append(entry + ('plan', None))
         total += size

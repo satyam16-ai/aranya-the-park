@@ -46,7 +46,7 @@ export const Residences: React.FC<ResidencesProps> = ({
         <SectionHeading
           eyebrow="The Residences"
           title="Room to Breathe"
-          subtitle="Spacious, Vastu-compliant 2, 3 & 5 BHK homes with private sundecks, French windows and ceiling heights of up to 11 ft."
+          subtitle="Spacious, Vastu-compliant 2, 3 & 5 BHK homes with French windows and ceiling heights of up to 11 ft."
         />
 
         {/* ─── Elegant Glass Configuration Selector ─── */}
@@ -143,9 +143,11 @@ export const Residences: React.FC<ResidencesProps> = ({
                 <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
                   RERA Carpet: {currentUnit.carpetArea}
                 </span>
-                <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
-                  {currentUnit.deck}
-                </span>
+                {currentUnit.deck && (
+                  <span className="px-3.5 py-1.5 glass-panel-subtle text-champagne-300 rounded-full font-medium">
+                    {currentUnit.deck}
+                  </span>
+                )}
               </div>
 
               {/* Description */}

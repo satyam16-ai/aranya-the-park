@@ -6,7 +6,7 @@ export const specificationsData: SpecificationCategory[] = [
     items: [
       { feature: 'Configurations', detail: 'Premium 2, 3 & 5 BHK residences' },
       { feature: 'Ceiling Height', detail: 'Floor-to-ceiling height of up to 11 ft' },
-      { feature: 'Private Sundecks', detail: 'Private sundecks with panoramic views' },
+      { feature: 'Private Sundeck', detail: 'In the 5 BHK residences, with panoramic views' },
       { feature: 'Windows', detail: 'French windows for natural light' },
       { feature: 'Flooring & Surfaces', detail: 'Designer wall tiles & vitrified flooring' },
       { feature: 'Planning', detail: 'Spacious, Vastu-compliant layouts' },

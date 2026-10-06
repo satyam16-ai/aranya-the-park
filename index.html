@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aranya The Park, Malad West | Luxury 2, 3 & 5 BHK Residences in Mumbai</title>
-    <meta name="description" content="Aranya The Park, Malad West, Mumbai. Spacious, Vastu-compliant 2, 3 & 5 BHK residences with private sundecks, 40% open green spaces, rooftop amenities and an 18.3 m access road to New Link Road." />
+    <meta name="description" content="Aranya The Park, Malad West, Mumbai. Spacious, Vastu-compliant 2, 3 & 5 BHK residences, 40% open green spaces, rooftop amenities and an 18.3 m access road to New Link Road." />
     <meta name="keywords" content="Aranya The Park, Aranya The Park Malad West, Luxury Apartments Malad West, 2 BHK in Malad, 3 BHK in Malad, 5 BHK in Malad, Zaveri Realty, BKM Mindspace, Anuradha Real Estate Developers" />
     
     <!-- Open Graph / Social Sharing -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Aranya The Park | The Lushury Life at Malad West, Mumbai" />
-    <meta property="og:description" content="A serene metropolitan address behind Evershine Mall, Malad West. 2, 3 & 5 BHK residences with private sundecks and 40% open green spaces." />
+    <meta property="og:description" content="A serene metropolitan address behind Evershine Mall, Malad West. 2, 3 & 5 BHK residences with 40% open green spaces." />
     <meta property="og:image" content="/assets/og-image.jpg" />
     <meta property="og:site_name" content="Aranya The Park" />
     
@@ -28,6 +28,47 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body class="bg-[#080908] text-[#F4F0E8] font-sans antialiased selection:bg-[#C8A96B] selection:text-[#080908]">
+    <!-- Site loader: covers the page until the hero's first frame has loaded.
+         Same markup and gate as the WordPress plugin (assets/js/site-loader-gate.js). -->
+    <div id="site-loader" class="site-loader" aria-hidden="true">
+      <img class="site-loader__crest" src="/assets/branding/aranya-crest-96.png" srcset="/assets/branding/aranya-crest-48.png 1x, /assets/branding/aranya-crest-96.png 2x, /assets/branding/aranya-crest-144.png 3x" width="48" height="48" alt="" />
+      <img class="site-loader__wordmark" src="/assets/branding/aranya-wordmark-light-320.png" srcset="/assets/branding/aranya-wordmark-light-160.png 1x, /assets/branding/aranya-wordmark-light-320.png 2x, /assets/branding/aranya-wordmark-light-480.png 3x" width="160" height="45" alt="" />
+      <span class="site-loader__line"></span>
+    </div>
+    <noscript><style>.site-loader { display: none; }</style></noscript>
+    <script>
+      (function () {
+        var root = document.documentElement;
+        var loader = document.getElementById('site-loader');
+        if (!loader) return;
+        root.classList.add('aranya-loading');
+        var done = false;
+        function lift() {
+          if (done) return;
+          done = true;
+          root.classList.remove('aranya-loading');
+          loader.classList.add('is-done');
+          window.aranyaReady = true;
+          window.dispatchEvent(new Event('aranya:ready'));
+          setTimeout(function () { loader.remove(); }, 700);
+        }
+        function whenLoaded(img) {
+          var shown = function () { img.decode ? img.decode().then(lift, lift) : lift(); };
+          if (img.complete) return shown();
+          img.addEventListener('load', shown, { once: true });
+          img.addEventListener('error', lift, { once: true });
+        }
+        // The hero is parsed after this script (WordPress) or mounted by React: look until it is there.
+        var tries = 0;
+        (function find() {
+          var img = document.querySelector('img[data-aranya-lcp]');
+          if (img) return whenLoaded(img);
+          if (++tries > 160 || (document.readyState === 'complete' && tries > 20)) return lift();
+          setTimeout(find, 50);
+        })();
+        setTimeout(lift, 8000);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

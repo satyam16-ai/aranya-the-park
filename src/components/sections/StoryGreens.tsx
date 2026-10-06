@@ -57,7 +57,7 @@ export const StoryGreens: React.FC<StoryGreensProps> = ({ onOpenLightbox }) => {
           </div>
 
           <p className="lg:col-span-5 font-sans text-sm sm:text-base text-ivory-muted font-light leading-relaxed">
-            While the world races after fleeting luxuries, Aranya offers a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Life here is lush with 40% open green spaces and generous with sunlit sundecks and spacious homes.
+            While the world races after fleeting luxuries, Aranya offers a different kind — <strong className="text-ivory font-medium">The Lushury</strong>. Life here is lush with 40% open green spaces and generous with sunlit, spacious homes.
           </p>
 
           <div className="lg:col-span-3 pt-4 border-t border-white/[0.08] flex items-center gap-6">

@@ -9,7 +9,7 @@ export const developerData = {
   pillars: [
     {
       title: 'Architectural Vision',
-      description: 'Human-centric spatial planning prioritizing daylight, ventilation, and private outdoor sundecks.',
+      description: 'Human-centric spatial planning prioritizing daylight and ventilation.',
     },
     {
       title: 'Structural Precision',
