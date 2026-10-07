@@ -53,7 +53,7 @@ for (const f of phpFiles) {
   if (f.endsWith('media-manifest.php')) continue;
   // Code only: doc comments carry example paths such as 'opt/x-2000.webp'.
   const code = readFileSync(f, 'utf8').split('\n').filter((l) => !/^\s*(\*|\/\/|\/\*)/.test(l)).join('\n');
-  for (const m of code.matchAll(/'((?:opt|branding|video)\/[\w.-]+|[\w-]+\.(?:png|jpe?g|webp|mp4))'/g)) used.add(m[1]);
+  for (const m of code.matchAll(/'((?:opt|branding|video)\/[\w.-]+|[\w-]+\.(?:png|jpe?g|webp|mp4|pdf))'/g)) used.add(m[1]);
 }
 const files = new Set();
 for (const path of used) {

@@ -44,6 +44,7 @@ class Enquiry_Modal extends Widget_Base {
 		'success_heading'    => 'Thank You, {name}',
 		'success_body'       => 'Your enquiry is with our sales team under reference {ref}.',
 		'success_note'       => 'A member of our sales team will be in touch shortly with floor plans and current pricing.',
+		'brochure_button'    => 'Download E-Brochure',
 		'continue_whatsapp'  => 'Continue on WhatsApp',
 		'return_label'       => 'Return to Website',
 	);
@@ -93,7 +94,7 @@ class Enquiry_Modal extends Widget_Base {
 		$this->text( 'success_eyebrow', __( 'Eyebrow', 'aranya' ), $d['success_eyebrow'] );
 		$this->text( 'success_heading', __( 'Heading ({name} = visitor)', 'aranya' ), $d['success_heading'] );
 		$this->textarea( 'success_body', __( 'Text ({config}, {ref})', 'aranya' ), $d['success_body'], array( 'rows' => 2 ) );
-		foreach ( array( 'continue_whatsapp', 'return_label' ) as $k ) {
+		foreach ( array( 'brochure_button', 'continue_whatsapp', 'return_label' ) as $k ) {
 			$this->text( $k, ucwords( str_replace( '_', ' ', $k ) ), $d[ $k ] );
 		}
 		$this->textarea( 'success_note', __( 'Note', 'aranya' ), $d['success_note'], array( 'rows' => 2 ) );
@@ -179,6 +180,9 @@ class Enquiry_Modal extends Widget_Base {
 								</div>
 
 								<div class="pt-2 flex flex-col gap-2 max-w-sm mx-auto">
+									<button type="button" ar-show="isBrochure" style="display: none;" ar-on:click="Aranya.downloadBrochure()" class="<?php echo esc_attr( self::button_class( 'gold', 'sm', 'w-full' ) ); ?>">
+										<?php echo self::button_inner( esc_html( $s['brochure_button'] ), aranya_icon( 'download', 14 ) ); ?>
+									</button>
 									<a ar-bind:href="whatsappAfter()" href="<?php echo esc_url( aranya_whatsapp_url() ); ?>" target="_blank" rel="noopener noreferrer" class="btn-lux w-full py-2.5 px-4 bg-[#25D366] text-white font-sans text-xs uppercase tracking-widest font-bold inline-flex items-center justify-center gap-2 hover:brightness-105 transition-all rounded-[4px] shadow-md">
 										<?php echo aranya_icon( 'message-square', 14 ); ?>
 										<span><?php echo esc_html( $s['continue_whatsapp'] ); ?></span>

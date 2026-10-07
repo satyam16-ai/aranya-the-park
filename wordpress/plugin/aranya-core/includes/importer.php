@@ -90,7 +90,7 @@ function aranya_import_media_list(): array {
 			}
 		);
 	}
-	foreach ( array( 'rera-qr.png', 'og-image.jpg', 'branding/aranya-crest-48.png', 'branding/aranya-crest-144.png', 'branding/aranya-wordmark-light-160.png', 'branding/aranya-wordmark-light-480.png', 'branding/aranya-wordmark-light.png', 'branding/botanical-pattern.jpg' ) as $extra ) {
+	foreach ( array( 'rera-qr.png', 'aranya-e-brochure.pdf', 'og-image.jpg', 'branding/aranya-crest-48.png', 'branding/aranya-crest-144.png', 'branding/aranya-wordmark-light-160.png', 'branding/aranya-wordmark-light-480.png', 'branding/aranya-wordmark-light.png', 'branding/botanical-pattern.jpg' ) as $extra ) {
 		$paths[] = $extra;
 	}
 	return array_values( array_unique( $paths ) );
@@ -814,7 +814,8 @@ function aranya_media_upload() {
 	if ( is_dir( $target ) ) {
 		$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $target, FilesystemIterator::SKIP_DOTS ) );
 		foreach ( $files as $f ) {
-			if ( $f->isFile() && ! in_array( strtolower( $f->getExtension() ), array( 'webp', 'jpg', 'jpeg', 'png', 'gif', 'avif', 'mp4', 'webm' ), true ) ) {
+			// Media only (the e-brochure is a PDF); anything else, such as a script, is dropped.
+			if ( $f->isFile() && ! in_array( strtolower( $f->getExtension() ), array( 'webp', 'jpg', 'jpeg', 'png', 'gif', 'avif', 'mp4', 'webm', 'pdf' ), true ) ) {
 				wp_delete_file( $f->getPathname() );
 			}
 		}

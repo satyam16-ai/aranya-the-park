@@ -59,6 +59,7 @@ function aranya_settings_schema(): array {
 			'popup_delay'         => array( __( 'Popup delay (seconds)', 'aranya' ), 'number', '10' ),
 			'lead_emails'         => array( __( 'Email new enquiries to', 'aranya' ), 'text', '', __( 'Comma-separated addresses. Empty = no email; enquiries are always saved under Aranya → Enquiries.', 'aranya' ) ),
 			'webhook_url'         => array( __( 'CRM webhook URL', 'aranya' ), 'url', '', __( 'Each enquiry is POSTed here as JSON (LeadSquared, HubSpot, Zoho, Salesforce, Zapier…). Empty = off.', 'aranya' ) ),
+			'brochure_url'        => array( __( 'E-brochure PDF link', 'aranya' ), 'url', '', __( 'What the Download E-Brochure buttons give after the enquiry form. Empty = the brochure bundled with the site; to replace it, upload a PDF to Media and paste its link here.', 'aranya' ) ),
 			'otp_mode'            => array( __( 'Mobile verification (OTP)', 'aranya' ), 'select', 'demo', __( 'Demo accepts any 6-digit code, as the current site does. Connect an SMS provider before taking live leads.', 'aranya' ), array( 'demo' => __( 'Demo — any 6-digit code', 'aranya' ), 'msg91' => __( 'MSG91', 'aranya' ) ) ),
 			'msg91_authkey'       => array( __( 'MSG91 auth key', 'aranya' ), 'text', '' ),
 			'msg91_template_id'   => array( __( 'MSG91 OTP template ID', 'aranya' ), 'text', '' ),
@@ -127,6 +128,15 @@ function aranya_setting_media( string $key ): array {
  */
 function aranya_tel_url(): string {
 	return 'tel:' . preg_replace( '/[^\d+]/', '', (string) aranya_setting( 'phone_link' ) );
+}
+
+/**
+ * The e-brochure PDF: the Site Settings link, else the copy bundled with the
+ * site (scripts/web-brochure.py makes it).
+ */
+function aranya_brochure_url(): string {
+	$url = trim( (string) aranya_setting( 'brochure_url' ) );
+	return '' !== $url ? $url : aranya_asset_url( 'aranya-e-brochure.pdf' );
 }
 
 /**

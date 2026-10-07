@@ -35,6 +35,8 @@ class Footer extends Widget_Base {
 		$this->text( 'wordmark_alt', __( 'Wordmark alt text', 'aranya' ), 'Aranya The Park' );
 		$this->textarea( 'quote', __( 'Statement', 'aranya' ), '"A serene metropolitan address, where life is lush with open greens and generous with space."', array( 'rows' => 3 ) );
 		$this->text( 'follow_label', __( 'Social label', 'aranya' ), '', array( 'placeholder' => 'Follow Aranya The Park', 'description' => __( 'Empty = "Follow" + project name. Social links are set in Site Settings.', 'aranya' ) ) );
+		// The e-brochure, given after the enquiry form (client, 7 Oct). The PDF is set in Site Settings.
+		$this->text( 'brochure_label', __( 'E-brochure button', 'aranya' ), 'Download E-Brochure', array( 'description' => __( 'Empty = no button.', 'aranya' ) ) );
 		$this->end_section();
 
 		$this->section( 'rera', __( 'MahaRERA column', 'aranya' ) );
@@ -124,6 +126,11 @@ class Footer extends Widget_Base {
 								<span class="text-[11px] uppercase tracking-[0.2em] text-ivory-muted/70"><?php echo esc_html( $follow ); ?></span>
 								<?php echo aranya_social_links(); ?>
 							</div>
+						<?php endif; ?>
+						<?php if ( '' !== trim( (string) $s['brochure_label'] ) ) : ?>
+							<button type="button" ar-data ar-on:click="Aranya.openBrochure()" class="<?php echo esc_attr( self::button_class( 'outline-gold', 'sm', 'rounded-full' ) ); ?>">
+								<?php echo self::button_inner( esc_html( $s['brochure_label'] ), aranya_icon( 'download', 14 ), 'left' ); ?>
+							</button>
 						<?php endif; ?>
 					</div>
 				</div>

@@ -43,6 +43,7 @@ function aranya_enqueue_assets() {
 			'home'         => esc_url_raw( home_url( '/' ) ),
 			'popupEnabled' => '1' === aranya_setting( 'popup_enabled' ),
 			'popupDelay'   => max( 0, (int) aranya_setting( 'popup_delay' ) ) * 1000,
+			'brochure'     => esc_url_raw( aranya_brochure_url() ),
 			'editor'       => aranya_is_editor(),
 		)
 	);

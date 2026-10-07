@@ -74,6 +74,9 @@ class Navbar extends Widget_Base {
 		$this->text( 'mobile_cta_label', __( 'Mobile menu button', 'aranya' ), 'ENQUIRE NOW' );
 		$this->text( 'mobile_cta_purpose', __( 'Mobile enquiry purpose', 'aranya' ), 'Mobile Navigation Inquiry' );
 		$this->text( 'mobile_tagline', __( 'Mobile menu footnote', 'aranya' ), 'MALAD WEST · MUMBAI' );
+		// The e-brochure, given after the enquiry form (client, 7 Oct). The PDF is set in Site Settings.
+		$this->text( 'brochure_label', __( 'E-brochure button', 'aranya' ), 'E-Brochure', array( 'description' => __( 'Desktop; below 1280 px wide only its icon shows.', 'aranya' ) ) );
+		$this->text( 'mobile_brochure_label', __( 'Mobile e-brochure button', 'aranya' ), 'Download E-Brochure' );
 		$this->end_section();
 	}
 
@@ -147,17 +150,22 @@ class Navbar extends Widget_Base {
 						?>
 					</a>
 
-					<nav class="hidden lg:flex items-center gap-7 xl:gap-9" aria-label="Primary navigation">
+					<?php // Tighter than before: the bar also holds the e-brochure button now (client, 7 Oct). ?>
+					<nav class="hidden lg:flex items-center gap-4 xl:gap-7" aria-label="Primary navigation">
 						<?php foreach ( $links as $link ) : ?>
-							<a href="<?php echo esc_url( self::href( $link['href'] ) ); ?>" ar-on:click="<?php echo esc_attr( $link_click( $link, false ) ); ?>" class="relative text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-ivory/85 hover:text-champagne-200 transition-colors duration-300 py-1 group">
+							<a href="<?php echo esc_url( self::href( $link['href'] ) ); ?>" ar-on:click="<?php echo esc_attr( $link_click( $link, false ) ); ?>" class="relative whitespace-nowrap text-[11px] font-sans font-medium tracking-[0.2em] uppercase text-ivory/85 hover:text-champagne-200 transition-colors duration-300 py-1 group">
 								<?php echo esc_html( $link['label'] ); ?>
 								<span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-[1px] bg-champagne-400 transition-all duration-300 group-hover:w-full"></span>
 							</a>
 						<?php endforeach; ?>
 					</nav>
 
-					<div class="hidden lg:flex items-center">
-						<button ar-on:click="<?php echo esc_attr( self::lead_js( $s['cta_purpose'] ) ); ?>" class="btn-lux px-5 py-2 text-[10px] font-sans font-semibold tracking-[0.22em] uppercase text-champagne-300 hover:text-dark-950 hover:bg-champagne-400 border border-champagne-400/40 hover:border-champagne-400 rounded-full transition-all duration-300 cursor-pointer select-none"><?php echo esc_html( $s['cta_label'] ); ?></button>
+					<div class="hidden lg:flex items-center gap-1.5 xl:gap-2">
+						<button ar-on:click="Aranya.openBrochure()" aria-label="<?php echo esc_attr( $s['mobile_brochure_label'] ); ?>" title="<?php echo esc_attr( $s['mobile_brochure_label'] ); ?>" class="inline-flex items-center gap-1.5 whitespace-nowrap px-2.5 xl:px-3.5 py-2 text-[10px] font-sans font-semibold tracking-[0.22em] uppercase text-champagne-300 hover:text-champagne-200 hover:bg-white/[0.05] rounded-full transition-colors duration-300 cursor-pointer select-none">
+							<?php echo aranya_icon( 'download', 14, array( 'class' => 'shrink-0' ) ); ?>
+							<span class="hidden xl:inline"><?php echo esc_html( $s['brochure_label'] ); ?></span>
+						</button>
+						<button ar-on:click="<?php echo esc_attr( self::lead_js( $s['cta_purpose'] ) ); ?>" class="btn-lux whitespace-nowrap px-5 py-2 text-[10px] font-sans font-semibold tracking-[0.22em] uppercase text-champagne-300 hover:text-dark-950 hover:bg-champagne-400 border border-champagne-400/40 hover:border-champagne-400 rounded-full transition-all duration-300 cursor-pointer select-none"><?php echo esc_html( $s['cta_label'] ); ?></button>
 					</div>
 
 					<button ar-on:click="isMobileOpen = !isMobileOpen" class="lg:hidden p-2 text-ivory hover:text-champagne-300 transition-colors cursor-pointer min-w-[40px] min-h-[40px] flex items-center justify-center -mr-1" aria-label="Open navigation menu" ar-bind:aria-label="isMobileOpen ? 'Close navigation menu' : 'Open navigation menu'" aria-expanded="false" ar-bind:aria-expanded="isMobileOpen ? 'true' : 'false'">
@@ -201,6 +209,10 @@ class Navbar extends Widget_Base {
 
 					<div class="pt-8 pb-4 space-y-3">
 						<button ar-on:click="isMobileOpen = false; <?php echo esc_attr( self::lead_js( $s['mobile_cta_purpose'] ) ); ?>" class="btn-lux w-full py-4 min-h-[52px] text-xs font-sans font-semibold tracking-[0.2em] uppercase text-dark-950 bg-champagne-400 hover:bg-champagne-300 active:scale-[0.99] rounded-full transition-all duration-300 cursor-pointer text-center shadow-[0_8px_25px_rgba(200,169,107,0.3)]"><?php echo esc_html( $s['mobile_cta_label'] ); ?></button>
+						<button ar-on:click="isMobileOpen = false; Aranya.openBrochure()" class="btn-lux w-full py-4 min-h-[52px] inline-flex items-center justify-center gap-2 text-xs font-sans font-semibold tracking-[0.2em] uppercase text-champagne-300 border border-champagne-400/40 hover:border-champagne-400 hover:text-champagne-200 active:scale-[0.99] rounded-full transition-all duration-300 cursor-pointer">
+							<?php echo aranya_icon( 'download', 15, array( 'class' => 'shrink-0' ) ); ?>
+							<span><?php echo esc_html( $s['mobile_brochure_label'] ); ?></span>
+						</button>
 						<div class="text-center">
 							<span class="text-[10px] font-sans uppercase tracking-[0.3em] text-ivory-muted/50"><?php echo esc_html( $s['mobile_tagline'] ); ?></span>
 						</div>

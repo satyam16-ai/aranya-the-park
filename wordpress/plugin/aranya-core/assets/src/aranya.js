@@ -15,6 +15,8 @@
  *
  * Public API (used by widget markup and available to custom code):
  *   Aranya.openLead(purpose?, config?)   — the enquiry modal (LeadFormModal)
+ *   Aranya.openBrochure()                — the e-brochure: after an enquiry this visit, a download;
+ *                                          before one, the enquiry form first
  *   Aranya.openLightbox({url,title,description,category,credit})
  *   Aranya.openFloorPlans(category?)     — 'master' | 'tower-a' | 'tower-b'
  *   Aranya.openLocation(category?)       — 'all' | 'connectivity' | …
@@ -118,8 +120,34 @@ import Alpine from 'alpinejs';
       s.lead.purpose = purpose;
       s.lead.config = config;
       s.lead.fromPopup = false;
+      s.lead.brochure = false;
       s.lead.open = true;
       s.lead.seq++;
+    },
+    /**
+     * The e-brochure is given after an enquiry (client, 7 Oct): any enquiry this
+     * visit (the flag that also unlocks the floor plans) downloads it at once;
+     * otherwise the enquiry form opens and the download follows its submit.
+     */
+    openBrochure() {
+      const s = store();
+      if (!s) return;
+      if (s.plansUnlocked) {
+        Aranya.downloadBrochure();
+        return;
+      }
+      Aranya.openLead('Download E-Brochure');
+      s.lead.brochure = true;
+    },
+    downloadBrochure() {
+      if (!cfg.brochure) return;
+      const a = document.createElement('a');
+      a.href = cfg.brochure;
+      a.download = 'Aranya-The-Park-E-Brochure.pdf';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     },
     openLightbox(item) {
       const s = store();
@@ -428,7 +456,7 @@ import Alpine from 'alpinejs';
 
   {
     Alpine.store('aranya', {
-      lead: { open: false, purpose: 'General Inquiry', config: '', fromPopup: false, seq: 0 },
+      lead: { open: false, purpose: 'General Inquiry', config: '', fromPopup: false, brochure: false, seq: 0 },
       lightbox: { open: false, item: null },
       plansUnlocked: session.get(PLANS_KEY) === 'true',
     });
@@ -923,9 +951,15 @@ import Alpine from 'alpinejs';
           if (p.includes('callback') || p.includes('call')) return 'clock';
           return 'sparkles';
         },
+        /** Opened from a Download E-Brochure button. */
+        get isBrochure() {
+          return this.$store.aranya.lead.brochure;
+        },
         async submit() {
           const ok = await this.submitEnquiry(this.purpose);
           if (ok) session.set(POPUP_KEY, 'true');
+          // The thank-you screen also has the button, for browsers that ignore this.
+          if (ok && this.isBrochure) Aranya.downloadBrochure();
         },
         whatsappAfter() {
           return `https://wa.me/${opts.whatsapp || ''}?text=${encodeURIComponent(
